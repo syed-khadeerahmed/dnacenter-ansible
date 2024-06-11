@@ -1,0 +1,140 @@
+06-10-2024 19:52:57 DEBUG  Accesspoint: __init__: 80: Logging configured and initiated 
+
+06-10-2024 19:52:57 DEBUG  Accesspoint: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-10-2024 19:52:57 INFO  Accesspoint: __init__: 199: Login DNAC using by user: devnetuser 
+
+06-10-2024 19:52:59 INFO  Accesspoint: validate_input_yml: 224: Validating the Yaml File.. 
+
+06-10-2024 19:52:59 ERROR  Accesspoint: validate_input_yml: 285: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+
+06-10-2024 19:52:59 INFO  Accesspoint: get_state: 317: Getting Network Device information 
+
+06-10-2024 19:56:39 DEBUG  Accesspoint: __init__: 80: Logging configured and initiated 
+
+06-10-2024 19:56:39 DEBUG  Accesspoint: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-10-2024 19:56:39 INFO  Accesspoint: __init__: 199: Login DNAC using by user: devnetuser 
+
+06-10-2024 19:56:41 INFO  Accesspoint: validate_input_yml: 224: Validating the Yaml File.. 
+
+06-10-2024 19:56:41 ERROR  Accesspoint: validate_input_yml: 285: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+
+06-10-2024 19:56:41 INFO  Accesspoint: get_state: 317: Getting Network Device information 
+
+06-10-2024 20:01:41 DEBUG  Accesspoint: __init__: 80: Logging configured and initiated 
+
+06-10-2024 20:01:41 DEBUG  Accesspoint: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-10-2024 20:01:41 INFO  Accesspoint: __init__: 199: Login DNAC using by user: devnetuser 
+
+06-10-2024 20:01:42 INFO  Accesspoint: validate_input_yml: 224: Validating the Yaml File.. 
+
+06-10-2024 20:01:42 ERROR  Accesspoint: validate_input_yml: 285: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+
+06-10-2024 20:01:42 INFO  Accesspoint: get_state: 317: Getting Network Device information 
+
+06-11-2024 15:17:00 DEBUG  Accesspoint: __init__: 80: Logging configured and initiated 
+
+06-11-2024 15:17:00 DEBUG  Accesspoint: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 15:17:00 INFO  Accesspoint: __init__: 199: Login DNAC using by user: devnetuser 
+
+06-11-2024 15:17:01 INFO  Accesspoint: validate_input_yml: 224: Validating the Yaml File.. 
+
+06-11-2024 15:17:01 ERROR  Accesspoint: validate_input_yml: 285: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+
+06-11-2024 15:17:01 INFO  Accesspoint: get_state: 317: Getting Network Device information 
+
+06-11-2024 15:32:31 DEBUG  Accesspoint: __init__: 80: Logging configured and initiated 
+
+06-11-2024 15:32:31 DEBUG  Accesspoint: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 15:32:31 INFO  Accesspoint: __init__: 199: Login DNAC using by user: devnetuser 
+
+06-11-2024 15:32:32 INFO  Accesspoint: validate_input_yml: 224: Validating the Yaml File.. 
+
+06-11-2024 15:32:32 ERROR  Accesspoint: validate_input_yml: 285: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+
+06-11-2024 15:32:32 INFO  Accesspoint: get_state: 317: Getting Network Device information 
+
+06-11-2024 15:47:15 DEBUG  Accesspoint: __init__: 80: Logging configured and initiated 
+
+06-11-2024 15:47:15 DEBUG  Accesspoint: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 15:47:15 INFO  Accesspoint: __init__: 199: Login DNAC using by user: devnetuser 
+
+06-11-2024 15:47:17 INFO  Accesspoint: validate_input_yml: 224: Validating the Yaml File.. 
+
+06-11-2024 15:47:17 ERROR  Accesspoint: validate_input_yml: 285: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+
+06-11-2024 15:47:17 INFO  Accesspoint: get_state: 317: Getting Network Device information 
+
+06-11-2024 17:14:38 DEBUG  Accesspoint: __init__: 80: Logging configured and initiated 
+
+06-11-2024 17:14:38 DEBUG  Accesspoint: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 17:14:38 INFO  Accesspoint: __init__: 199: Login DNAC using by user: devnetuser 
+
+06-11-2024 17:14:40 INFO  Accesspoint: validate_input_yml: 224: Validating the Yaml File.. 
+
+06-11-2024 17:14:40 ERROR  Accesspoint: validate_input_yml: 285: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+
+06-11-2024 17:14:40 INFO  Accesspoint: get_state: 317: Getting Network Device information 
+
+06-11-2024 17:36:01 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+
+06-11-2024 17:36:01 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 17:36:01 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+
+06-11-2024 17:39:30 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+
+06-11-2024 17:39:30 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 17:39:30 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+
+06-11-2024 17:41:34 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+
+06-11-2024 17:41:34 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 17:41:34 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+
+06-11-2024 17:42:46 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+
+06-11-2024 17:42:46 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 17:42:46 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+
+06-11-2024 17:42:46 ERROR  UserWorkflowManager: __init__: 43: Unable to Login DNAC DNACenterAPI.__init__() got an unexpected keyword argument 'token' 
+
+06-11-2024 17:45:20 DEBUG  Accesspoint: __init__: 80: Logging configured and initiated 
+
+06-11-2024 17:45:20 DEBUG  Accesspoint: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 17:45:20 INFO  Accesspoint: __init__: 199: Login DNAC using by user: devnetuser 
+
+06-11-2024 17:45:22 INFO  Accesspoint: validate_input_yml: 224: Validating the Yaml File.. 
+
+06-11-2024 17:45:22 ERROR  Accesspoint: validate_input_yml: 285: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+
+06-11-2024 17:45:22 INFO  Accesspoint: get_state: 317: Getting Network Device information 
+
+06-11-2024 18:00:59 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+
+06-11-2024 18:00:59 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 18:00:59 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+
+06-11-2024 18:25:45 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+
+06-11-2024 18:25:45 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 18:25:45 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+
+06-11-2024 18:29:08 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+
+06-11-2024 18:29:08 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-11-2024 18:29:08 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+
