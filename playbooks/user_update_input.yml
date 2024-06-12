@@ -3,6 +3,6 @@ config:
     - firstName: ""
       lastName: ""
       email: ""
-      username: "johndoe"
+      username: "devnetuser"
       userId: "60ec4e4f4ca7f9222c82da66"
-      roleList: ['5e8e896e4d4add00ca2b648e']
+      roleList: ["5e8e896e4d4add00ca2b648e"]
