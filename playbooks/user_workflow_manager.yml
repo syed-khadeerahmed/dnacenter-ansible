@@ -3,9 +3,22 @@
   hosts: dnac_servers
   vars_files:
     - "credentials.yml"
-    - "user_update_input.yml"
   connection: local
   gather_facts: no
+  vars:
+    user_details:
+      - firstName: ""
+        lastName: ""
+        email: ""
+        username: "devnetuser1"
+        userId: "60ec4e4f4ca7f9222c82da66"
+        roleList: ['5e8e896e4d4add00ca2b648e']
+      - firstName: ""
+        lastName: ""
+        email: ""
+        username: "devnetuser2"
+        userId: "60ec4e4f4ca7f9222c82da67"
+        roleList: ['5e8e896e4d4add00ca2b648f']
   tasks:
     - name: Get Device info and updating user details
       cisco.dnac.user_workflow_manager:
@@ -21,5 +34,6 @@
         config_verify: True
         dnac_api_task_timeout: 1000
         dnac_task_poll_interval: 1
-        config: "{{ config }}"
+        config: "{{ item }}"
+      loop: "{{ user_details }}"
       register: output_list
