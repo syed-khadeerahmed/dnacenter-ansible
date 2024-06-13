@@ -1,36 +1,30 @@
-06-12-2024 19:17:49 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+06-13-2024 09:32:07 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
 
-06-12-2024 19:17:49 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-13-2024 09:32:07 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-12-2024 19:17:49 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+06-13-2024 09:32:07 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
 
-06-12-2024 19:17:51 INFO  UserWorkflowManager: validate_input_yml: 45: Validating the Yaml File.. 
+06-13-2024 09:32:15 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
 
-06-12-2024 19:17:51 DEBUG  UserWorkflowManager: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+06-13-2024 09:32:15 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-12-2024 19:17:51 DEBUG  UserWorkflowManager: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+06-13-2024 09:32:15 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
 
-06-12-2024 19:17:51 DEBUG  UserWorkflowManager: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+06-13-2024 09:32:19 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
 
-06-12-2024 19:17:51 DEBUG  UserWorkflowManager: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+06-13-2024 09:32:19 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-12-2024 19:17:51 ERROR  UserWorkflowManager: validate_input_yml: 104: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+06-13-2024 09:32:19 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
 
-06-12-2024 19:22:04 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+06-13-2024 09:39:49 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
 
-06-12-2024 19:22:04 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-13-2024 09:39:49 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-12-2024 19:22:04 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+06-13-2024 09:39:49 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
 
-06-12-2024 19:22:05 INFO  UserWorkflowManager: validate_input_yml: 45: Validating the Yaml File.. 
+06-13-2024 09:39:53 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
 
-06-12-2024 19:22:05 DEBUG  UserWorkflowManager: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+06-13-2024 09:39:53 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-12-2024 19:22:05 DEBUG  UserWorkflowManager: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
-
-06-12-2024 19:22:05 DEBUG  UserWorkflowManager: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
-
-06-12-2024 19:22:05 DEBUG  UserWorkflowManager: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
-
-06-12-2024 19:22:05 ERROR  UserWorkflowManager: validate_input_yml: 107: Invalid Param provided in input Yml File. 'str' object has no attribute 'get' 
+06-13-2024 09:39:53 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
 
