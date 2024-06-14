@@ -7,8 +7,137 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 __author__ = ("Ajith Andrew J, Syed Khadeer Ahmed")
  
-DOCUMENTATION = ""
-EXAMPLES = ""
+DOCUMENTATION = r"""
+---
+module: user
+short_description: Resource module for User
+description:
+- Manage operations create and update of the resource User.
+- Add a new user for Cisco DNA Center system.
+- Update a user for Cisco DNA Center system.
+- Delete a user for cisco DNA Center system
+version_added: '6.7.0'
+extends_documentation_fragment:
+  - cisco.dnac.workflow_manager_params
+author: Syed Khadeer Ahmed (@syed-khadeerahmed)
+        Ajith Andrew J(@ajithandrewj)
+ 
+Create user options:
+  email:
+    description: Email.
+    type: str
+  firstName:
+    description: First Name.
+    type: str
+  lastName:
+    description: Last Name.
+    type: str
+  password:
+    description: Password.
+    type: str
+  username:
+    description: Username.
+    type: str
+  roleList:
+    description: Role id list.
+    elements: str
+    type: list
+ 
+Update user Options
+  email:
+    description: Email. Email should be set if the original value is not empty
+    type: str
+  firstName:
+    description: First Name. FirstName should be set if the original value is not empty
+    type: str
+  lastName:
+    description: Last Name. LastName should be set if the original value is not empty
+    type: str
+  username:
+    description: Username.
+    type: str
+  roleList:
+    description: Role id list.
+    elements: str
+    type: list
+ 
+requirements:
+- dnacentersdk >= 2.5.5
+- python >= 3.5
+seealso:
+- name: Cisco DNA Center documentation for User and Roles AddUserAPI
+  description: Complete reference of the AddUserAPI API.
+  link: https://developer.cisco.com/docs/dna-center/#!add-user-api
+- name: Cisco DNA Center documentation for User and Roles UpdateUserAPI
+  description: Complete reference of the UpdateUserAPI API.
+  link: https://developer.cisco.com/docs/dna-center/#!update-user-api
+- name: Cisco DNA Center documentation for User and Roles UpdateUserAPI
+  description: Complete reference of the UpdateUserAPI API.
+  link: https://developer.cisco.com/docs/dna-center/#!delete-user-api
+ 
+notes:
+  - SDK Method used are
+    user_and_roles.UserandRoles.add_user_ap_i,
+    user_and_roles.UserandRoles.update_user_ap_i,
+    user_and_roles.UserandRoles.delete_user_ap_i,
+ 
+  - Paths used are
+    post /dna/system/api/v1/user,
+    put /dna/system/api/v1/user,
+    delete /dna/system/api/v1/user/{userId}
+"""
+EXAMPLES = r"""
+---
+-name: Create User
+  cisco.dnac.user_workflow_manager:
+    dnac_host: "{{ dnac_host }}"
+    dnac_username: "{{ dnac_username }}"
+    dnac_password: "{{ dnac_password }}"
+    dnac_verify: "{{ dnac_verify }}"
+    dnac_port: "{{ dnac_port }}"
+    dnac_version: "{{ dnac_version }}"
+    dnac_debug: "{{ dnac_debug }}"
+    state: Merged
+    config:
+      email: "syedkhadeer@example.com"
+      firstName: "Syed Khadeer"
+      lastName: "Ahmed"
+      password: "password123"
+      roleList:
+        - "Network Administrator"
+      username: "syed"
+ 
+-name: Update User
+  cisco.dnac. user_workflow_manager:
+    dnac_host: "{{ dnac_host }}"
+    dnac_username: "{{ dnac_username }}"
+    dnac_password: "{{ dnac_password }}"
+    dnac_verify: "{{ dnac_verify }}"
+    dnac_port: "{{ dnac_port }}"
+    dnac_version: "{{ dnac_version }}"
+    dnac_debug: "{{ dnac_debug }}"
+    state: present
+    config:
+      email: "ajithandrew@example.com"
+      firstName: "Ajith "
+      lastName: "Andrew"
+      roleList:
+        - "system Administrator"
+        username: "ajith"
+ 
+-name: Delete  User
+  cisco.dnac.user_workflow_manager:
+    dnac_host: "{{ dnac_host }}"
+    dnac_username: "{{ dnac_username }}"
+    dnac_password: "{{ dnac_password }}"
+    dnac_verify: "{{ dnac_verify }}"
+    dnac_port: "{{ dnac_port }}"
+    dnac_version: "{{ dnac_version }}"
+    dnac_debug: "{{ dnac_debug }}"
+    state: absent
+    config:
+      username: "joel"
+"""
 RETURN = ""
  
 import re
