@@ -292,7 +292,7 @@ response_3:
     {
       "response":
         {
-             "bapiError": String,
+             "bapiError": String,ca
              "bapiExecutionId": String,
              "bapiKey": String,
              "bapiName": String,
