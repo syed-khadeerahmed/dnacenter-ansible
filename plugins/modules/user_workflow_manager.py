@@ -371,31 +371,124 @@ class User(DnacBase):
         self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
         return self
 
-    # def get_have(self, input_config):
-    #     """
-    #     Get the user details from Cisco Catalyst Center
-    #     Parameters:
-    #       - self (object): An instance of a class used for interacting with Cisco Catalyst Center.
-    #       - input_config (dict): A dictionary containing the configuration details.
-    #     Returns:
-    #       - self (object): An instance of a class used for interacting with  Cisco Catalyst Center.
-    #     Description:
-    #         This method queries Cisco Catalyst Center to check if a specified user
-    #         exists. If the user exists, it retrieves details about the current
-    #         user, including the user ID and other relevant information. The
-    #         results are stored in the 'have' attribute for later reference.
-    #     """
-    #     user_exists = False
-    #     current_user_config = None
-    #     # check if given user config exists, if exists store current user info
-    #     (user_exists, current_user_config) = self.get_current_config(input_config)
-    #     self.log("Current user config details (have): {0}".format(str(current_ap_config)), "DEBUG")
-    #     if user_exists:
-    #         self.have["username"] = current_user_config.get("username")
-    #         self.have["user_exists"] = user_exists
-    #         self.have["current_user_config"] = current_user_config
-    #     self.log("Current State (have): {0}".format(str(self.have)), "INFO")
-    #     return self
+    def get_have(self, input_config):
+        """
+        Get the user details from Cisco Catalyst Center
+        Parameters:
+          - self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+          - input_config (dict): A dictionary containing the configuration details.
+        Returns:
+          - self (object): An instance of a class used for interacting with  Cisco Catalyst Center.
+        Description:
+            This method queries Cisco Catalyst Center to check if a specified user
+            exists. If the user exists, it retrieves details about the current
+            user, including the user ID and other relevant information. The
+            results are stored in the 'have' attribute for later reference.
+        """
+        user_exists = False
+        current_user_config = None
+        # check if given user config exists, if exists store current user info
+        (user_exists, current_user_config) = self.get_current_config(input_config)
+        self.log("Current user config details (have): {0}".format(str(current_ap_config)), "DEBUG")
+        if user_exists:
+            self.have["username"] = current_user_config.get("username")
+            self.have["user_exists"] = user_exists
+            self.have["current_user_config"] = current_user_config
+        self.log("Current State (have): {0}".format(str(self.have)), "INFO")
+        return self
+
+    def get_current_config(self, input_config):
+        """
+        Check if the input user details exists in Cisco Catalyst Center.
+
+        Parameters:
+          - self (object): An instance of the class containing the method.
+        Returns:
+            A Dictionary list contains user details based on the input given from
+            playbook like username
+            [
+                {
+                    "first_name": "Ajith",
+                    "last_name": "Andrew",
+                    "email": "ajith.andrew@example.com",
+                    "password": "Ajith@123",
+                    "username": "ajithandrewj",
+                    "role_list": ["SUPER-ADMIN-ROLE"]
+                }
+            ]
+        Description:
+            Checks the existence of a user and get the user details in Cisco Catalyst Center 
+            by querying the 'get_user_ap_i' function in the 'user_and_roles' family to check 
+            the input data with current config data and return above resoponse.
+        """
+        user_exists = False
+        current_configuration = {}
+        response = None
+        input_param = {}
+        if input_config.get("username") is not None and input_config.get("username") != "":
+            input_param["username"] = input_config["username"]
+
+        if not input_param:
+            self.log("Required param username is not in playbook config",
+                      "ERROR")
+            return (user_exists, current_configuration)
+
+        try:
+            response = self.dnac._exec(
+                family="user_and_roles",
+                function='get_user_ap_i',
+                op_modifies=True,
+                params=input_param,
+            )
+        except Exception as e:
+            self.log("The provided user '{0}' is either invalid or not present in the Cisco Catalyst Center."\
+                     .format(str(input_param) + str(e)), "WARNING")
+
+        if response:
+            self.keymap = self.keymaping(self.keymap, response)
+            response = self.camel_to_snake_case(response)
+            current_configuration = response
+            self.log("Received API response from 'get_user_ap_i': {0}"\
+                     .format(str(current_configuration)), "DEBUG")
+            user_exists = True
+
+        return (user_exists, current_configuration)
+    
+    def keymaping(self, keymap = any, data = any):
+        """
+        This function used to create the key value by snake case and Camal Case
+        we need to pass the input as the device list or AP cofig list this function collects
+        all key which is in Camal case and convert the key to Snake Case 
+        Snake case will be key and value will be as Camal Case return as Dict
+        Parameters:
+          - keymap: type Dict : Already any Key map dict was available add here or empty dict.{}
+          - data: Type :Dict : Which key need do the key map use the data {}
+            eg: user details response as a input
+        Returns:
+            {
+                {
+                    "first_name": "firstName",
+                    "last_name": "lastName"
+                }
+            }
+        Example:
+            functions = User(module)
+            keymap = functions.keymaping(keymap,user_data)
+        """
+        if isinstance(data, dict):
+            keymap.update(keymap)
+            for key, value in data.items():
+                new_key = re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', key).lower()
+                keymap[new_key] = key
+                if isinstance(value, dict):
+                    self.keymaping(keymap, value)
+                elif isinstance(value, list):
+                    self.keymaping(keymap, (item for item in value if isinstance(item, dict)))
+            return keymap
+        elif isinstance(data, list):
+            self.keymaping(keymap, (item for item in data if isinstance(item, dict)))
+        else:
+            return keymap
 
 def main():
     """ main entry point for module execution
