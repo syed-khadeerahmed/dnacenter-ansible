@@ -292,12 +292,12 @@ class User(DnacBase):
             userlist = self.payload.get("config")
             userlist = self.camel_to_snake_case(userlist)
             userlist = self.update_site_type_key(userlist)
-            user_details = dict(firstName = dict(required=False, type='str'),
-                        lastName = dict(required=False, type='str'),
+            user_details = dict(first_name = dict(required=False, type='str'),
+                        last_name = dict(required=False, type='str'),
                         email = dict(required=False, type='str'),
                         password = dict(required=False, type='str'),
                         username = dict(required=False, type='str'),
-                        roleList = dict(required=False, type='list', elements='str'),
+                        role_list = dict(required=False, type='list', elements='str'),
                         )
             valid_param, invalid_param = validate_list_of_dicts(userlist, user_details)
             eachuser = valid_param[0]
@@ -306,14 +306,14 @@ class User(DnacBase):
                                 .format(", ".join(invalid_param)))
             self.log(str(eachuser) + str(valid_param), "INFO")
 
-            if eachuser.get("firstName"):
+            if eachuser.get("first_name"):
                 param_spec = dict(type = "str", length_max = 255)
-                validate_str(eachuser["firstName"], param_spec, "firstName",
+                validate_str(eachuser["first_name"], param_spec, "first_name",
                                 errormsg)
 
-            if eachuser.get("lastName"):
+            if eachuser.get("last_name"):
                 param_spec = dict(type = "str", length_max = 255)
-                validate_str(eachuser["lastName"], param_spec, "lastName",
+                validate_str(eachuser["last_name"], param_spec, "last_name",
                                 errormsg)
 
             if eachuser.get("email"):
@@ -331,9 +331,9 @@ class User(DnacBase):
                 validate_str(eachuser["username"], param_spec, "username",
                                 errormsg)
 
-            if eachuser.get("roleList"):
+            if eachuser.get("role_list"):
                 param_spec = dict(type = "list", elements="str")
-                validate_list(eachuser["roleList"], param_spec, "roleList",
+                validate_list(eachuser["role_list"], param_spec, "role_list",
                                 errormsg)
 
             if len(errormsg) > 0:

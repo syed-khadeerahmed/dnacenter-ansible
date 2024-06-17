@@ -22,11 +22,11 @@
         dnac_task_poll_interval: 1
         state: merged
         config:
-          - firstName: "ajith"
-            lastName: "andrew"
+          - first_name: "ajith"
+            last_name: "andrew"
             email: "ajith.andrew@example.com"
             password: "ajith@123"
             username: "devnetuser1"
-            roleList:
+            role_list:
               - "super-admin"
 

@@ -1,54 +1,36 @@
-06-13-2024 09:32:07 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+06-17-2024 12:49:21 DEBUG  User: __init__: 80: Logging configured and initiated 
 
-06-13-2024 09:32:07 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-17-2024 12:49:21 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-13-2024 09:32:07 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+06-17-2024 12:49:21 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
 
-06-13-2024 09:32:15 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+06-17-2024 12:49:21 INFO  User: validate_input_yml: 307: {'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}[{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
 
-06-13-2024 09:32:15 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-17-2024 12:49:21 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
 
-06-13-2024 09:32:15 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+06-17-2024 12:49:21 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
 
-06-13-2024 09:32:19 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+06-17-2024 12:57:07 DEBUG  User: __init__: 80: Logging configured and initiated 
 
-06-13-2024 09:32:19 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-17-2024 12:57:07 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-13-2024 09:32:19 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+06-17-2024 12:57:07 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
 
-06-13-2024 09:39:49 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+06-17-2024 12:57:07 INFO  User: validate_input_yml: 307: {'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}[{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
 
-06-13-2024 09:39:49 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-17-2024 12:57:07 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
 
-06-13-2024 09:39:49 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+06-17-2024 12:57:07 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
 
-06-13-2024 09:39:53 DEBUG  UserWorkflowManager: __init__: 80: Logging configured and initiated 
+06-17-2024 13:00:38 DEBUG  User: __init__: 80: Logging configured and initiated 
 
-06-13-2024 09:39:53 DEBUG  UserWorkflowManager: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-17-2024 13:00:38 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-13-2024 09:39:53 INFO  UserWorkflowManager: __init__: 34: Login DNAC using by user: devnetuser 
+06-17-2024 13:00:38 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
 
-06-14-2024 14:31:51 DEBUG  User: __init__: 80: Logging configured and initiated 
+06-17-2024 13:00:38 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
 
-06-14-2024 14:31:51 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-17-2024 13:00:38 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
 
-06-14-2024 14:32:02 DEBUG  User: __init__: 80: Logging configured and initiated 
-
-06-14-2024 14:32:02 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
-
-06-17-2024 11:21:54 DEBUG  Site: __init__: 80: Logging configured and initiated 
-
-06-17-2024 11:21:54 DEBUG  Site: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
-
-06-17-2024 11:21:54 INFO  Site: validate_input: 392: Successfully validated playbook config params: [{'type': 'floor', 'site': {'floor': {'name': 'Test_Floor6', 'parent_name': 'Global/USA/San Francisco/BGL_18', 'length': 103.23, 'width': 75.1, 'height': 50.22, 'rf_model': 'Cubes And Walled Offices', 'floor_number': 3}}}, {'type': 'area', 'site': {'area': {'name': 'Abc', 'parent_name': 'Global', 'address': 'Bengaluru, Karnataka, India', 'latitude': 22.2111, 'longitude': -42.1234434, 'country': 'United States'}}}] 
-
-06-17-2024 11:21:54 DEBUG  Site: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'type': 'floor', 'site': {'floor': {'name': 'Test_Floor6', 'parent_name': 'Global/USA/San Francisco/BGL_18', 'length': 103.23, 'width': 75.1, 'height': 50.22, 'rf_model': 'Cubes And Walled Offices', 'floor_number': 3}}}, {'type': 'area', 'site': {'area': {'name': 'Abc', 'parent_name': 'Global', 'address': 'Bengaluru, Karnataka, India', 'latitude': 22.2111, 'longitude': -42.1234434, 'country': 'United States'}}}] 
-
-06-17-2024 11:21:54 DEBUG  Site: get_site_params: 563: Site parameters: {'type': 'floor', 'site': {'floor': {'name': 'Test_Floor6', 'parentName': 'Global/USA/San Francisco/BGL_18', 'length': 103.23, 'width': 75.1, 'height': 50.22, 'floorNumber': 3, 'rfModel': 'Cubes And Walled Offices'}}} 
-
-06-17-2024 11:21:54 INFO  Site: get_site_name: 585: Site name: Global/USA/San Francisco/BGL_18/Test_Floor6 
-
-06-17-2024 11:21:54 INFO  Site: get_want: 760: Desired State (want): {'site_params': {'type': 'floor', 'site': {'floor': {'name': 'Test_Floor6', 'parentName': 'Global/USA/San Francisco/BGL_18', 'length': 103.23, 'width': 75.1, 'height': 50.22, 'floorNumber': 3, 'rfModel': 'Cubes And Walled Offices'}}}, 'site_name': 'Global/USA/San Francisco/BGL_18/Test_Floor6'} 
-
-06-17-2024 11:21:54 DEBUG  Site: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'type': 'floor', 'site': {'floor': {'name': 'Test_Floor6', 'parent_name': 'Global/USA/San Francisco/BGL_18', 'length': 103.23, 'width': 75.1, 'height': 50.22, 'rf_model': 'Cubes And Walled Offices', 'floor_number': 3}}}, {'type': 'area', 'site': {'area': {'name': 'Abc', 'parent_name': 'Global', 'address': 'Bengaluru, Karnataka, India', 'latitude': 22.2111, 'longitude': -42.1234434, 'country': 'United States'}}}] 
+06-17-2024 13:00:38 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
 
