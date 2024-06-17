@@ -29,10 +29,10 @@ options:
     email:
       description: The email address of the user.
       type: str
-    firstName:
+    first_name:
       description: The first name of the user.
       type: str
-    lastName:
+    last_name:
       description: The last name of the user.
       type: str
     password:
@@ -41,7 +41,7 @@ options:
     username:
       description: The username for the user's account.
       type: str
-    roleList:
+    role_list:
       description: A list of role IDs assigned to the user.
       elements: str
       type: list
@@ -50,16 +50,16 @@ options:
     email:
       description: The email address of the user. This must be set if the original value is not empty.
       type: str
-    firstName:
+    first_name:
       description: The first name of the user. This must be set if the original value is not empty.
       type: str
-    lastName:
+    last_name:
       description: The last name of the user. This must be set if the original value is not empty.
       type: str
     username:
       description: The username for the user's account.
       type: str
-    roleList:
+    role_list:
       description: A list of role IDs assigned to the user.
       elements: str
       type: list
@@ -114,10 +114,10 @@ EXAMPLES = r"""
       state: merged
       config:
         email: "syedkhadeer@example.com"
-        firstName: "Syed Khadeer"
-        lastName: "Ahmed"
+        first_name: "Syed Khadeer"
+        last_name: "Ahmed"
         password: "password123"
-        roleList:
+        role_list:
           - "Network Administrator"
         username: "syed"
 
@@ -133,9 +133,9 @@ EXAMPLES = r"""
       state: present
       config:
         email: "ajithandrew@example.com"
-        firstName: "Ajith"
-        lastName: "Andrew"
-        roleList:
+        first_name: "Ajith"
+        last_name: "Andrew"
+        role_list:
           - "System Administrator"
         username: "ajith"
 
@@ -187,10 +187,10 @@ response_2:
       "response": {
         "user": {
           "email": "user@example.com",
-          "firstName": "John",
-          "lastName": "Doe",
+          "first_name": "John",
+          "last_name": "Doe",
           "username": "johndoe",
-          "roleList": ["Network Administrator"]
+          "role_list": ["Network Administrator"]
           # Additional user details as needed
         },
         "userId": "string",  # User ID from Cisco DNA Center
@@ -219,7 +219,7 @@ response_3:
         "status": "string",
         "timeDuration": 0
       },
-      "msg": "Error during creating or updating or deliting the user."
+      "msg": "Error during creating or updating or deleting the user."
     }
 
 # Case 4: User not found (during delete operation)
@@ -317,14 +317,14 @@ class User(DnacBase):
                                 errormsg)
 
             if eachuser.get("email"):
-                param_spec = dict(type = "str", length_max = 255)
-                validate_str(eachuser["password"], param_spec, "email",
-                                errormsg)
+                email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
+                if not email_regex.match(eachuser["email"]):
+                    errormsg.append("email: Invalid email format for email: '{0}'".format(eachuser["email"]))
 
             if eachuser.get("password"):
-                param_spec = dict(type = "str", length_max = 255)
-                validate_str(eachuser["password"], param_spec, "password",
-                                errormsg)
+                password_regex = re.compile(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+                if not password_regex.match(eachuser["password"]):
+                    errormsg.append("password: Password does not meet complexity requirements for password: '{0}'".format(eachuser["password"]))
 
             if eachuser.get("username"):
                 param_spec = dict(type = "str", length_max = 255)
@@ -351,6 +351,51 @@ class User(DnacBase):
             self.msg = "Invalid parameters in playbook: {0}".format(str("\n".join(errormsg)))
             self.status = "failed"
             return self
+
+    def get_want(self, user_config):
+        """
+        Get all user-related information from the playbook needed for creation/updation/deletion of user in Cisco Catalyst Center.
+        Parameters:
+            self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+            config (dict): A dictionary containing user information.
+        Returns:
+            self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+        Description:
+            Retrieves all user-related information from playbook that is
+            required for creating a user in Cisco Catalyst Center. It includes
+            parameters such as 'username' and 'email' The gathered
+            information is stored in the 'want' attribute for later reference.
+        """
+        for key,value in user_config.items():
+            self.want[key] = value
+        self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
+        return self
+
+    # def get_have(self, input_config):
+    #     """
+    #     Get the user details from Cisco Catalyst Center
+    #     Parameters:
+    #       - self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+    #       - input_config (dict): A dictionary containing the configuration details.
+    #     Returns:
+    #       - self (object): An instance of a class used for interacting with  Cisco Catalyst Center.
+    #     Description:
+    #         This method queries Cisco Catalyst Center to check if a specified user
+    #         exists. If the user exists, it retrieves details about the current
+    #         user, including the user ID and other relevant information. The
+    #         results are stored in the 'have' attribute for later reference.
+    #     """
+    #     user_exists = False
+    #     current_user_config = None
+    #     # check if given user config exists, if exists store current user info
+    #     (user_exists, current_user_config) = self.get_current_config(input_config)
+    #     self.log("Current user config details (have): {0}".format(str(current_ap_config)), "DEBUG")
+    #     if user_exists:
+    #         self.have["username"] = current_user_config.get("username")
+    #         self.have["user_exists"] = user_exists
+    #         self.have["current_user_config"] = current_user_config
+    #     self.log("Current State (have): {0}".format(str(self.have)), "INFO")
+    #     return self
 
 def main():
     """ main entry point for module execution
@@ -391,13 +436,13 @@ def main():
     ccc_user.validate_input_yml().check_return_status()
     config_verify = ccc_user.params.get("config_verify")
 
-    # for config in ccc_user.validated_config:
-    #     ccc_user.reset_values()
-    #     ccc_user.get_want(config).check_return_status()
-    #     ccc_user.get_have(config).check_return_status()
-    #     ccc_user.get_diff_state_apply[state](config).check_return_status()
-    #     if config_verify:
-    #         ccc_user.verify_diff_state_apply[state](config).check_return_status()
+    for config in ccc_user.validated_config:
+        ccc_user.reset_values()
+        ccc_user.get_want(config).check_return_status()
+        ccc_user.get_have(config).check_return_status()
+        # ccc_user.get_diff_state_apply[state](config).check_return_status()
+        # if config_verify:
+        #     ccc_user.verify_diff_state_apply[state](config).check_return_status()
 
     module.exit_json(**ccc_user.result)
 
