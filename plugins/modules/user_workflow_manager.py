@@ -5,7 +5,6 @@
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
-
 __metaclass__ = type
 __author__ = ("Ajith Andrew J, Syed khadeer Ahmed")
 
@@ -160,7 +159,7 @@ response_1:
   description: A dictionary with details of the API execution from Cisco DNA Center.
   returned: always
   type: dict
-  sample: >
+  sample:
     {
       "response": {
         "bapiExecutionId": "string",
@@ -183,7 +182,7 @@ response_2:
   description: A dictionary with existing user details indicating no update needed.
   returned: always
   type: dict
-  sample: >
+  sample:
     {
       "response": {
         "user": {
@@ -205,7 +204,7 @@ response_3:
   description: A dictionary with details of the API execution and error information.
   returned: always
   type: dict
-  sample: >
+  sample:
     {
       "response": {
         "bapiError": "string",  # Specific error message
@@ -246,21 +245,112 @@ response_5:
     }
 """
 
-from ansible.module_utils.basic import AnsibleModule
+import re, time
 from ansible_collections.cisco.dnac.plugins.module_utils.dnac import (
     DnacBase,
     validate_list_of_dicts,
-    get_dict_result,
+    validate_int,
+    validate_str,
+    validate_list
 )
+from ansible.module_utils.basic import AnsibleModule
 
 class User(DnacBase):
     """Class containing member attributes for user workflow_manager module"""
 
     def __init__(self, module):
         super().__init__(module)
+        self.result["response"] = []
         self.supported_states = ["merged", "deleted"]
-        self.created_user_list, self.updated_user_list, self.update_not_neeeded_user = [], [], []
-        self.deleted_user_list, self.user_absent_list = [], []
+        self.payload = module.params
+        self.keymap = {}
+
+    # Below function used to validate input over the ansible validation
+    def validate_input_yml(self):
+        """
+        Validate the fields provided in the yml files.
+        Checks the configuration provided in the playbook against a predefined specification
+        to ensure it adheres to the expected structure and data types based on input.
+        Parameters:
+          - self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+        Returns:
+          The method returns an instance of the class with updated attributes:
+                - self.msg: A message describing the validation result.
+                - self.status: The status of the validation (either 'success' or 'failed').
+                - self.validated_config: If successful, a validated version of the 'config' parameter.
+        Example:
+            To use this method, create an instance of the class and call 'validate_input_yml' on it.
+            If the validation succeeds, 'self.status' will be 'success' and 'self.validated_config'
+            will contain the validated configuration. If it fails, 'self.status' will be 'failed', and
+            'self.msg' will describe the validation issues.
+          If the validation succeeds, this will allow to go next step, unless this will stop execution.
+          based on the fields.
+        """
+        self.log('Validating the Playbook Yaml File..', "INFO")
+        try:
+            errormsg = []
+            userlist = self.payload.get("config")
+            userlist = self.camel_to_snake_case(userlist)
+            userlist = self.update_site_type_key(userlist)
+            user_details = dict(firstName = dict(required=False, type='str'),
+                        lastName = dict(required=False, type='str'),
+                        email = dict(required=False, type='str'),
+                        password = dict(required=False, type='str'),
+                        username = dict(required=False, type='str'),
+                        roleList = dict(required=False, type='list', elements='str'),
+                        )
+            valid_param, invalid_param = validate_list_of_dicts(userlist, user_details)
+            eachuser = valid_param[0]
+            if len(invalid_param) > 0:
+                errormsg.append("Invalid param found in playbook: '{0}' "\
+                                .format(", ".join(invalid_param)))
+            self.log(str(eachuser) + str(valid_param), "INFO")
+
+            if eachuser.get("firstName"):
+                param_spec = dict(type = "str", length_max = 255)
+                validate_str(eachuser["firstName"], param_spec, "firstName",
+                                errormsg)
+
+            if eachuser.get("lastName"):
+                param_spec = dict(type = "str", length_max = 255)
+                validate_str(eachuser["lastName"], param_spec, "lastName",
+                                errormsg)
+
+            if eachuser.get("email"):
+                param_spec = dict(type = "str", length_max = 255)
+                validate_str(eachuser["password"], param_spec, "email",
+                                errormsg)
+
+            if eachuser.get("password"):
+                param_spec = dict(type = "str", length_max = 255)
+                validate_str(eachuser["password"], param_spec, "password",
+                                errormsg)
+
+            if eachuser.get("username"):
+                param_spec = dict(type = "str", length_max = 255)
+                validate_str(eachuser["username"], param_spec, "username",
+                                errormsg)
+
+            if eachuser.get("roleList"):
+                param_spec = dict(type = "list", elements="str")
+                validate_list(eachuser["roleList"], param_spec, "roleList",
+                                errormsg)
+
+            if len(errormsg) > 0:
+                self.log("Invalid parameters in playbook file: '{0}' ".format(str("\n".join(errormsg))), "ERROR")
+                self.module.fail_json(msg=str("\n".join(errormsg)))
+            else:
+                self.validated_config = valid_param
+                self.msg = "Successfully validated playbook config params: {0}".format(str(valid_param))
+                self.log(self.msg, "INFO")
+                self.status = "success"
+                return self
+
+        except Exception as e:
+            self.log("Invalid Param provided in playbook Yml File. {0}".format(str(e)), "ERROR")
+            self.msg = "Invalid parameters in playbook: {0}".format(str("\n".join(errormsg)))
+            self.status = "failed"
+            return self
 
 def main():
     """ main entry point for module execution
@@ -291,6 +381,23 @@ def main():
     )
 
     ccc_user = User(module)
+    state = ccc_user.params.get("state")
+
+    if state not in ccc_user.supported_states:
+        ccc_user.status = "invalid"
+        ccc_user.msg = "State {0} is invalid".format(state)
+        ccc_user.check_return_status()
+
+    ccc_user.validate_input_yml().check_return_status()
+    config_verify = ccc_user.params.get("config_verify")
+
+    # for config in ccc_user.validated_config:
+    #     ccc_user.reset_values()
+    #     ccc_user.get_want(config).check_return_status()
+    #     ccc_user.get_have(config).check_return_status()
+    #     ccc_user.get_diff_state_apply[state](config).check_return_status()
+    #     if config_verify:
+    #         ccc_user.verify_diff_state_apply[state](config).check_return_status()
 
     module.exit_json(**ccc_user.result)
 
