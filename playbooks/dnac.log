@@ -1,36 +1,544 @@
-06-17-2024 12:49:21 DEBUG  User: __init__: 80: Logging configured and initiated 
+06-18-2024 11:00:15 DEBUG  User: __init__: 80: Logging configured and initiated 
 
-06-17-2024 12:49:21 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-18-2024 11:00:15 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
 
-06-17-2024 12:49:21 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+06-18-2024 11:00:15 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
 
-06-17-2024 12:49:21 INFO  User: validate_input_yml: 307: {'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}[{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
+06-18-2024 11:00:15 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
 
-06-17-2024 12:49:21 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
+06-18-2024 11:00:15 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
 
-06-17-2024 12:49:21 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
+06-18-2024 11:00:15 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
 
-06-17-2024 12:57:07 DEBUG  User: __init__: 80: Logging configured and initiated 
+06-18-2024 11:00:15 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']} 
 
-06-17-2024 12:57:07 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-18-2024 11:00:15 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
 
-06-17-2024 12:57:07 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+06-18-2024 11:00:16 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
 
-06-17-2024 12:57:07 INFO  User: validate_input_yml: 307: {'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}[{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
+06-18-2024 11:00:16 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
 
-06-17-2024 12:57:07 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
+06-18-2024 11:00:16 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
 
-06-17-2024 12:57:07 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'firstName': None, 'lastName': None, 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'roleList': None}] 
+06-18-2024 11:00:16 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
 
-06-17-2024 13:00:38 DEBUG  User: __init__: 80: Logging configured and initiated 
+06-18-2024 11:00:16 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
 
-06-17-2024 13:00:38 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+06-18-2024 11:00:16 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
 
-06-17-2024 13:00:38 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+06-18-2024 11:00:16 DEBUG  User: get_current_config: 451: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
 
-06-17-2024 13:00:38 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
+06-18-2024 11:00:16 DEBUG  User: get_have: 392: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
 
-06-17-2024 13:00:38 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
+06-18-2024 11:00:16 INFO  User: get_have: 397: Current State (have): {'username': None, 'user_exists': True, 'current_user_config': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}}} 
 
-06-17-2024 13:00:38 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
+06-18-2024 11:00:16 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser1', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:19:29 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 11:19:29 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 11:19:29 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 11:19:29 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:19:29 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:19:29 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:19:29 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 11:19:29 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:19:30 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 11:19:30 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 11:19:30 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 11:19:30 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 11:19:30 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 11:19:30 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 11:19:30 DEBUG  User: get_current_config: 451: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 11:19:30 DEBUG  User: get_have: 392: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 11:19:30 INFO  User: get_have: 397: Current State (have): {'username': None, 'user_exists': True, 'current_user_config': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}}} 
+
+06-18-2024 11:19:30 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:27:39 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 11:27:39 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 11:27:39 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 11:27:39 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:27:39 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:27:39 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:27:39 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 11:27:39 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:27:40 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 11:27:40 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 11:27:40 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 11:27:40 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 11:27:40 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 11:27:40 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 11:27:40 DEBUG  User: get_current_config: 451: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 11:27:40 DEBUG  User: get_have: 392: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 11:27:40 INFO  User: get_have: 397: Current State (have): {'username': None, 'user_exists': True, 'current_user_config': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}}} 
+
+06-18-2024 11:27:40 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:32:34 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 11:32:34 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 11:32:34 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 11:32:34 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:32:34 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:32:34 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:32:34 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 11:32:34 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:32:34 WARNING  User: get_current_config: 430: {'username': 'ajithandrewj'} 
+
+06-18-2024 11:32:35 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 11:32:35 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 11:32:35 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 11:32:35 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 11:32:35 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 11:32:35 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 11:32:35 DEBUG  User: get_current_config: 452: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 11:32:35 DEBUG  User: get_have: 392: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 11:32:35 INFO  User: get_have: 397: Current State (have): {'username': None, 'user_exists': True, 'current_user_config': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}}} 
+
+06-18-2024 11:32:35 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:43:20 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 11:43:20 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 11:43:20 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 11:43:20 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:43:20 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:43:20 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:43:20 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 11:43:20 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 11:43:20 WARNING  User: get_current_config: 430: {'username': 'ajithandrewj'} 
+
+06-18-2024 11:43:21 DEBUG  User: get_current_config: 452: Received API response from 'get_user_ap_i': {'response': {'users': [{'firstName': '', 'lastName': '', 'authSource': 'internal', 'passphraseUpdateTime': '1626099279679', 'roleList': ['5e8e896e4d4add00ca2b648e'], 'userId': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 11:43:21 DEBUG  User: get_have: 392: Current user config details (have): {'response': {'users': [{'firstName': '', 'lastName': '', 'authSource': 'internal', 'passphraseUpdateTime': '1626099279679', 'roleList': ['5e8e896e4d4add00ca2b648e'], 'userId': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 11:43:21 INFO  User: get_have: 397: Current State (have): {'username': None, 'user_exists': True, 'current_user_config': {'response': {'users': [{'firstName': '', 'lastName': '', 'authSource': 'internal', 'passphraseUpdateTime': '1626099279679', 'roleList': ['5e8e896e4d4add00ca2b648e'], 'userId': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}}} 
+
+06-18-2024 11:43:21 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:12:20 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:12:20 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:12:20 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:12:20 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:12:20 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:12:20 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:12:20 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 12:12:20 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:12:20 DEBUG  User: get_current_config: 441: Calling get_users_api with params: {'username': 'ajithandrewj', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:12:21 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 12:12:21 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 12:12:21 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 12:12:21 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 12:12:21 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 12:12:21 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 12:12:21 DEBUG  User: get_current_config: 456: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:12:21 DEBUG  User: get_have: 392: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:12:21 INFO  User: get_have: 397: Current State (have): {} 
+
+06-18-2024 12:12:21 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:13:18 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:13:18 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:13:18 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:13:18 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:13:18 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:13:18 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:13:18 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 12:13:18 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:13:18 DEBUG  User: get_current_config: 441: Calling get_users_api with params: {'username': 'ajithandrewj', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:13:20 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 12:13:20 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 12:13:20 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 12:13:20 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 12:13:20 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 12:13:20 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 12:13:20 DEBUG  User: get_current_config: 456: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:13:20 DEBUG  User: get_have: 392: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:13:20 INFO  User: get_have: 397: Current State (have): {} 
+
+06-18-2024 12:13:20 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:18:38 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:18:38 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:18:38 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:18:38 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:18:38 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:18:38 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:18:38 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 12:18:38 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:18:38 DEBUG  User: get_current_config: 441: Calling get_users_api with params: {'username': 'ajithandrewj', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:18:39 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 12:18:39 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 12:18:39 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 12:18:39 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 12:18:39 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 12:18:39 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 12:18:39 DEBUG  User: get_current_config: 454: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:18:39 DEBUG  User: get_have: 392: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:18:39 INFO  User: get_have: 397: Current State (have): {} 
+
+06-18-2024 12:18:39 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:24:21 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:24:21 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:24:21 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:24:21 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:24:21 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:24:21 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:24:21 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 12:24:21 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:24:21 DEBUG  User: get_current_config: 441: Calling get_users_api with params: {'username': 'ajithandrewj', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:24:23 DEBUG  User: get_have: 392: Current user config details (have): {} 
+
+06-18-2024 12:24:23 INFO  User: get_have: 397: Current State (have): {} 
+
+06-18-2024 12:24:23 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:31:33 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:31:33 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:31:33 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:31:33 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:31:33 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:31:33 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:31:33 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']} 
+
+06-18-2024 12:31:33 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:31:33 DEBUG  User: get_current_config: 442: Calling get_users_api with params: {'username': 'ajithandrewj', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:31:35 WARNING  User: get_have: 392: The provided user 'ajithandrewj' is not present in the Cisco Catalyst Center. User_exists = False 
+
+06-18-2024 12:31:35 DEBUG  User: get_have: 393: Current user config details (have): {} 
+
+06-18-2024 12:31:35 INFO  User: get_have: 398: Current State (have): {} 
+
+06-18-2024 12:31:35 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:33:06 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:33:06 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:33:06 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:33:06 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:33:06 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:33:06 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:33:06 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-18-2024 12:33:06 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:33:06 DEBUG  User: get_current_config: 442: Calling get_users_api with params: {'username': 'devnetuser', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:33:07 WARNING  User: get_have: 392: The provided user 'devnetuser' is not present in the Cisco Catalyst Center. User_exists = False 
+
+06-18-2024 12:33:07 DEBUG  User: get_have: 393: Current user config details (have): {} 
+
+06-18-2024 12:33:07 INFO  User: get_have: 398: Current State (have): {} 
+
+06-18-2024 12:33:07 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:36:41 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:36:41 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:36:41 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:36:41 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:36:41 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:36:41 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:36:41 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-18-2024 12:36:41 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:36:41 DEBUG  User: get_current_config: 443: Calling get_users_api with params: {'username': 'devnetuser', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:36:42 INFO  User: get_have: 393: The provided user 'devnetuser' is not present in the Cisco Catalyst Center. User_exists = False 
+
+06-18-2024 12:36:42 DEBUG  User: get_have: 394: Current user config details (have): {} 
+
+06-18-2024 12:36:42 INFO  User: get_have: 399: Current State (have): {} 
+
+06-18-2024 12:36:42 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:40:59 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:40:59 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:40:59 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:40:59 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:40:59 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:40:59 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:40:59 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-18-2024 12:40:59 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:40:59 DEBUG  User: get_current_config: 443: Calling get_users_api with params: {'username': 'devnetuser', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:41:00 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 12:41:00 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 12:41:00 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 12:41:00 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 12:41:00 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 12:41:00 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 12:41:00 DEBUG  User: get_current_config: 459: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:41:00 DEBUG  User: get_have: 394: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:41:00 INFO  User: get_have: 399: Current State (have): {'username': None, 'user_exists': True, 'current_user_config': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}}} 
+
+06-18-2024 12:41:00 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:41:59 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:41:59 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:41:59 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:41:59 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:41:59 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:41:59 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:41:59 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']} 
+
+06-18-2024 12:41:59 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:41:59 DEBUG  User: get_current_config: 443: Calling get_users_api with params: {'username': 'aj', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:42:00 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 12:42:00 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 12:42:00 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 12:42:00 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 12:42:00 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 12:42:00 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 12:42:00 DEBUG  User: get_current_config: 459: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:42:00 INFO  User: get_have: 393: The provided user 'aj' is not present in the Cisco Catalyst Center. User_exists = False 
+
+06-18-2024 12:42:00 DEBUG  User: get_have: 394: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:42:00 INFO  User: get_have: 399: Current State (have): {} 
+
+06-18-2024 12:42:00 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:47:48 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:47:48 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:47:48 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:47:48 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:47:48 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:47:48 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:47:48 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']} 
+
+06-18-2024 12:47:48 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:47:48 DEBUG  User: get_current_config: 443: Calling get_users_api with params: {'username': 'aj', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:47:49 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 12:47:49 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 12:47:49 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 12:47:49 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 12:47:49 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 12:47:49 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 12:47:49 DEBUG  User: get_current_config: 459: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:47:49 INFO  User: get_have: 393: The provided user 'aj' is not present in the Cisco Catalyst Center. User_exists = False 
+
+06-18-2024 12:47:49 DEBUG  User: get_have: 394: Current user config details (have): {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:47:49 INFO  User: get_have: 399: Current State (have): {} 
+
+06-18-2024 12:47:49 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'aj', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:50:59 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 12:50:59 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 12:50:59 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 12:50:59 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:50:59 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:50:59 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:50:59 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-18-2024 12:50:59 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 12:50:59 DEBUG  User: get_current_config: 443: Calling get_users_api with params: {'username': 'devnetuser', 'invoke_source': 'external', 'auth_source': 'internal'} 
+
+06-18-2024 12:51:00 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 12:51:00 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 12:51:00 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 12:51:00 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 12:51:00 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 12:51:00 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 12:51:00 DEBUG  User: get_current_config: 459: Received API response from 'get_user_ap_i': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 12:51:00 DEBUG  User: get_have: 394: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-18-2024 12:51:00 INFO  User: get_have: 399: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}} 
+
+06-18-2024 12:51:00 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
 

@@ -389,7 +389,9 @@ class User(DnacBase):
         current_user_config = None
         # check if given user config exists, if exists store current user info
         (user_exists, current_user_config) = self.get_current_config(input_config)
-        self.log("Current user config details (have): {0}".format(str(current_ap_config)), "DEBUG")
+        if not user_exists:
+            self.log("The provided user '{0}' is not present in the Cisco Catalyst Center. User_exists = {1}".format(str(input_config.get("username")), str(user_exists)), "INFO")
+        self.log("Current user config details (have): {0}".format(str(current_user_config)), "DEBUG")
         if user_exists:
             self.have["username"] = current_user_config.get("username")
             self.have["user_exists"] = user_exists
@@ -397,14 +399,80 @@ class User(DnacBase):
         self.log("Current State (have): {0}".format(str(self.have)), "INFO")
         return self
 
+    def get_diff_merged(self, config):
+        """
+        Update/Create user in Cisco Catalyst Center with fields
+        provided in the playbook.
+        Parameters:
+          self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+          config (dict): A dictionary containing configuration information.
+        Returns:
+            self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+        Description:
+            This method determines whether to update or create user details in Cisco
+            Catalyst Center based on the provided configuration information. 
+            If the specified user exists, the method checks if it requires an update
+            by calling the 'update_user_configuration' method. If an update is required, 
+            it calls the 'configure_user' function from the 'user_and_roles' family of 
+            the Cisco Catalyst Center API. If Current configuration same as input configuration 
+            does not require an update, the method exits, indicating that user is up to date.
+        """
+
+        config_updated = False
+        config_created = False
+        task_response = None
+        # check if the given user config exists and/or needs to be updated/created.
+
+        if self.have.get("user_exists"):
+            consolidated_data = self.compare_user_cofig_with_inputdata(self.have["current_user_config"])
+            if consolidated_data:
+                self.log('Final user data to update {}'.format(str(consolidated_data)),
+                      "INFO")
+                task_response = self.update_user_configuration(consolidated_data)
+                self.log('Task respoonse {}'.format(str(task_response)),"INFO")
+                config_updated = True
+            else:
+                # user does not need update
+                self.msg = "user - {0} does not need any update"\
+                    .format(self.have.get("current_user_config").get("username"))
+                self.log(self.msg, "INFO")
+                responses = {}
+                responses["users_updates"] = {"response": config}
+                self.result['msg'] = self.msg
+                self.result["response"].append(responses)
+                self.result["skipped"] = True
+                return self
+        else:
+            #need to add the method for creation.
+            pass
+
+        if config_updated or config_created:
+            responses = {}
+            if task_response and isinstance(task_response, dict):
+                self.check_task_response_status(task_response, "task_intent", True).check_return_status()
+                if self.status == "success":
+                    self.result['changed'] = True
+                    responses["users_updates"] = {"response": task_response}
+                else:
+                    self.module.fail_json(msg="Unable to get Task Details.", response=task_response)
+
+            if config_updated:
+                self.msg = "User details - {0} Updated Successfully"\
+                    .format(self.have["current_user_config"].get("username"))
+                self.log(self.msg, "INFO")
+                self.result['msg'] = self.msg
+                self.result['response'].append(responses)
+        return self
+
     def get_current_config(self, input_config):
         """
-        Check if the input user details exists in Cisco Catalyst Center.
+        Check if the input user details exist in Cisco Catalyst Center.
 
         Parameters:
           - self (object): An instance of the class containing the method.
+
         Returns:
-            A Dictionary list contains user details based on the input given from
+            A Dictionary list containing user details based on the input given from
             playbook like username
             [
                 {
@@ -416,29 +484,34 @@ class User(DnacBase):
                     "role_list": ["SUPER-ADMIN-ROLE"]
                 }
             ]
+
         Description:
-            Checks the existence of a user and get the user details in Cisco Catalyst Center 
-            by querying the 'get_user_ap_i' function in the 'user_and_roles' family to check 
-            the input data with current config data and return above resoponse.
+            Checks the existence of a user and gets the user details in Cisco Catalyst Center
+            by querying the 'get_user_ap_i' function in the 'user_and_roles' family to check
+            the input data with current config data and return the above response.
         """
+
         user_exists = False
         current_configuration = {}
         response = None
         input_param = {}
+
         if input_config.get("username") is not None and input_config.get("username") != "":
             input_param["username"] = input_config["username"]
 
         if not input_param:
-            self.log("Required param username is not in playbook config",
-                      "ERROR")
+            self.log("Required param username is not in playbook config", "ERROR")
             return (user_exists, current_configuration)
 
         try:
+            params = {**input_param, 'invoke_source': 'external', 'auth_source': 'internal'}
+            self.log(f"Calling get_users_api with params: {params}", "DEBUG")
+
             response = self.dnac._exec(
                 family="user_and_roles",
-                function='get_user_ap_i',
+                function="get_users_api",
                 op_modifies=True,
-                params=input_param,
+                params=params,
             )
         except Exception as e:
             self.log("The provided user '{0}' is either invalid or not present in the Cisco Catalyst Center."\
@@ -448,12 +521,18 @@ class User(DnacBase):
             self.keymap = self.keymaping(self.keymap, response)
             response = self.camel_to_snake_case(response)
             current_configuration = response
-            self.log("Received API response from 'get_user_ap_i': {0}"\
-                     .format(str(current_configuration)), "DEBUG")
-            user_exists = True
+            self.log("Received API response from 'get_user_ap_i': {0}".format(str(current_configuration)), "DEBUG")
 
+            if current_configuration and "response" in current_configuration and "users" in current_configuration["response"]:
+                users = current_configuration["response"]["users"]
+                for user in users:
+                   if user.get("username") == input_config.get("username"):
+                        current_configuration= user
+                        user_exists = True
+                        break
         return (user_exists, current_configuration)
-    
+
+
     def keymaping(self, keymap = any, data = any):
         """
         This function used to create the key value by snake case and Camal Case
