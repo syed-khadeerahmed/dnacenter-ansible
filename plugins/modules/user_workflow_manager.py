@@ -387,8 +387,9 @@ class User(DnacBase):
         """
         user_exists = False
         current_user_config = None
+        current_role_config = None
         # check if given user config exists, if exists store current user info
-        (user_exists, current_user_config) = self.get_current_config(input_config)
+        (user_exists, current_user_config, current_role_config) = self.get_current_config(input_config)
         if not user_exists:
             self.log("The provided user '{0}' is not present in the Cisco Catalyst Center. User_exists = {1}".format(str(input_config.get("username")), str(user_exists)), "INFO")
         self.log("Current user config details (have): {0}".format(str(current_user_config)), "DEBUG")
@@ -396,10 +397,11 @@ class User(DnacBase):
             self.have["username"] = current_user_config.get("username")
             self.have["user_exists"] = user_exists
             self.have["current_user_config"] = current_user_config
+            self.have["current_role_config"] = current_role_config
         self.log("Current State (have): {0}".format(str(self.have)), "INFO")
         return self
 
-    def get_diff_merged(self, config):
+    # def get_diff_merged(self, config):
         """
         Update/Create user in Cisco Catalyst Center with fields
         provided in the playbook.
@@ -492,46 +494,65 @@ class User(DnacBase):
         """
 
         user_exists = False
-        current_configuration = {}
-        response = None
+        current_user_configuration = {}
+        current_role_configuration = []
+        response_user = None
+        response_role = None
         input_param = {}
 
         if input_config.get("username") is not None and input_config.get("username") != "":
             input_param["username"] = input_config["username"]
+        
+        if input_config.get("role_list") and all(item for item in input_config.get("role_list")):
+            input_param["role_list"] = input_config["role_list"]
 
         if not input_param:
-            self.log("Required param username is not in playbook config", "ERROR")
-            return (user_exists, current_configuration)
+            self.log("Required param username or role_list is not in playbook config", "ERROR")
+            return (user_exists, current_user_configuration, current_role_configuration)
 
         try:
-            params = {**input_param, 'invoke_source': 'external', 'auth_source': 'internal'}
-            self.log(f"Calling get_users_api with params: {params}", "DEBUG")
 
-            response = self.dnac._exec(
+            response_user = self.dnac._exec(
                 family="user_and_roles",
                 function="get_users_api",
                 op_modifies=True,
-                params=params,
+                params={**input_param, 'invoke_source': 'external', 'auth_source': 'internal'},
             )
+
+            response_role = self.dnac._exec(
+                family="user_and_roles",
+                function="get_roles_api",
+                op_modifies=True,
+                params=input_param,
+            )
+
         except Exception as e:
             self.log("The provided user '{0}' is either invalid or not present in the Cisco Catalyst Center."\
                      .format(str(input_param) + str(e)), "WARNING")
 
-        if response:
-            self.keymap = self.keymaping(self.keymap, response)
-            response = self.camel_to_snake_case(response)
-            current_configuration = response
-            self.log("Received API response from 'get_user_ap_i': {0}".format(str(current_configuration)), "DEBUG")
+        if response_user and response_role:
+            self.keymap = self.keymaping(self.keymap, response_user)
+            self.keymap = self.keymaping(self.keymap, response_role)
+            response_user = self.camel_to_snake_case(response_user)
+            response_role = self.camel_to_snake_case(response_role)
+            current_user_configuration = response_user
+            current_role_configuration = response_role
+            self.log("Received API response from 'get_users_api': {0}".format(str(current_user_configuration)), "DEBUG")
+            self.log("Received API response from 'get_roles_api': {0}".format(str(current_role_configuration)), "DEBUG")
 
-            if current_configuration and "response" in current_configuration and "users" in current_configuration["response"]:
-                users = current_configuration["response"]["users"]
+            if (current_user_configuration and "response" in current_user_configuration and "users" in current_user_configuration["response"]) and (current_role_configuration and "response" in current_role_configuration and "roles" in current_role_configuration["response"]):
+                users = current_user_configuration["response"]["users"]
+                roles = current_role_configuration["response"]["roles"]
                 for user in users:
                    if user.get("username") == input_config.get("username"):
-                        current_configuration= user
+                        user_role_ids= user.get("role_list",[])
+                        for role in roles:
+                            if role.get("name") in user_role_ids:
+                                current_role_configuration.append(role.get("role_id"))
+                        current_user_configuration= user
                         user_exists = True
                         break
-        return (user_exists, current_configuration)
-
+        return (user_exists, current_user_configuration, current_role_configuration)
 
     def keymaping(self, keymap = any, data = any):
         """
