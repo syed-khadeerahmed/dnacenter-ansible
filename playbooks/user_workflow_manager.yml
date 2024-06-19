@@ -26,7 +26,6 @@
             last_name: "andrew"
             email: "ajith.andrew@example.com"
             password: "Ajith@123"
-            username: "devnetuser"
-            role_list:
-              - "super-admin"
+            username: "ajithandrewj"
+            role_list: ["OBSERVER-ROLE","SUPER-ADMIN-ROLE"]
 

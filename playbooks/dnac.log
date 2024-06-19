@@ -542,3 +542,1717 @@
 
 06-18-2024 12:51:00 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
 
+06-18-2024 19:03:48 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-18-2024 19:03:48 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-18-2024 19:03:48 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-18-2024 19:03:48 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 19:03:48 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 19:03:48 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 19:03:48 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-18-2024 19:03:48 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-18-2024 19:03:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-18-2024 19:03:50 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-18-2024 19:03:50 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-18-2024 19:03:50 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-18-2024 19:03:50 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-18-2024 19:03:50 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:12:45 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:12:45 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:12:45 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:12:45 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:12:45 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:12:45 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:12:45 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:12:45 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:12:47 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:12:47 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:12:47 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:12:47 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:12:47 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:12:47 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:18:51 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:18:51 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:18:51 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:18:51 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:18:51 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:18:51 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:18:51 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:18:51 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:18:53 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:18:53 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:18:53 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:23:34 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:23:34 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:23:34 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:23:34 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:23:34 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:23:34 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:23:34 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:23:34 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:23:36 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:23:36 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:23:36 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:23:36 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:23:36 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:23:36 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:25:44 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:25:44 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:25:44 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:25:44 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:25:44 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:25:44 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:25:44 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:25:44 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:25:46 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:25:46 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:25:46 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:25:46 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:25:46 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:25:46 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:28:22 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:28:22 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:28:22 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:28:22 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:28:22 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:28:22 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:28:22 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:28:22 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:28:24 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:28:24 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:28:24 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:28:24 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:28:24 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:28:24 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:01 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:34:01 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:34:01 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:34:01 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:01 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:01 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:01 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:34:01 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:03 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:34:03 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:34:03 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:34:03 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:34:03 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:48 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:34:48 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:34:48 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:34:48 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:48 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:48 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:48 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:34:48 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:34:49 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:34:49 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:34:49 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:34:49 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:34:49 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:34:49 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:34:49 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:49 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:34:50 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:34:50 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:34:50 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:34:50 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:34:50 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:34:50 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:35:44 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:35:44 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:35:44 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:35:44 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:35:44 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:35:44 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:35:44 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:35:44 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:35:45 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:35:45 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:35:45 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:35:45 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:35:45 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:35:45 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:37:39 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:37:39 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:37:39 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:37:39 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:37:39 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:37:39 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:37:39 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:37:39 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:37:41 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:37:41 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:37:41 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:37:41 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:37:41 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:37:41 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:47:57 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:47:57 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:47:57 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:47:57 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:47:57 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:47:57 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:47:57 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:47:57 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:47:59 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:47:59 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:47:59 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:47:59 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:47:59 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:47:59 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:51:17 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:51:17 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:51:17 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:51:17 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:51:17 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:51:17 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:51:17 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:51:17 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:51:19 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:51:19 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:51:19 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:51:19 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:51:19 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:51:19 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:54:08 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 09:54:08 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 09:54:08 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 09:54:08 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:54:08 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:54:08 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:54:08 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 09:54:08 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 09:54:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 09:54:09 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 09:54:09 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 09:54:09 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 09:54:09 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}}} 
+
+06-19-2024 09:54:09 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:24:31 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 11:24:31 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 11:24:31 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 11:24:31 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:24:31 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:24:31 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:24:31 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 11:24:31 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:24:32 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 11:24:32 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 11:24:32 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 11:24:32 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 11:24:32 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:24:33 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:24:33 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 11:24:33 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 11:24:33 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 11:24:33 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {}} 
+
+06-19-2024 11:24:33 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:26:25 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 11:26:25 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 11:26:25 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 11:26:25 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:26:25 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:26:25 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:26:25 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']} 
+
+06-19-2024 11:26:25 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:26:27 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:26:27 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 11:26:27 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 11:26:27 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 11:26:27 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {}} 
+
+06-19-2024 11:26:27 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['super-admin']}] 
+
+06-19-2024 11:28:30 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 11:28:30 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 11:28:30 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 11:28:30 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 11:28:30 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 11:28:30 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 11:28:30 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']} 
+
+06-19-2024 11:28:30 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 11:28:31 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 11:28:31 DEBUG  User: get_current_config: 539: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 11:28:31 DEBUG  User: get_current_config: 540: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 11:28:31 DEBUG  User: get_have: 395: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 11:28:31 INFO  User: get_have: 401: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'SUPER-ADMIN-ROLE': '5e8e896e4d4add00ca2b6489', 'OBSERVER-ROLE': '5e8e896e4d4add00ca2b648e'}} 
+
+06-19-2024 11:28:31 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:05:53 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 12:05:53 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 12:05:53 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 12:05:53 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:05:53 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:05:53 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:05:53 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']} 
+
+06-19-2024 12:05:53 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:05:55 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:05:55 DEBUG  User: get_current_config: 545: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 12:05:55 DEBUG  User: get_current_config: 546: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 12:05:55 DEBUG  User: get_have: 397: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 12:05:55 INFO  User: get_have: 406: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}} 
+
+06-19-2024 12:05:55 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:07:07 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 12:07:07 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 12:07:07 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 12:07:07 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:07:07 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:07:07 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:07:07 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']} 
+
+06-19-2024 12:07:07 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:07:09 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:07:09 DEBUG  User: get_current_config: 545: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 12:07:09 DEBUG  User: get_current_config: 546: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 12:07:09 DEBUG  User: get_have: 397: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 12:07:09 INFO  User: get_have: 406: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}} 
+
+06-19-2024 12:07:09 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:09:36 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 12:09:36 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 12:09:36 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 12:09:36 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:09:36 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:09:36 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:09:36 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']} 
+
+06-19-2024 12:09:36 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:09:38 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:09:38 DEBUG  User: get_current_config: 545: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 12:09:38 DEBUG  User: get_current_config: 546: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 12:09:38 DEBUG  User: get_have: 397: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 12:09:38 INFO  User: get_have: 406: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'SUPER-ADMIN-ROLE': '5e8e896e4d4add00ca2b6489', 'OBSERVER-ROLE': '5e8e896e4d4add00ca2b648e'}} 
+
+06-19-2024 12:09:38 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:11:22 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 12:11:22 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 12:11:22 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 12:11:22 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:11:22 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:11:22 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:11:22 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']} 
+
+06-19-2024 12:11:22 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:11:23 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:11:23 DEBUG  User: get_current_config: 545: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 12:11:23 DEBUG  User: get_current_config: 546: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 12:11:23 INFO  User: get_have: 396: The provided user 'ajithandrewj' is not present in the Cisco Catalyst Center. User_exists = False 
+
+06-19-2024 12:11:23 DEBUG  User: get_have: 397: Current user config details (have): {} 
+
+06-19-2024 12:11:23 INFO  User: get_have: 406: Current State (have): {'current_role_config': {'SUPER-ADMIN-ROLE': '5e8e896e4d4add00ca2b6489', 'OBSERVER-ROLE': '5e8e896e4d4add00ca2b648e'}} 
+
+06-19-2024 12:11:23 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:15:01 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 12:15:01 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 12:15:01 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 12:15:01 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE']}] 
+
+06-19-2024 12:15:01 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE']}] 
+
+06-19-2024 12:15:01 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE']}] 
+
+06-19-2024 12:15:01 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE']} 
+
+06-19-2024 12:15:01 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE']}] 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:15:03 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:15:03 DEBUG  User: get_current_config: 545: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 12:15:03 DEBUG  User: get_current_config: 546: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 12:15:03 DEBUG  User: get_have: 397: Current user config details (have): {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'} 
+
+06-19-2024 12:15:03 INFO  User: get_have: 406: Current State (have): {'username': 'devnetuser', 'user_exists': True, 'current_user_config': {'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}, 'current_role_config': {'OBSERVER-ROLE': '5e8e896e4d4add00ca2b648e'}} 
+
+06-19-2024 12:15:03 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'devnetuser', 'role_list': ['OBSERVER-ROLE']}] 
+
+06-19-2024 12:19:16 DEBUG  User: __init__: 80: Logging configured and initiated 
+
+06-19-2024 12:19:16 DEBUG  User: __init__: 85: Cisco Catalyst Center parameters: {'dnac_host': 'sandboxdnac.cisco.com', 'dnac_port': '443', 'dnac_username': 'devnetuser', 'dnac_password': 'Cisco123!', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+06-19-2024 12:19:16 INFO  User: validate_input_yml: 289: Validating the Playbook Yaml File.. 
+
+06-19-2024 12:19:16 INFO  User: validate_input_yml: 307: {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}[{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:19:16 INFO  User: validate_input_yml: 345: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:19:16 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:19:16 INFO  User: get_want: 371: Desired State (want): {'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']} 
+
+06-19-2024 12:19:16 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: firstName will be deprecated soon. Please use first_name. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: lastName will be deprecated soon. Please use last_name. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: authSource will be deprecated soon. Please use auth_source. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: passphraseUpdateTime will be deprecated soon. Please use passphrase_update_time. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: roleList will be deprecated soon. Please use role_list. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: userId will be deprecated soon. Please use user_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: resourceTypes will be deprecated soon. Please use resource_types. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: roleId will be deprecated soon. Please use role_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: tenantId will be deprecated soon. Please use tenant_id. 
+
+06-19-2024 12:19:18 DEBUG  User: camel_to_snake_case: 453: rolePermissionIdList will be deprecated soon. Please use role_permission_id_list. 
+
+06-19-2024 12:19:18 DEBUG  User: get_current_config: 545: Received API response from 'get_users_api': {'response': {'users': [{'first_name': '', 'last_name': '', 'auth_source': 'internal', 'passphrase_update_time': '1626099279679', 'role_list': ['5e8e896e4d4add00ca2b648e'], 'user_id': '60ec4e4f4ca7f9222c82da66', 'email': '', 'username': 'devnetuser'}]}} 
+
+06-19-2024 12:19:18 DEBUG  User: get_current_config: 546: Received API response from 'get_roles_api': {'response': {'roles': [{'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6489', 'name': 'SUPER-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'SUPER-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6488'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648c', 'name': 'NETWORK-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'NETWORK-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648b'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b648e', 'name': 'OBSERVER-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'OBSERVER-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648d'], 'type': 'DEFAULT'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6490', 'name': 'TELEMETRY-ADMIN-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-ADMIN-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b648f'], 'type': 'SYSTEM'}, {'resource_types': None, 'meta': None, 'role_id': '5e8e896e4d4add00ca2b6492', 'name': 'TELEMETRY-CLIENT-ROLE', 'tenant_id': '5e8e896e4d4add00ca2b6487', 'description': 'TELEMETRY-CLIENT-ROLE', 'resources': None, 'role_permission_id_list': ['5e8e896e4d4add00ca2b6491'], 'type': 'SYSTEM'}]}} 
+
+06-19-2024 12:19:18 INFO  User: get_have: 396: The provided user 'ajithandrewj' is not present in the Cisco Catalyst Center. User_exists = False 
+
+06-19-2024 12:19:18 DEBUG  User: get_have: 397: Current user config details (have): {} 
+
+06-19-2024 12:19:18 INFO  User: get_have: 406: Current State (have): {'current_role_config': {'SUPER-ADMIN-ROLE': '5e8e896e4d4add00ca2b6489', 'OBSERVER-ROLE': '5e8e896e4d4add00ca2b648e'}} 
+
+06-19-2024 12:19:18 DEBUG  User: check_return_status: 229: status: success, msg: Successfully validated playbook config params: [{'first_name': 'ajith', 'last_name': 'andrew', 'email': 'ajith.andrew@example.com', 'password': 'Ajith@123', 'username': 'ajithandrewj', 'role_list': ['OBSERVER-ROLE', 'SUPER-ADMIN-ROLE']}] 
+
