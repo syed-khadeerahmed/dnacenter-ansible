@@ -1,6 +1,6 @@
 ---
 - name: Configure device credentials on Cisco DNA Center
-  hosts: dnac_servers
+  hosts: localhost
   vars_files:
     - "credentials.yml"
   connection: local
@@ -27,5 +27,5 @@
             email: "ajith.andrew@example.com"
             password: "Ajith@123"
             username: "ajithandrewj"
-            role_list: ["OBSERVER-ROLE","SUPER-ADMIN-ROLE"]
+            role_list: ["SUPER-ADMIN-ROLE"]
 

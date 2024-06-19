@@ -520,14 +520,14 @@ class User(DnacBase):
 
             response_user = self.dnac._exec(
                 family="user_and_roles",
-                function="get_users_api",
+                function="get_users_ap_i",
                 op_modifies=True,
                 params={**input_param, 'invoke_source': 'external', 'auth_source': 'internal'},
             )
 
             response_role = self.dnac._exec(
                 family="user_and_roles",
-                function="get_roles_api",
+                function="get_roles_ap_i",
                 op_modifies=True,
             )
 
