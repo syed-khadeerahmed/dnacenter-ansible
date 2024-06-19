@@ -400,13 +400,15 @@ class User(DnacBase):
             self.have["username"] = current_user_config.get("username")
             self.have["user_exists"] = user_exists
             self.have["current_user_config"] = current_user_config
+        else:
+            self.have["user_exists"] = user_exists
         if role_exists:
             self.have["current_role_config"] = current_role_config
 
         self.log("Current State (have): {0}".format(str(self.have)), "INFO")
         return self
 
-#    def get_diff_merged(self, config):
+    def get_diff_merged(self, config):
         """
         Update/Create user in Cisco Catalyst Center with fields
         provided in the playbook.
@@ -450,8 +452,34 @@ class User(DnacBase):
                 self.result["skipped"] = True
                 return self
         else:
-            #need to add the method for creation.
-            pass
+            # Create the user
+            self.log('Creating user with config {}'.format(str(config)), "INFO")
+            user_params = self.want
+            try:
+                # Additional filtering can be added here if necessary
+                user_details = {}
+                for key, value in user_params.items():
+                    if value is not None:
+                        if key != "role_list":
+                            user_details[key] = value
+                        else:
+                            current_role= self.have.get("current_role_config")
+                            user_details[key] = []
+                            for role_name in user_params['role_list']:
+                                role_id = current_role.get(role_name)
+                                if role_id:
+                                    user_details[key].append(role_id)
+                                else:
+                                    self.log("Role ID for {0} not found in current_role_config".format(str(role_name)))
+                user_params = user_details
+            except Exception as e:
+                user_name = user_params['username']
+                self.log("""The user '{0}' does not need additional filtering for 'None' values \
+                         in the 'user_params' dictionary.""".format(user_name), "INFO")
+ 
+            task_response = self.create_user(user_params)
+            self.log('Task response {}'.format(str(task_response)), "INFO")
+            config_created = True
 
         if config_updated or config_created:
             responses = {}
@@ -469,7 +497,34 @@ class User(DnacBase):
                 self.log(self.msg, "INFO")
                 self.result['msg'] = self.msg
                 self.result['response'].append(responses)
+
+            if config_created:
+                self.msg = "User created successfully"
+                self.log(self.msg, "INFO")
+                self.result['msg'] = self.msg
+                self.result['response'].append(responses)
         return self
+
+    def create_user(self, user_params):
+        """
+        Create a new user in Cisco Catalyst Center with the provided parameters.
+        Parameters:
+            self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+            user_params (dict): A dictionary containing user information.
+        Returns:
+            response (dict): The API response from the 'create_user' function.
+        Description:
+            This method sends a request to create a new user in Cisco Catalyst Center using the provided
+            user parameters. It logs the response and returns it.
+        """
+        response = self.dnac._exec(
+            family="user_and_roles",
+            function='add_user_ap_i',
+            op_modifies=True,
+            params=user_params,
+        )
+        self.log("Received API response from 'create_user': {0}".format(str(response)), "DEBUG")
+        return response
 
     def get_current_config(self, input_config):
         """
