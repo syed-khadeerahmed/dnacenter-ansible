@@ -11,9 +11,9 @@ __author__ = ("Ajith Andrew J, Syed khadeer Ahmed")
 DOCUMENTATION = r"""
 ---
 module: user
-short_description: Resource module for managing Users in Cisco DNA Center
+short_description: Resource module for managing Users in Cisco Catalyst Center
 description:
-  - Manages operations to create, update, and delete users in the Cisco DNA Center system.
+  - Manages operations to create, update, and delete users in the Cisco Catalyst Center system.
   - Allows adding a new user.
   - Supports updating an existing user.
   - Enables deleting a user.
@@ -27,7 +27,7 @@ author:
 options:
   create_user:
     email:
-      description: The email address of the user.
+      description: The email address of the user. Example Email: syedkhadeerahmed@example.com
       type: str
     first_name:
       description: The first name of the user.
@@ -36,19 +36,20 @@ options:
       description: The last name of the user.
       type: str
     password:
-      description: The password for the user's account.
+      description: The password for the user's account. Criteria: should contain 1 special character, capital letter, small letter and minimum length should be 15 characters 
       type: str
     username:
       description: The username for the user's account.
       type: str
     role_list:
-      description: A list of role IDs assigned to the user.
+      description: A list of role name assigned to the user. It should be exactly as in the Cisco DNA center
       elements: str
       type: list
 
   update_user:
     email:
       description: The email address of the user. This must be set if the original value is not empty.
+                   Example Email: syedkhadeerahmed@example.com
       type: str
     first_name:
       description: The first name of the user. This must be set if the original value is not empty.
@@ -60,7 +61,7 @@ options:
       description: The username for the user's account.
       type: str
     role_list:
-      description: A list of role IDs assigned to the user.
+      description: A list of role name assigned to the user. It should be exactly as in the Cisco DNA center
       elements: str
       type: list
 
@@ -71,17 +72,17 @@ options:
       required: true
 
 requirements:
-  - dnacentersdk >= 2.7.1
-  - python >= 3.10
+  - dnacentersdk >= V2_3_7_6
+  - python >= 3.9
 
 see also:
-  - name: Cisco DNA Center documentation for User and Roles AddUserAPI
+  - name: Cisco Catalyst Center documentation for User and Roles AddUserAPI
     description: Complete reference of the AddUserAPI API.
     link: https://developer.cisco.com/docs/dna-center/#!add-user-api
-  - name: Cisco DNA Center documentation for User and Roles UpdateUserAPI
+  - name: Cisco Catalyst Center documentation for User and Roles UpdateUserAPI
     description: Complete reference of the UpdateUserAPI API.
     link: https://developer.cisco.com/docs/dna-center/#!update-user-api
-  - name: Cisco DNA Center documentation for User and Roles DeleteUserAPI
+  - name: Cisco Catalyst Center documentation for User and Roles DeleteUserAPI
     description: Complete reference of the DeleteUserAPI API.
     link: https://developer.cisco.com/docs/dna-center/#!delete-user-api
 
@@ -92,12 +93,16 @@ notes:
     - user_and_roles.UserandRoles.update_user_ap_i
     - user_and_roles.UserandRoles.delete_user_ap_i
     - user_and_roles.UserandRoles.get_roles_ap_i
+    - user_and_roles.UserandRoles.add_roles_ap_i
+    - user_and_roles.UserandRoles.update_roles_ap_i
   - Paths used:
     - get /dna/system/api/v1/user
     - post /dna/system/api/v1/user
     - put /dna/system/api/v1/user
     - delete /dna/system/api/v1/user/{userId}
     - get /dna/system/api/v1/roles
+    - post /dna/system/api/v1/roles
+    - put /dna/system/api/v1/roles
 """
 
 EXAMPLES = r"""
@@ -151,12 +156,63 @@ EXAMPLES = r"""
       state: absent
       config:
         username: "joel"
+
+- name: create_new_custom_role:
+    - Assurance:
+       - Monitoring_and_Troubleshooting: "Deny/Read/Write"
+         Monitoring_Settings: "Deny/Read/Write"
+         Troubleshooting_Tools: "Deny/Read/Write"
+    - Network_Analytics:
+       - Data_Access: "Deny/Read/Write"
+    - Network_Design:
+       - Advanced_Network_Settings: "Deny/Read/Write"
+         Image_Repository: "Deny/Read/Write"
+         Network_Hierarchy: "Deny/Read/Write"
+         Network_Profiles: "Deny/Read/Write"
+         Network_Settings: "Deny/Read/Write"
+         Virtual_Network: "Deny/Read/Write"
+    - Network_Provision:
+       - Compliance: "Deny/Read/Write"
+         Image_Update: "Deny/Read/Write"
+         Inventory_Management:
+           - Device_Configuration: "Deny/Read/Write"
+             Discovery: "Deny/Read/Write"
+             Network_Device: "Deny/Read/Write"
+             Port_Management: "Deny/Read/Write"
+             Topology: "Deny/Read/Write"
+         License: "Deny/Read/Write"
+         Network_Telemetry: "Deny/Read/Write"
+         PnP: "Deny/Read/Write"
+         Provision: "Deny/Read/Write"
+    - Network_Services:
+       - App_Hosting: "Deny/Read/Write"
+         Bonjour: "Deny/Read/Write"
+         Stealthwatch: "Deny/Read/Write"
+         Umbrella: "Deny/Read/Write"
+    - Platform:
+       - APIs: "Deny/Read/Write"
+         Bundles: "Deny/Read/Write"
+         Events: "Deny/Read/Write"
+         Reports: "Deny/Read/Write"
+    - Security:
+       - Group_Based_Policy: "Deny/Read/Write"
+         IP_Based_Access_Control: "Deny/Read/Write"
+         Security_Advisories: "Deny/Read/Write"
+    - System:
+       - Machine_Reasoning: "Deny/Read/Write"
+         System_Management: "Deny/Read/Write"
+    - Utilities:
+       - Audit_Log: "Deny/Read/Write"
+         Event_Viewer: "Deny/Read/Write"
+         Network_Reasoner: "Deny/Read/Write"
+         Scheduler: "Deny/Read/Write"
+         Search: "Deny/Read/Write"
 """
 
 RETURN = r"""
 # Case 1: User operation successful (create/update/delete)
 response_1:
-  description: A dictionary with details of the API execution from Cisco DNA Center.
+  description: A dictionary with details of the API execution from Cisco Catalyst Center.
   returned: always
   type: dict
   sample:
@@ -168,7 +224,7 @@ response_1:
         "endTime": "string",
         "endTimeEpoch": 0,
         "runtimeInstanceId": "string",
-        "userId": "string",  # User ID from Cisco DNA Center
+        "userId": "string",  # User ID from Cisco Catalyst Center
         "startTime": "string",
         "startTimeEpoch": 0,
         "status": "string",  # Status of the operation
@@ -193,7 +249,7 @@ response_2:
           "role_list": ["Network Administrator"]
           # Additional user details as needed
         },
-        "userId": "string",  # User ID from Cisco DNA Center
+        "userId": "string",  # User ID from Cisco Catalyst Center
         "type": "string"
       },
       "msg": "User already exists and no update needed."

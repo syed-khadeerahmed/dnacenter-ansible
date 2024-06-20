@@ -1,0 +1,11 @@
+config:
+   create_new_custom_role:
+    - Assurance: "Deny/Read/Write"
+      Network_Analytics: "Deny/Read/Write"
+      Network_Design: "Deny/Read/Write"
+      Network_Provision: "Deny/Read/Write"
+      Network_Services: "Deny/Read/Write"
+      Platform: "Deny/Read/Write"
+      Security: "Deny/Read/Write"
+      System: "Deny/Read/Write"
+      Utilities: "Deny/Read/Write"

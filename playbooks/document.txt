@@ -1,109 +1,39 @@
-Assurance: Deny","ReadWrite
-Assure consistent service levels with complete visibility across all aspects of your network.
-Monitoring and Troubleshooting	
+---
+#Create New Role
+#Asserance: Assure consistent service levels with complete visibility across all aspects of your network.
+   #Monitoring Settings: Monitor and manage the health of your network with issue troubleshooting and remediation, proactive network monitoring, and insights driven by AI Network Analytics.
+   #MonitoringSettings: Configure and manage issues. Update network, client, and application health thresholds.
+   #Troubleshooting Tools: Create and manage sensor tests. Schedule on-demand forensic packet captures (Intelligent Capture) for troubleshooting clients.
+#Network Analytics: Access to Network Analytics related components.
+   #Data Access: Access to Query engine APIs.
+#Network Design: Set up network hierarchy, update your software image repository, and configure network profiles and settings for managing your sites and network devices.
+   #Advanced Network Settings: Update network settings such as global device credentials, authentication and policy servers, certificates, trustpool, cloud access keys, Stealthwatch, Umbrella, and data anonymization in System Settings.
+   #Image Repository: Manage software images and facilitate upgrades and updates on physical and virtual network entities.
+   #Network Hierarchy: Define and create a network hierarchy of sites, buildings, floors, and areas based on geographic location. Users with this role can also add CMX servers in System Settings.
+   #Network Profiles: Create network profiles for routing, enterprise NFV, switching, and wireless, and assign profiles to sites. This role includes Template Editor, Tagging, Model Config Editor, and Authentication Template.
+   #Network Settings: Common site-wide network settings such as AAA, NTP, DHCP, DNS, Syslog, SNMP, and Telemetry. Users with this role can add an SFTP server and modify the Network Resync Interval in System Settings.
+   #Virtual Network: Manage virtual networks (VNs). Segment physical networks into multiple logical networks for traffic isolation and controlled inter-VN communication.
 
-Deny
+config:
+   create_new_custom_role:
+    - Assurance: 
+       - Monitoring_and_Troubleshooting: "Deny/Read/Write"
+         Monitoring_Settings: "Deny/Read/Write"
+         Troubleshooting_Tools: "Deny/Read/Write"
+    - Network_Analytics:
+       - Data_Access: "Deny/Read/Write"
+    - Network_Design:
+       - Advanced_Network_Settings: "Deny/Read/Write"
+         Image_Repository: "Deny/Read/Write"
+         Network_Hierarchy: "Deny/Read/Write"
+         Network_Profiles: "Deny/Read/Write"
+         Network_Settings: "Deny/Read/Write"
+         Virtual_Network: "Deny/Read/Write"
+    - Network_Provision: "Deny/Read/Write"
 
-Read
 
-Write
-Monitor and manage the health of your network with issue troubleshooting and remediation, proactive network monitoring, and insights driven by AI Network Analytics.
-Monitoring Settings	
 
-Deny
-
-Read
-
-Write
-Configure and manage issues. Update network, client, and application health thresholds.
-Troubleshooting Tools	
-
-Deny
-
-Read
-
-Write
-Create and manage sensor tests. Schedule on-demand forensic packet captures (Intelligent Capture) for troubleshooting clients.
-Network Analytics	
-
-Deny
-
-Read
-
-Write
-Access to Network Analytics related components.
-Data Access	
-
-Deny
-
-Read
-
-Write
-Access to Query engine APIs.
-Network Design	
-
-Deny
-
-Read
-
-Write
-Set up network hierarchy, update your software image repository, and configure network profiles and settings for managing your sites and network devices.
-Advanced Network Settings	
-
-Deny
-
-Read
-
-Write
-Update network settings such as global device credentials, authentication and policy servers, certificates, trustpool, cloud access keys, Stealthwatch, Umbrella, and data anonymization in System Settings.
-Image Repository	
-
-Deny
-
-Read
-
-Write
-Manage software images and facilitate upgrades and updates on physical and virtual network entities.
-Network Hierarchy	
-
-Deny
-
-Read
-
-Write
-Define and create a network hierarchy of sites, buildings, floors, and areas based on geographic location. Users with this role can also add CMX servers in System Settings.
-Network Profiles	
-
-Deny
-
-Read
-
-Write
-Create network profiles for routing, enterprise NFV, switching, and wireless, and assign profiles to sites. This role includes Template Editor, Tagging, Model Config Editor, and Authentication Template.
-Network Settings	
-
-Deny
-
-Read
-
-Write
-Common site-wide network settings such as AAA, NTP, DHCP, DNS, Syslog, SNMP, and Telemetry. Users with this role can add an SFTP server and modify the Network Resync Interval in System Settings.
-Virtual Network	
-
-Deny
-
-Read
-
-Write
-Manage virtual networks (VNs). Segment physical networks into multiple logical networks for traffic isolation and controlled inter-VN communication.
-Network Provision	
-
-Deny
-
-Read
-
-Write
-Configure, upgrade, provision and manage your network devices.
+Network Provision: Configure, upgrade, provision and manage your network devices.
 Compliance	
 
 Deny
