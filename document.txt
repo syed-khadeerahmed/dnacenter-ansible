@@ -1,0 +1,362 @@
+Assurance: Deny","ReadWrite
+Assure consistent service levels with complete visibility across all aspects of your network.
+Monitoring and Troubleshooting	
+
+Deny
+
+Read
+
+Write
+Monitor and manage the health of your network with issue troubleshooting and remediation, proactive network monitoring, and insights driven by AI Network Analytics.
+Monitoring Settings	
+
+Deny
+
+Read
+
+Write
+Configure and manage issues. Update network, client, and application health thresholds.
+Troubleshooting Tools	
+
+Deny
+
+Read
+
+Write
+Create and manage sensor tests. Schedule on-demand forensic packet captures (Intelligent Capture) for troubleshooting clients.
+Network Analytics	
+
+Deny
+
+Read
+
+Write
+Access to Network Analytics related components.
+Data Access	
+
+Deny
+
+Read
+
+Write
+Access to Query engine APIs.
+Network Design	
+
+Deny
+
+Read
+
+Write
+Set up network hierarchy, update your software image repository, and configure network profiles and settings for managing your sites and network devices.
+Advanced Network Settings	
+
+Deny
+
+Read
+
+Write
+Update network settings such as global device credentials, authentication and policy servers, certificates, trustpool, cloud access keys, Stealthwatch, Umbrella, and data anonymization in System Settings.
+Image Repository	
+
+Deny
+
+Read
+
+Write
+Manage software images and facilitate upgrades and updates on physical and virtual network entities.
+Network Hierarchy	
+
+Deny
+
+Read
+
+Write
+Define and create a network hierarchy of sites, buildings, floors, and areas based on geographic location. Users with this role can also add CMX servers in System Settings.
+Network Profiles	
+
+Deny
+
+Read
+
+Write
+Create network profiles for routing, enterprise NFV, switching, and wireless, and assign profiles to sites. This role includes Template Editor, Tagging, Model Config Editor, and Authentication Template.
+Network Settings	
+
+Deny
+
+Read
+
+Write
+Common site-wide network settings such as AAA, NTP, DHCP, DNS, Syslog, SNMP, and Telemetry. Users with this role can add an SFTP server and modify the Network Resync Interval in System Settings.
+Virtual Network	
+
+Deny
+
+Read
+
+Write
+Manage virtual networks (VNs). Segment physical networks into multiple logical networks for traffic isolation and controlled inter-VN communication.
+Network Provision	
+
+Deny
+
+Read
+
+Write
+Configure, upgrade, provision and manage your network devices.
+Compliance	
+
+Deny
+
+Read
+
+Write
+Manage Compliance Provision.
+EoX	
+
+Deny
+
+Read
+
+Write
+Scan the network for details on publicly announced information pertaining to the End of Life, End of Sales, End of Support, etc of the hardware and software in your network.
+Image Update	
+
+Deny
+
+Read
+
+Write
+Upgrade a software image on devices that does not match the Golden Image settings after a complete upgrade lifecycle.
+Inventory Management	
+
+Deny
+
+Read
+
+Write
+Discover, add, replace, or delete devices on your network while managing device attributes and configuration properties.
+License	
+
+Deny
+
+Read
+
+Write
+Unified view of your software and network assets relative to license usage and compliance.
+Network Telemetry	
+
+Deny
+
+Read
+
+Write
+Enable or Disable gathering of application telemetry from the device, and Configure the telemetry settings associated with the assigned site and other settings like Wireless Service Assurance, Controller Certificates.
+PnP	
+
+Deny
+
+Read
+
+Write
+Automatically onboard new devices, assign them to sites, and configure them with site-specific contextual settings.
+Provision	
+
+Deny
+
+Read
+
+Write
+Provision devices with the site-specific settings and policies that are configured for the network. This role includes Fabric, Application Policy, Application Visibility, Cloud, Site-to-Site VPN, Network/Application Telemetry, Security Service Insertion, Stealthwatch, and Umbrella provisioning.
+Network Services	
+
+Deny
+
+Read
+
+Write
+Configure additional capabilities on the network beyond basic network connectivity and access.
+App Hosting	
+
+Deny
+
+Read
+
+Write
+Deploy, manage, and monitor virtualized and container-based applications running on network devices.
+Bonjour	
+
+Deny
+
+Read
+
+Write
+Enable wide-area bonjour service across your network to enable policy-based service discovery.
+Stealthwatch	
+
+Deny
+
+Read
+
+Write
+Configure network elements to send data to Cisco Stealthwatch to detect and mitigate threats, even in encrypted traffic.
+Umbrella	
+
+Deny
+
+Read
+
+Write
+Configure network elements to use Cisco Umbrella as the first line of defense against cybersecurity threats.
+Platform	
+
+Deny
+
+Read
+
+Write
+Open platform for accessible intent-based workflows, data exchange, notifications, and third-party app integrations.
+APIs	
+
+Deny
+
+Read
+
+Write
+Drive value by accessing Cisco DNA Center through REST APIs.
+Bundles	
+
+Deny
+
+Read
+
+Write
+Enhance productivity by configuring and activating preconfigured bundles for ITSM integration.
+Events	
+
+Deny
+
+Read
+
+Write
+Subscribe to get notified in near real time about network and system events of interest and initiate corrective actions.
+Reports	
+
+Deny
+
+Read
+
+Write
+Generate reports using predefined reporting templates for all aspects of your network.
+Security	
+
+Deny
+
+Read
+
+Write
+Manage and control secure access to the network.
+Group-Based Policy	
+
+Deny
+
+Read
+
+Write
+Manage group-based policies for networks that enforce segmentation and access control based on Cisco security group tag.
+IP Based Access Control	
+
+Deny
+
+Read
+
+Write
+Manage IP-based access control lists that enforce network segmentation based on IP addresses.
+Security Advisories	
+
+Deny
+
+Read
+
+Write
+Scan the network for security advisories and field notices. Review and understand the impact of published Cisco security advisories and field notices that may affect your network.
+System	
+
+Deny
+
+Read
+
+Write
+Centralized administration of your Cisco DNA Center, which includes configuration management, network connectivity, software upgrades, and more.
+Machine Reasoning	
+
+Deny
+
+Read
+
+Write
+Configure automatic updates to the machine reasoning knowledge base to rapidly identify security vulnerabilities and improve automated issue analysis.
+System Management	
+
+Deny
+
+Read
+
+Write
+Manage core system functionality and connectivity settings. This role includes Cisco Credentials, Integrity Verification, Device EULA, HA, Integration Settings, Disaster Recovery, Debugging Logs, Telemetry Collection, System EULA, IPAM, vManage Servers, Backup and Restore, and Data Platform. Manage user roles and configure external authentication.
+Utilities	
+
+Deny
+
+Read
+
+Write
+One-stop-shop productivity resource for the most commonly used troubleshooting tools and services.
+Audit Log	
+
+Deny
+
+Read
+
+Write
+Detailed log of changes made via UI or API interface to network devices or Cisco DNA Center.
+Event Viewer	
+
+Deny
+
+Read
+
+Write
+View network device and client events for troubleshooting.
+Network Reasoner	
+
+Deny
+
+Read
+
+Write
+Initiate logical and automated troubleshooting for network issues while drawing on the knowledge wealth of network domain experts.
+Remote Device Support	
+
+Deny
+
+Read
+
+Write
+Allow Cisco support team to remotely troubleshoot any network devices managed by Cisco DNA Center.
+Scheduler	
+
+Deny
+
+Read
+
+Write
+Integrated with other back-end services, scheduler lets you run, schedule and monitor network tasks and activities such as deploy policies, provision, or upgrade the network.
+Search	
+
+Deny
+
+Read
+
+Write
+Search for various objects in Cisco DNA Center, such as sites, network devices, clients, applications, policies, settings, tags, menu items, and more.
