@@ -575,7 +575,6 @@ import re, time
 from ansible_collections.cisco.dnac.plugins.module_utils.dnac import (
     DnacBase,
     validate_list_of_dicts,
-    validate_int,
     validate_str,
     validate_list
 )
@@ -617,7 +616,6 @@ class User(DnacBase):
             errormsg = []
             userlist = self.payload.get("config")
             userlist = self.camel_to_snake_case(userlist)
-            userlist = self.update_site_type_key(userlist)
             user_details = dict(first_name = dict(required=False, type='str'),
                         last_name = dict(required=False, type='str'),
                         email = dict(required=False, type='str'),
@@ -626,40 +624,40 @@ class User(DnacBase):
                         role_list = dict(required=False, type='list', elements='str'),
                         )
             valid_param, invalid_param = validate_list_of_dicts(userlist, user_details)
-            eachuser = valid_param[0]
+            user_data = valid_param[0]
             if len(invalid_param) > 0:
                 errormsg.append("Invalid param found in playbook: '{0}' "\
                                 .format(", ".join(invalid_param)))
-            self.log(str(eachuser) + str(valid_param), "INFO")
+            self.log(str(user_data) + str(valid_param), "INFO")
 
-            if eachuser.get("first_name"):
+            if user_data.get("first_name"):
                 param_spec = dict(type = "str", length_max = 255)
-                validate_str(eachuser["first_name"], param_spec, "first_name",
+                validate_str(user_data["first_name"], param_spec, "first_name",
                                 errormsg)
 
-            if eachuser.get("last_name"):
+            if user_data.get("last_name"):
                 param_spec = dict(type = "str", length_max = 255)
-                validate_str(eachuser["last_name"], param_spec, "last_name",
+                validate_str(user_data["last_name"], param_spec, "last_name",
                                 errormsg)
 
-            if eachuser.get("email"):
+            if user_data.get("email"):
                 email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
-                if not email_regex.match(eachuser["email"]):
-                    errormsg.append("email: Invalid email format for email: '{0}'".format(eachuser["email"]))
+                if not email_regex.match(user_data["email"]):
+                    errormsg.append("email: Invalid email format for email: '{0}'".format(user_data["email"]))
 
-            if eachuser.get("password"):
+            if user_data.get("password"):
                 password_regex = re.compile(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
-                if not password_regex.match(eachuser["password"]):
-                    errormsg.append("password: Password does not meet complexity requirements for password: '{0}'".format(eachuser["password"]))
+                if not password_regex.match(user_data["password"]):
+                    errormsg.append("password: Password does not meet complexity requirements for password: '{0}'".format(user_data["password"]))
 
-            if eachuser.get("username"):
+            if user_data.get("username"):
                 param_spec = dict(type = "str", length_max = 255)
-                validate_str(eachuser["username"], param_spec, "username",
+                validate_str(user_data["username"], param_spec, "username",
                                 errormsg)
 
-            if eachuser.get("role_list"):
+            if user_data.get("role_list"):
                 param_spec = dict(type = "list", elements="str")
-                validate_list(eachuser["role_list"], param_spec, "role_list",
+                validate_list(user_data["role_list"], param_spec, "role_list",
                                 errormsg)
 
             if len(errormsg) > 0:
@@ -753,30 +751,31 @@ class User(DnacBase):
             does not require an update, the method exits, indicating that user is up to date.
         """
 
-        config_updated = False
+        # config_updated = False
         config_created = False
         task_response = None
         # check if the given user config exists and/or needs to be updated/created.
 
         if self.have.get("user_exists"):
-            consolidated_data = self.compare_user_cofig_with_inputdata(self.have["current_user_config"])
-            if consolidated_data:
-                self.log('Final user data to update {}'.format(str(consolidated_data)),
-                      "INFO")
-                task_response = self.update_user_configuration(consolidated_data)
-                self.log('Task respoonse {}'.format(str(task_response)),"INFO")
-                config_updated = True
-            else:
-                # user does not need update
-                self.msg = "user - {0} does not need any update"\
-                    .format(self.have.get("current_user_config").get("username"))
-                self.log(self.msg, "INFO")
-                responses = {}
-                responses["users_updates"] = {"response": config}
-                self.result['msg'] = self.msg
-                self.result["response"].append(responses)
-                self.result["skipped"] = True
-                return self
+            pass
+            # consolidated_data = self.compare_user_cofig_with_inputdata(self.have["current_user_config"])
+            # if consolidated_data:
+            #     self.log('Final user data to update {}'.format(str(consolidated_data)),
+            #           "INFO")
+            #     task_response = self.update_user_configuration(consolidated_data)
+            #     self.log('Task respoonse {}'.format(str(task_response)),"INFO")
+            #     config_updated = True
+            # else:
+            #     # user does not need update
+            #     self.msg = "user - {0} does not need any update"\
+            #         .format(self.have.get("current_user_config").get("username"))
+            #     self.log(self.msg, "INFO")
+            #     responses = {}
+            #     responses["users_updates"] = {"response": config}
+            #     self.result['msg'] = self.msg
+            #     self.result["response"].append(responses)
+            #     self.result["skipped"] = True
+            #     return self
         else:
             # Create the user
             self.log('Creating user with config {}'.format(str(config)), "INFO")
@@ -807,28 +806,22 @@ class User(DnacBase):
             self.log('Task response {}'.format(str(task_response)), "INFO")
             config_created = True
 
-        if config_updated or config_created:
+        # if config_updated or config_created:
+        if config_created:
             responses = {}
-            if task_response and isinstance(task_response, dict):
-                self.check_task_response_status(task_response, "task_intent", True).check_return_status()
-                if self.status == "success":
-                    self.result['changed'] = True
-                    responses["users_updates"] = {"response": task_response}
-                else:
-                    self.module.fail_json(msg="Unable to get Task Details.", response=task_response)
+            responses["users_updates"] = {"response": task_response}
+            
+            # if config_updated:
+            #     self.msg = "User details - {0} Updated Successfully"\
+            #         .format(self.have["current_user_config"].get("username"))
+            #     self.log(self.msg, "INFO")
+            #     self.result['msg'] = self.msg
+            #     self.result['response'].append(responses)
 
-            if config_updated:
-                self.msg = "User details - {0} Updated Successfully"\
-                    .format(self.have["current_user_config"].get("username"))
-                self.log(self.msg, "INFO")
-                self.result['msg'] = self.msg
-                self.result['response'].append(responses)
-
-            if config_created:
-                self.msg = "User created successfully"
-                self.log(self.msg, "INFO")
-                self.result['msg'] = self.msg
-                self.result['response'].append(responses)
+            self.msg = "User created successfully"
+            self.log(self.msg, "INFO")
+            self.result['msg'] = self.msg
+            self.result['response'].append(responses)
         return self
 
     def create_user(self, user_params):
@@ -843,11 +836,13 @@ class User(DnacBase):
             This method sends a request to create a new user in Cisco Catalyst Center using the provided
             user parameters. It logs the response and returns it.
         """
+        user_info_params= self.snake_to_camel_case(user_params)
+        self.log("Create user with user_info_params: {0}".format(str(user_info_params)), "DEBUG")
         response = self.dnac._exec(
             family="user_and_roles",
             function='add_user_ap_i',
             op_modifies=True,
-            params=user_params,
+            params=user_info_params,
         )
         self.log("Received API response from 'create_user': {0}".format(str(response)), "DEBUG")
         return response
@@ -944,7 +939,7 @@ class User(DnacBase):
     def keymaping(self, keymap = any, data = any):
         """
         This function used to create the key value by snake case and Camal Case
-        we need to pass the input as the device list or AP cofig list this function collects
+        we need to pass the input as the user details this function collects
         all key which is in Camal case and convert the key to Snake Case 
         Snake case will be key and value will be as Camal Case return as Dict
         Parameters:
@@ -976,6 +971,36 @@ class User(DnacBase):
             self.keymaping(keymap, (item for item in data if isinstance(item, dict)))
         else:
             return keymap
+
+    def snake_to_camel_case(self, data):
+            """
+            This function converts keys from snake case to camel case in a given dictionary.
+            
+            Parameters:
+            - data: type Dict: A dictionary with keys in snake case.
+
+            Returns:
+            A new dictionary with keys converted to camel case.
+            """
+            def to_camel_case(snake_str):
+                components = snake_str.split('_')
+                return components[0] + ''.join(x.title() for x in components[1:])
+
+            if isinstance(data, dict):
+                camel_case_data = {}
+                for key, value in data.items():
+                    new_key = to_camel_case(key)
+                    if isinstance(value, dict):
+                        camel_case_data[new_key] = self.snake_to_camel_case(value)
+                    elif isinstance(value, list):
+                        camel_case_data[new_key] = [self.snake_to_camel_case(item) if isinstance(item, dict) else item for item in value]
+                    else:
+                        camel_case_data[new_key] = value
+                return camel_case_data
+            elif isinstance(data, list):
+                return [self.snake_to_camel_case(item) if isinstance(item, dict) else item for item in data]
+            else:
+                return data
 
 def main():
     """ main entry point for module execution
@@ -1020,7 +1045,7 @@ def main():
         ccc_user.reset_values()
         ccc_user.get_want(config).check_return_status()
         ccc_user.get_have(config).check_return_status()
-        # ccc_user.get_diff_state_apply[state](config).check_return_status()
+        ccc_user.get_diff_state_apply[state](config).check_return_status()
         # if config_verify:
         #     ccc_user.verify_diff_state_apply[state](config).check_return_status()
 
