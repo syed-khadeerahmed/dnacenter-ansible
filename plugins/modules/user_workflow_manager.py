@@ -157,56 +157,88 @@ EXAMPLES = r"""
       config:
         username: "joel"
 
-- name: create_new_custom_role:
-    - Assurance:
-       - Monitoring_and_Troubleshooting: "Deny/Read/Write"
-         Monitoring_Settings: "Deny/Read/Write"
-         Troubleshooting_Tools: "Deny/Read/Write"
-    - Network_Analytics:
-       - Data_Access: "Deny/Read/Write"
-    - Network_Design:
-       - Advanced_Network_Settings: "Deny/Read/Write"
-         Image_Repository: "Deny/Read/Write"
-         Network_Hierarchy: "Deny/Read/Write"
-         Network_Profiles: "Deny/Read/Write"
-         Network_Settings: "Deny/Read/Write"
-         Virtual_Network: "Deny/Read/Write"
-    - Network_Provision:
-       - Compliance: "Deny/Read/Write"
-         Image_Update: "Deny/Read/Write"
-         Inventory_Management:
-           - Device_Configuration: "Deny/Read/Write"
-             Discovery: "Deny/Read/Write"
-             Network_Device: "Deny/Read/Write"
-             Port_Management: "Deny/Read/Write"
-             Topology: "Deny/Read/Write"
-         License: "Deny/Read/Write"
-         Network_Telemetry: "Deny/Read/Write"
-         PnP: "Deny/Read/Write"
-         Provision: "Deny/Read/Write"
-    - Network_Services:
-       - App_Hosting: "Deny/Read/Write"
-         Bonjour: "Deny/Read/Write"
-         Stealthwatch: "Deny/Read/Write"
-         Umbrella: "Deny/Read/Write"
-    - Platform:
-       - APIs: "Deny/Read/Write"
-         Bundles: "Deny/Read/Write"
-         Events: "Deny/Read/Write"
-         Reports: "Deny/Read/Write"
-    - Security:
-       - Group_Based_Policy: "Deny/Read/Write"
-         IP_Based_Access_Control: "Deny/Read/Write"
-         Security_Advisories: "Deny/Read/Write"
-    - System:
-       - Machine_Reasoning: "Deny/Read/Write"
-         System_Management: "Deny/Read/Write"
-    - Utilities:
-       - Audit_Log: "Deny/Read/Write"
-         Event_Viewer: "Deny/Read/Write"
-         Network_Reasoner: "Deny/Read/Write"
-         Scheduler: "Deny/Read/Write"
-         Search: "Deny/Read/Write"
+    - name: Add or update role to custom select each parameter:
+      config:
+        create_new_custom_role:
+            - Assurance:
+              - Monitoring_and_Troubleshooting: "Deny/Read/Write"
+                Monitoring_Settings: "Deny/Read/Write"
+                Troubleshooting_Tools: "Deny/Read/Write"
+            - Network_Analytics:
+              - Data_Access: "Deny/Read/Write"
+            - Network_Design:
+              - Advanced_Network_Settings: "Deny/Read/Write"
+                Image_Repository: "Deny/Read/Write"
+                Network_Hierarchy: "Deny/Read/Write"
+                Network_Profiles: "Deny/Read/Write"
+                Network_Settings: "Deny/Read/Write"
+                Virtual_Network: "Deny/Read/Write"
+            - Network_Provision:
+              - Compliance: "Deny/Read/Write"
+                Image_Update: "Deny/Read/Write"
+                Inventory_Management:
+                  - Device_Configuration: "Deny/Read/Write"
+                    Discovery: "Deny/Read/Write"
+                    Network_Device: "Deny/Read/Write"
+                    Port_Management: "Deny/Read/Write"
+                    Topology: "Deny/Read/Write"
+                License: "Deny/Read/Write"
+                Network_Telemetry: "Deny/Read/Write"
+                PnP: "Deny/Read/Write"
+                Provision: "Deny/Read/Write"
+            - Network_Services:
+              - App_Hosting: "Deny/Read/Write"
+                Bonjour: "Deny/Read/Write"
+                Stealthwatch: "Deny/Read/Write"
+                Umbrella: "Deny/Read/Write"
+            - Platform:
+              - APIs: "Deny/Read/Write"
+                Bundles: "Deny/Read/Write"
+                Events: "Deny/Read/Write"
+                Reports: "Deny/Read/Write"
+            - Security:
+              - Group_Based_Policy: "Deny/Read/Write"
+                IP_Based_Access_Control: "Deny/Read/Write"
+                Security_Advisories: "Deny/Read/Write"
+            - System:
+              - Machine_Reasoning: "Deny/Read/Write"
+                System_Management: "Deny/Read/Write"
+            - Utilities:
+              - Audit_Log: "Deny/Read/Write"
+                Event_Viewer: "Deny/Read/Write"
+                Network_Reasoner: "Deny/Read/Write"
+                Scheduler: "Deny/Read/Write"
+                Search: "Deny/Read/Write"
+                
+    - name: Add or update role to custom select for whole parameter:
+    config:
+        create_new_custom_role:
+          - Assurance: "Deny/Read/Write"
+            Network_Analytics: "Deny/Read/Write"
+            Network_Design: "Deny/Read/Write"
+            Network_Provision: "Deny/Read/Write"
+            Network_Services: "Deny/Read/Write"
+            Platform: "Deny/Read/Write"
+            Security: "Deny/Read/Write"
+            System: "Deny/Read/Write"
+            Utilities: "Deny/Read/Write"
+
+    - name: Role delete:
+      hosts: localhost
+      gather_facts: no
+      tasks:
+        - name: Delete User
+          cisco.dnac.user_workflow_manager:
+            dnac_host: "{{ dnac_host }}"
+            dnac_username: "{{ dnac_username }}"
+            dnac_password: "{{ dnac_password }}"
+            dnac_verify: "{{ dnac_verify }}"
+            dnac_port: "{{ dnac_port }}"
+            dnac_version: "{{ dnac_version }}"
+            dnac_debug: "{{ dnac_debug }}"
+            state: absent
+            config:
+                role name: "Example_role"
 """
 
 RETURN = r"""
