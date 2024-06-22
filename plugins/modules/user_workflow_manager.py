@@ -571,6 +571,7 @@ Responce_6:
       }
 """
 
+
 import re, time
 from ansible_collections.cisco.dnac.plugins.module_utils.dnac import (
     DnacBase,
@@ -579,6 +580,7 @@ from ansible_collections.cisco.dnac.plugins.module_utils.dnac import (
     validate_list
 )
 from ansible.module_utils.basic import AnsibleModule
+
 
 class User(DnacBase):
     """Class containing member attributes for user workflow_manager module"""
@@ -589,6 +591,7 @@ class User(DnacBase):
         self.supported_states = ["merged", "deleted"]
         self.payload = module.params
         self.keymap = {}
+
 
     # Below function used to validate input over the ansible validation
     def validate_input_yml(self):
@@ -611,89 +614,63 @@ class User(DnacBase):
           If the validation succeeds, this will allow to go next step, unless this will stop execution.
           based on the fields.
         """
+
         self.log('Validating the Playbook Yaml File..', "INFO")
-        try:
-            errormsg = []
-            userlist = self.payload.get("config")
-            userlist = self.camel_to_snake_case(userlist)
-            user_details = dict(first_name = dict(required=False, type='str'),
-                        last_name = dict(required=False, type='str'),
-                        email = dict(required=False, type='str'),
-                        password = dict(required=False, type='str'),
-                        username = dict(required=False, type='str'),
-                        role_list = dict(required=False, type='list', elements='str'),
-                        )
-            valid_param, invalid_param = validate_list_of_dicts(userlist, user_details)
-            user_data = valid_param[0]
-            if len(invalid_param) > 0:
-                errormsg.append("Invalid param found in playbook: '{0}' "\
-                                .format(", ".join(invalid_param)))
-            self.log(str(user_data) + str(valid_param), "INFO")
-
-            if user_data.get("first_name"):
-                param_spec = dict(type = "str", length_max = 255)
-                validate_str(user_data["first_name"], param_spec, "first_name",
-                                errormsg)
-
-            if user_data.get("last_name"):
-                param_spec = dict(type = "str", length_max = 255)
-                validate_str(user_data["last_name"], param_spec, "last_name",
-                                errormsg)
-
-            if user_data.get("email"):
-                email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
-                if not email_regex.match(user_data["email"]):
-                    errormsg.append("email: Invalid email format for email: '{0}'".format(user_data["email"]))
-
-            if user_data.get("password"):
-                password_regex = re.compile(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
-                if not password_regex.match(user_data["password"]):
-                    errormsg.append("password: Password does not meet complexity requirements for password: '{0}'".format(user_data["password"]))
-
-            if user_data.get("username"):
-                param_spec = dict(type = "str", length_max = 255)
-                validate_str(user_data["username"], param_spec, "username",
-                                errormsg)
-
-            if user_data.get("role_list"):
-                param_spec = dict(type = "list", elements="str")
-                validate_list(user_data["role_list"], param_spec, "role_list",
-                                errormsg)
-
-            if len(errormsg) > 0:
-                self.log("Invalid parameters in playbook file: '{0}' ".format(str("\n".join(errormsg))), "ERROR")
-                self.module.fail_json(msg=str("\n".join(errormsg)))
-            else:
-                self.validated_config = valid_param
-                self.msg = "Successfully validated playbook config params: {0}".format(str(valid_param))
-                self.log(self.msg, "INFO")
-                self.status = "success"
-                return self
-
-        except Exception as e:
-            self.log("Invalid Param provided in playbook Yml File. {0}".format(str(e)), "ERROR")
-            self.msg = "Invalid parameters in playbook: {0}".format(str("\n".join(errormsg)))
+        if not self.config:
+            self.status = "success"
+            self.msg = "Configuration is not available in the playbook for validation"
+            self.log(self.msg, "ERROR")
+            return self       
+             
+        userlist = self.payload.get("config")
+        userlist = self.camel_to_snake_case(userlist)
+        user_details = dict(first_name = dict(required=False, type='str'),
+                    last_name = dict(required=False, type='str'),
+                    email = dict(required=False, type='str'),
+                    password = dict(required=False, type='str'),
+                    username = dict(required=False, type='str'),
+                    role_list = dict(required=False, type='list', elements='str'),
+                    )
+        valid_param, invalid_params = validate_list_of_dicts(userlist, user_details)
+        if invalid_params:
+            self.msg = "Invalid parameters in playbook: {0}".format(
+                "\n".join(invalid_params)
+            )
+            self.log(self.msg, "ERROR")
             self.status = "failed"
             return self
+        
+        self.validated_config = valid_param
+        self.msg = "Successfully validated playbook config params:{0}".format(str(valid_param[0]))
+        self.log(self.msg, "INFO")
+        self.status = "success"
+        return self
+
 
     def get_want(self, user_config):
         """
-        Get all user-related information from the playbook needed for creation/updation/deletion of user in Cisco Catalyst Center.
+        Get all user and role related information from the playbook needed for creation/updation/deletion of user in Cisco Catalyst Center.
         Parameters:
             self (object): An instance of a class used for interacting with Cisco Catalyst Center.
             config (dict): A dictionary containing user information.
         Returns:
             self (object): An instance of a class used for interacting with Cisco Catalyst Center.
         Description:
-            Retrieves all user-related information from playbook that is
+            Retrieves all user and role related information from playbook that is
             required for creating a user in Cisco Catalyst Center. It includes
-            parameters such as 'username' and 'email' The gathered
+            parameters such as 'username' or 'rolename' The gathered
             information is stored in the 'want' attribute for later reference.
         """
+        self.log("CHECKIN" + str(user_config), "INFO")
+        want={}
+
         for key,value in user_config.items():
-            self.want[key] = value
+            want[key] = value
+
+        self.want= want
         self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
         return self
+
 
     def get_have(self, input_config):
         """
@@ -713,26 +690,41 @@ class User(DnacBase):
         role_exists = False
         current_user_config = None
         current_role_config = None
+        current_role_ids = None
+
         # check if given user config exists, if exists store current user info
-        (user_exists, role_exists, current_user_config, current_role_config) = self.get_current_config(input_config)
+        (user_exists, role_exists, current_user_config, current_role_ids, current_role_config) = self.get_current_config(input_config)
 
         if not user_exists:
             self.log("The provided user '{0}' is not present in the Cisco Catalyst Center. User_exists = {1}".format(str(input_config.get("username")), str(user_exists)), "INFO")
-        self.log("Current user config details (have): {0}".format(str(current_user_config)), "DEBUG")
+
+        if not user_exists:
+            self.log("The provided role '{0}' is not present in the Cisco Catalyst Center. Role_exists = {1}".format(str(input_config.get("role_list")), str(role_exists)), "INFO")
+
+        self.log("Current User details (have): {0}".format(str(current_user_config)), "DEBUG")
+        self.log("Current Role details (have): {0}".format(str(current_role_config)), "DEBUG")
+        have = {}
 
         if user_exists:
-            self.have["username"] = current_user_config.get("username")
-            self.have["user_exists"] = user_exists
-            self.have["current_user_config"] = current_user_config
+            have["username"] = current_user_config.get("username")
+            have["user_exists"] = user_exists
+            have["current_user_config"] = current_user_config
         else:
             self.have["user_exists"] = user_exists
-        if role_exists:
-            self.have["current_role_config"] = current_role_config
 
+        if role_exists:
+            have["current_role_config"] = current_role_config
+            have["current_role_ids"] = current_role_ids
+            have["role_exists"] = role_exists
+        else:
+            have["role_exists"] = role_exists
+
+        self.have=have
         self.log("Current State (have): {0}".format(str(self.have)), "INFO")
         return self
 
-    def get_diff_merged(self, config):
+
+    def get_diff_merged(self, user_role_config):
         """
         Update/Create user in Cisco Catalyst Center with fields
         provided in the playbook.
@@ -751,77 +743,112 @@ class User(DnacBase):
             does not require an update, the method exits, indicating that user is up to date.
         """
 
-        # config_updated = False
+        config_updated = False
         config_created = False
         task_response = None
-        # check if the given user config exists and/or needs to be updated/created.
+        errormsg = []
 
+        if user_role_config.get("first_name"):
+            param_spec = dict(type = "str", length_max = 255)
+            validate_str(user_role_config["first_name"], param_spec, "first_name",
+                            errormsg)
+ 
+        if user_role_config.get("last_name"):
+            param_spec = dict(type = "str", length_max = 255)
+            validate_str(user_role_config["last_name"], param_spec, "last_name",
+                            errormsg)
+ 
+        if user_role_config.get("email"):
+            email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
+            if not email_regex.match(user_role_config["email"]):
+                errormsg.append("email: Invalid email format for email: '{0}'".format(user_role_config["email"]))
+ 
+        if user_role_config.get("password"):
+            password_regex = re.compile(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+            if not password_regex.match(user_role_config["password"]):
+                errormsg.append("password: Password does not meet complexity requirements for password: '{0}'".format(user_role_config["password"]))
+ 
+        if user_role_config.get("username"):
+            param_spec = dict(type = "str", length_max = 255)
+            validate_str(user_role_config["username"], param_spec, "username",
+                            errormsg)
+ 
+        if user_role_config.get("role_list"):
+            param_spec = dict(type = "list", elements="str")
+            validate_list(user_role_config["role_list"], param_spec, "role_list",
+                            errormsg)
+
+        if len(errormsg) > 0:
+            self.msg = "Invalid parameters in playbook config: '{0}' "\
+                     .format(str("\n".join(errormsg)))
+            self.log(self.msg, "ERROR")
+            self.status = "failed"
+            return self
+        
+        # check if the given user config exists and/or needs to be updated/created.
         if self.have.get("user_exists"):
             pass
+            # # update the user
             # consolidated_data = self.compare_user_cofig_with_inputdata(self.have["current_user_config"])
-            # if consolidated_data:
-            #     self.log('Final user data to update {}'.format(str(consolidated_data)),
-            #           "INFO")
-            #     task_response = self.update_user_configuration(consolidated_data)
-            #     self.log('Task respoonse {}'.format(str(task_response)),"INFO")
-            #     config_updated = True
-            # else:
+            
+            # if not consolidated_data:
             #     # user does not need update
             #     self.msg = "user - {0} does not need any update"\
             #         .format(self.have.get("current_user_config").get("username"))
             #     self.log(self.msg, "INFO")
             #     responses = {}
-            #     responses["users_updates"] = {"response": config}
+            #     responses["users_updates"] = {"response": user_role_config}
             #     self.result['msg'] = self.msg
             #     self.result["response"].append(responses)
             #     self.result["skipped"] = True
             #     return self
+            
+            # self.log('Final user data to update {}'.format(str(consolidated_data)), "INFO")
+            # task_response = self.update_user_configuration(consolidated_data)
+            # self.log('Task respoonse {}'.format(str(task_response)),"INFO")
+            # config_updated = True
+            
         else:
             # Create the user
-            self.log('Creating user with config {}'.format(str(config)), "INFO")
+            self.log('Creating user with config {}'.format(str(user_role_config)), "INFO")
             user_params = self.want
-            try:
-                # Additional filtering can be added here if necessary
-                user_details = {}
-                for key, value in user_params.items():
-                    if value is not None:
-                        if key != "role_list":
-                            user_details[key] = value
-                        else:
-                            current_role= self.have.get("current_role_config")
-                            user_details[key] = []
-                            for role_name in user_params['role_list']:
-                                role_id = current_role.get(role_name)
-                                if role_id:
-                                    user_details[key].append(role_id)
-                                else:
-                                    self.log("Role ID for {0} not found in current_role_config".format(str(role_name)))
-                user_params = user_details
-            except Exception as e:
-                user_name = user_params['username']
-                self.log("""The user '{0}' does not need additional filtering for 'None' values \
-                         in the 'user_params' dictionary.""".format(user_name), "INFO")
- 
+            user_details = {}
+
+            for key, value in user_params.items():
+                if value is not None:
+                    if key != "role_list":
+                        user_details[key] = value
+                    else:
+                        current_role= self.have.get("current_role_ids")
+                        user_details[key] = []
+                        for role_name in user_params['role_list']:
+                            role_id = current_role.get(role_name)
+                            if role_id:
+                                user_details[key].append(role_id)
+                            else:
+                                self.log("Role ID for {0} not found in current_role_ids".format(str(role_name)))
+            
+            user_params = user_details
             task_response = self.create_user(user_params)
             self.log('Task response {}'.format(str(task_response)), "INFO")
             config_created = True
 
-        # if config_updated or config_created:
-        if config_created:
+        if config_updated or config_created:
             responses = {}
             responses["users_updates"] = {"response": task_response}
             
             # if config_updated:
-            #     self.msg = "User details - {0} Updated Successfully"\
-            #         .format(self.have["current_user_config"].get("username"))
-            #     self.log(self.msg, "INFO")
-            #     self.result['msg'] = self.msg
-            #     self.result['response'].append(responses)
+            #   self.msg = "User updated successfully"
+            #   self.log(self.msg, "INFO")
+            #   self.result['msg'] = self.msg
+            #   self.result['response'].append(responses)
+            
+            if config_created:
+              self.msg = "User created successfully"
+              self.log(self.msg, "INFO")
+              self.result['msg'] = self.msg
+              self.result['response'].append(responses)
 
-            self.msg = "User created successfully"
-            self.log(self.msg, "INFO")
-            self.result['msg'] = self.msg
-            self.result['response'].append(responses)
         return self
 
     def create_user(self, user_params):
@@ -838,12 +865,14 @@ class User(DnacBase):
         """
         user_info_params= self.snake_to_camel_case(user_params)
         self.log("Create user with user_info_params: {0}".format(str(user_info_params)), "DEBUG")
+        
         response = self.dnac._exec(
             family="user_and_roles",
             function='add_user_ap_i',
             op_modifies=True,
             params=user_info_params,
         )
+        
         self.log("Received API response from 'create_user': {0}".format(str(response)), "DEBUG")
         return response
 
@@ -855,18 +884,7 @@ class User(DnacBase):
           - self (object): An instance of the class containing the method.
 
         Returns:
-            A Dictionary list containing user details based on the input given from
-            playbook like username
-            [
-                {
-                    "first_name": "Ajith",
-                    "last_name": "Andrew",
-                    "email": "ajith.andrew@example.com",
-                    "password": "Ajith@123",
-                    "username": "ajithandrewj",
-                    "role_list": ["SUPER-ADMIN-ROLE"]
-                }
-            ]
+            A Dictionary list containing user or role details based on the input given from.
 
         Description:
             Checks the existence of a user and gets the user details in Cisco Catalyst Center
@@ -878,9 +896,11 @@ class User(DnacBase):
         role_exists = False
         current_user_configuration = {}
         current_role_configuration = {}
+        current_role_ids = {}
         response_user = None
         response_role = None
         input_param = {}
+        self.keymap = self.map_config_key_to_api_param(self.keymap, input_config)
 
         if input_config.get("username") is not None and input_config.get("username") != "":
             input_param["username"] = input_config["username"]
@@ -890,15 +910,14 @@ class User(DnacBase):
 
         if not input_param:
             self.log("Required param username or role_list is not in playbook config", "ERROR")
-            return (user_exists, current_user_configuration, current_role_configuration)
+            return (user_exists, role_exists, current_user_configuration, current_role_ids, current_role_configuration)
 
         try:
-
             response_user = self.dnac._exec(
                 family="user_and_roles",
                 function="get_users_ap_i",
                 op_modifies=True,
-                params={**input_param, 'invoke_source': 'external', 'auth_source': 'internal'},
+                # params={**input_param, 'invoke_source': 'external', 'auth_source': 'internal'},
             )
 
             response_role = self.dnac._exec(
@@ -907,36 +926,38 @@ class User(DnacBase):
                 op_modifies=True,
             )
 
+            if response_user and response_role:
+                response_user = self.camel_to_snake_case(response_user)
+                response_role = self.camel_to_snake_case(response_role)
+                current_user_configuration = {}
+                current_role_ids = {}
+                current_role_configuration = {}
+                self.log("Received API response from 'get_users_api': {0}".format(str(response_user)), "DEBUG")
+                self.log("Received API response from 'get_roles_api': {0}".format(str(response_role)), "DEBUG")
+
+                users = response_user.get("response", {}).get("users", [])
+                roles = response_role.get("response", {}).get("roles", [])
+
+                for user in users:
+                    if user.get("username") == input_config.get("username"):
+                        current_user_configuration = user
+                        user_exists = True
+                        break
+
+                for role in roles:
+                    if role.get("name") in input_config.get("role_list"):
+                        current_role_ids[role.get("name")] = role.get("role_id")
+                        current_role_configuration = role
+                        role_exists = True
+
         except Exception as e:
-            self.log("The provided user '{0}' is either invalid or not present in the Cisco Catalyst Center."\
+            self.log("The provided user or role '{0}' is either invalid or not present in the Cisco Catalyst Center."\
                      .format(str(input_param) + str(e)), "WARNING")
+        
+        return (user_exists, role_exists, current_user_configuration, current_role_ids, current_role_configuration)
 
-        if response_user and response_role:
-            self.keymap = self.keymaping(self.keymap, response_user)
-            self.keymap = self.keymaping(self.keymap, response_role)
-            response_user = self.camel_to_snake_case(response_user)
-            response_role = self.camel_to_snake_case(response_role)
-            current_user_configuration = {}
-            current_role_configuration = {}
-            self.log("Received API response from 'get_users_api': {0}".format(str(response_user)), "DEBUG")
-            self.log("Received API response from 'get_roles_api': {0}".format(str(response_role)), "DEBUG")
 
-            users = response_user.get("response", {}).get("users", [])
-            roles = response_role.get("response", {}).get("roles", [])
-
-            for user in users:
-                if user.get("username") == input_config.get("username"):
-                    current_user_configuration = user
-                    user_exists = True
-                    break
-            for role in roles:
-                if role.get("name") in input_config.get("role_list"):
-                    current_role_configuration[role.get("name")] = role.get("role_id")
-                    role_exists = True
-
-        return (user_exists, role_exists, current_user_configuration, current_role_configuration)
-
-    def keymaping(self, keymap = any, data = any):
+    def map_config_key_to_api_param(self, keymap = any, data = any):
         """
         This function used to create the key value by snake case and Camal Case
         we need to pass the input as the user details this function collects
@@ -955,7 +976,7 @@ class User(DnacBase):
             }
         Example:
             functions = User(module)
-            keymap = functions.keymaping(keymap,user_data)
+            keymap = functions.map_config_key_to_api_param(keymap,user_data)
         """
         if isinstance(data, dict):
             keymap.update(keymap)
@@ -963,12 +984,12 @@ class User(DnacBase):
                 new_key = re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', key).lower()
                 keymap[new_key] = key
                 if isinstance(value, dict):
-                    self.keymaping(keymap, value)
+                    self.map_config_key_to_api_param(keymap, value)
                 elif isinstance(value, list):
-                    self.keymaping(keymap, (item for item in value if isinstance(item, dict)))
+                    self.map_config_key_to_api_param(keymap, (item for item in value if isinstance(item, dict)))
             return keymap
         elif isinstance(data, list):
-            self.keymaping(keymap, (item for item in data if isinstance(item, dict)))
+            self.map_config_key_to_api_param(keymap, (item for item in data if isinstance(item, dict)))
         else:
             return keymap
 
