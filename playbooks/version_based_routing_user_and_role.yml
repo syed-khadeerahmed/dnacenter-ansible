@@ -23,7 +23,7 @@
         state: merged
         config:
           - first_name: "syed"
-            last_name: "khadeer"
+            last_name: "khadeer-ahmed"
             email: "khadeerahmed@example.com"
             password: "Syed@123"
             username: "syed"
