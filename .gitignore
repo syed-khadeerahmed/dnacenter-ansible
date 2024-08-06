@@ -19,4 +19,5 @@ docs/_build/
 changelogs/.plugin-cache.yaml
 playbooks/credentials.yml
 playbooks/device_details.template
+playbooks/dnac.log
 .DS_Store

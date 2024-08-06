@@ -31,8 +31,8 @@ class User(DnacBase):
         self.result["response"] = []
         self.supported_states = ["merged", "deleted"]
         self.payload = module.params
+        self.log(self.payload)
         self.keymap = {}
-
 
     # Below function used to validate input over the ansible validation
     def validate_input_yml(self):
@@ -44,7 +44,7 @@ class User(DnacBase):
             self.msg = "Configuration is not available in the playbook for validation"
             self.log(self.msg, "ERROR")
             return self
-
+        
         userlist = self.payload.get("config")
         userlist = self.camel_to_snake_case(userlist)
         user_details = dict(first_name = dict(required = False, type = 'str'),
@@ -117,7 +117,7 @@ class User(DnacBase):
 
     def get_want(self, user_config):
 
-
+        
         for key,value in user_config.items():
             self.want[key] = value
         self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
@@ -215,7 +215,7 @@ class User(DnacBase):
             config_created = True
 
         responses = {}
-
+            
         if config_updated:
             responses["users_operation"] = {"response": task_response}
             self.msg = responses
@@ -231,94 +231,6 @@ class User(DnacBase):
             self.log(self.msg, "INFO")
 
         return self
-
-    def list_defined_methods(self, cls_obj):
-        """Lists all methods of a given class."""
-        methods = [
-            name for name, obj in inspect.getmembers(cls_obj, inspect.isfunction)
-            if obj.__module__ == cls_obj.__module__
-        ]
-        return methods
-
-    def format_version(self, version):
-        """Converts version from '2.3.5.3' to 'v2_3_5_3'."""
-        return f'v{version.replace(".", "_")}'
-
-    def validate_version(self, version):
-        """Validates if the provided version is among the known versions."""
-        valid_versions = {'2.2.2.3', '2.2.3.3', '2.3.3.0', '2.3.5.3', '2.3.7.6'}
-        if version not in valid_versions:
-            self.log("'Unknown API version, known versions are: '2.2.2.3, 2.2.3.3, 2.3.3.0, 2.3.5.3, and 2.3.7.6'")
-
-    def find_closest_family(self, module, family):
-        """Finds the closest matching family name from available modules."""
-        available_families = [name for _, name, _ in pkgutil.iter_modules(module.__path__)]
-        closest_matches = difflib.get_close_matches(family, available_families)
-        return closest_matches[0] if closest_matches else None
-
-    def try_import_module(self, version, family):
-        """Attempts to import a module dynamically based on the family name and version."""
-        formatted_version = self.format_version(version)
-        module_path = f"dnacentersdk.api.{formatted_version}"
-
-        try:
-            base_module = importlib.import_module(module_path)
-            family_name = self.find_closest_family(base_module, family)
-            if family_name:
-                submodule_path = f"{module_path}.{family_name}"
-                return importlib.import_module(submodule_path)
-            else:
-                raise ImportError(f"Module for family '{family}' not found in version '{version}'.")
-        except ImportError as e:
-            raise ImportError(f"Module for version '{version}' not found: {e}")
-
-    def call_function(self, version, family, hint):
-        """Checks if a specific function exists in the first class found in the module."""
-        try:
-            self.validate_version(version)
-            module = self.try_import_module(version, family)
-            self.log(f"Successfully imported {module.__name__}")
-
-            # Find the first class in the module
-            class_names = [name for name, obj in inspect.getmembers(module, inspect.isclass) if obj.__module__ == module.__name__]
-            if class_names:
-                family_class = getattr(module, class_names[0])
-                methods = self.list_defined_methods(family_class)
-                matching_methods = [method for method in methods if hint in method]
-
-                if matching_methods:
-                    self.log(f"Yes, function '{matching_methods[0]}' is available.")
-                    return matching_methods[0]  # Return the matched function name
-                else:
-                    self.log(f"No matching function for hint '{hint}' in version '{version}'.")
-                    return None
-            else:
-                self.log(f"No classes found in module '{module.__name__}'.")
-                return None
-        except ImportError as e:
-            self.log(f"ImportError: {e}")
-            return None
-
-    def inspect_family_file(self, version, family):
-        """Inspects the family file and lists available classes and their methods."""
-        try:
-            self.validate_version(version)
-            module = self.try_import_module(version, family)
-            self.log(f"Successfully imported {module.__name__}")
-
-            class_names = [name for name, obj in inspect.getmembers(module, inspect.isclass) if obj.__module__ == module.__name__]
-
-            if class_names:
-                self.log("Available classes:")
-                for cls_name in class_names:
-                    self.log(f"- {cls_name}")
-            else:
-                self.log(f"No classes found in module '{module.__name__}'.")
-
-        except ImportError as e:
-            self.log(f"ImportError: {e}")
-        except Exception as e:
-            self.log(f"Error: {e}")
 
     def get_current_config(self, input_config):
 
@@ -339,13 +251,13 @@ class User(DnacBase):
         if not input_param:
             self.log("Required param username or role_list is not in playbook config", "ERROR")
             return (user_exists, current_user_configuration, current_role_configuration)
-
-        function_get_user = "get_user"
+        
+        function_get_user = "get_users"
         version = self.payload.get("dnac_version")
         VBR_funtion_get_user = self.call_function(version, 'user_and_roles', function_get_user)
         self.log(f"VBR_funtion : {VBR_funtion_get_user}")
 
-        function_get_role = "get_role"
+        function_get_role = "get_roles"
         version = self.payload.get("dnac_version")
         VBR_funtion_get_role = self.call_function(version, 'user_and_roles', function_get_role)
         self.log(f"VBR_funtion : {VBR_funtion_get_role}")
@@ -409,7 +321,7 @@ class User(DnacBase):
         )
         self.log("Received API response from 'create_user': {0}".format(str(response)), "DEBUG")
         return response
-
+    
     def user_requires_update(self, current_user, current_role):
 
         update_required = False
@@ -420,25 +332,25 @@ class User(DnacBase):
             update_required = True
         elif 'first_name' not in update_user_param:
             update_user_param['first_name'] = current_user['first_name']
-
+        
         if current_user.get('last_name') != self.want.get('last_name'):
             update_user_param['last_name'] = self.want['last_name']
             update_required = True
         elif 'last_name' not in update_user_param:
             update_user_param['last_name'] = current_user['last_name']
-
+        
         if current_user.get('email') != self.want.get('email'):
             update_user_param['email'] = self.want['email']
             update_required = True
         elif 'email' not in update_user_param:
             update_user_param['email'] = current_user['email']
-
+        
         if current_user.get('username') != self.want.get('username'):
             update_user_param['username'] = self.want['username']
             update_required = True
         elif 'username' not in update_user_param:
             update_user_param['username'] = current_user['username']
-
+        
         if current_user.get('role_list')[0] != current_role[self.want.get("role_list")[0]]:
             role_id = current_role[self.want.get("role_list")[0]]
             update_user_param['role_list'] = [role_id]
@@ -492,13 +404,14 @@ class User(DnacBase):
                  may not have executed successfully.""".format(user_name), "INFO")
 
         return self
-
+    
     def snake_to_camel_case(self, data):
             """
             This function converts keys from snake case to camel case in a given dictionary.
             
             Parameters:
             - data: type Dict: A dictionary with keys in snake case.
+
             Returns:
             A new dictionary with keys converted to camel case.
             """
@@ -569,7 +482,7 @@ def main():
         ccc_user.get_want(config).check_return_status()
         ccc_user.get_have(config).check_return_status()
         ccc_user.get_diff_state_apply[state](config).check_return_status()
-
+        
         if config_verify:
             time.sleep(5)
             ccc_user.verify_diff_state_apply[state](config).check_return_status()
