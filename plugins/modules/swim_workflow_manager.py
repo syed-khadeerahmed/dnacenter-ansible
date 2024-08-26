@@ -497,6 +497,9 @@ class Swim(DnacBase):
     def __init__(self, module):
         super().__init__(module)
         self.supported_states = ["merged"]
+        self.payload = module.params
+        self.dnac_version= int(self.payload.get("dnac_version").replace(".", ""))
+        self.version_2_3_5_3, self.version_2_3_7_6 = 2353, 2376
 
     def validate_input(self):
         """
@@ -524,6 +527,7 @@ class Swim(DnacBase):
             return self
 
         temp_spec = dict(
+            import_cco_image_details=dict(type='dict'),
             import_image_details=dict(type='dict'),
             tagging_details=dict(type='dict'),
             image_distribution_details=dict(type='dict'),
@@ -619,6 +623,44 @@ class Swim(DnacBase):
             self.module.fail_json(msg=error_message, response=image_response)
 
         return image_id
+
+    def get_cco_image_id(self, cco_image_name):
+        self.log("inside get cco image id")
+        image_id = None
+        self.log(image_id)
+        response = self.dnac._exec(
+            family="software_image_management_swim",
+            function='get_software_image_details',
+            op_modifies=True,
+            params={"image_name": cco_image_name},
+        )
+        self.log("Received API response from {0}: {1}".format("returns_list_of_software_images", (response)), "DEBUG")
+        self.log(response)
+        response = response.get("response")
+        self.log(response)
+
+        for image in response:
+            if cco_image_name == image.get("name"):
+                image_id = image.get("id")
+                break
+
+        if image_id:
+            return image_id
+
+        error_message = "Image id cannot be found in cisco.com"
+        self.log(error_message)
+        self.module.fail_json(msg=error_message, response=response)
+
+    def import_cco_image(self, cco_image_id):
+        
+        response = self.dnac._exec(
+            family="software_image_management_swim",
+            function="download_the_software_image",
+            op_modifies=True,
+            params=cco_image_id
+        )
+        self.log("Received API response from {0}: {1}".format("returns_list_of_software_images", str(response)), "DEBUG")
+        response = response.get("response")
 
     def get_image_name_from_id(self, image_id):
         """
@@ -1034,6 +1076,16 @@ class Swim(DnacBase):
                 self.log("The import type '{0}' provided is incorrect. Only 'local' or 'remote' are supported.".format(want["import_type"]), "CRITICAL")
                 self.module.fail_json(msg="Incorrect import type. Supported Values: local or remote")
 
+        if config.get("import_cco_image_details"):
+            self.log("inside11")
+            if "type" in config.get("import_cco_image_details", []) and "image_name" in config.get("import_cco_image_details", []):
+                self.log("inside111")
+                want["import_cco_image"] = True
+                want["import_cco_type"] = config.get("import_cco_image_details").get("type").lower()
+                want["cco_image_details"] = config.get("import_cco_image_details").get("image_name")
+            else:
+                self.log("ERROR")
+
         want["tagging_details"] = config.get("tagging_details")
         want["distribution_details"] = config.get("image_distribution_details")
         want["activation_details"] = config.get("image_activation_details")
@@ -1060,19 +1112,24 @@ class Swim(DnacBase):
 
         try:
             import_type = self.want.get("import_type")
+            import_type_cco = self.want.get("import_cco_type")
 
-            if not import_type:
+            if not import_type and not import_type_cco:
                 self.status = "success"
                 self.msg = "Error: Details required for importing SWIM image. Please provide the necessary information."
                 self.result['msg'] = self.msg
                 self.log(self.msg, "WARNING")
                 self.result['changed'] = False
                 return self
+        
+            self.log("inside")
 
             if import_type == "remote":
                 image_name = self.want.get("url_import_details").get("payload")[0].get("source_url")
-            else:
+            elif import_type == "local":
                 image_name = self.want.get("local_import_details").get("file_path")
+            elif import_type_cco == "cco":
+                image_name = self.want.get("cco_image_details")
 
             # Code to check if the image already exists in Catalyst Center
             name = image_name.split('/')[-1]
@@ -1095,7 +1152,10 @@ class Swim(DnacBase):
                 self.result['changed'] = False
                 return self
 
+
+            self.log("33333")
             if self.want.get("import_type") == "remote":
+                self.log("inside remote")
                 import_payload_dict = {}
                 temp_payload = self.want.get("url_import_details").get("payload")[0]
                 keys_to_change = list(import_key_mapping.keys())
@@ -1113,7 +1173,8 @@ class Swim(DnacBase):
                     scheduleOrigin=self.want.get("url_import_details").get("schedule_origin"),
                 )
                 import_function = 'import_software_image_via_url'
-            else:
+
+            elif self.want.get("import_type") == "local":
                 file_path = self.want.get("local_import_details").get("file_path")
                 import_params = dict(
                     is_third_party=self.want.get("local_import_details").get("is_third_party"),
@@ -1124,47 +1185,57 @@ class Swim(DnacBase):
                     multipart_monitor_callback=None
                 )
                 import_function = 'import_local_software_image'
+            
+            elif self.want.get("import_cco_type") == "cco":
+                self.log("inside cco")
+                cco_image_id = self.get_cco_image_id(image_name)
+                self.log("get_cco_image_type")
+                self.log(cco_image_id)
+                import_function = 'download_the_software_image'
 
-            response = self.dnac._exec(
-                family="software_image_management_swim",
-                function=import_function,
-                op_modifies=True,
-                params=import_params,
-            )
-            self.log("Received API response from {0}: {1}".format(import_function, str(response)), "DEBUG")
+            if self.dnac_version >= self.version_2_3_7_6:
+                response = self.import_cco_image(cco_image_id)
+            else:
+                response = self.dnac._exec(
+                    family="software_image_management_swim",
+                    function=import_function,
+                    op_modifies=True,
+                    params=import_params,
+                )
+                self.log("Received API response from {0}: {1}".format(import_function, str(response)), "DEBUG")
 
-            task_details = {}
-            task_id = response.get("response").get("taskId")
+                task_details = {}
+                task_id = response.get("response").get("taskId")
 
-            while (True):
-                task_details = self.get_task_details(task_id)
-                name = image_name.split('/')[-1]
+                while (True):
+                    task_details = self.get_task_details(task_id)
+                    name = image_name.split('/')[-1]
 
-                if task_details and \
-                        ("completed successfully" in task_details.get("progress").lower()):
-                    self.result['changed'] = True
-                    self.status = "success"
-                    self.msg = "Swim Image {0} imported successfully".format(name)
-                    self.result['msg'] = self.msg
-                    self.log(self.msg, "INFO")
-                    break
-
-                if task_details and task_details.get("isError"):
-                    if "already exists" in task_details.get("failureReason", ""):
-                        self.msg = "SWIM Image {0} already exists in the Cisco Catalyst Center".format(name)
+                    if task_details and \
+                            ("completed successfully" in task_details.get("progress").lower()):
+                        self.result['changed'] = True
+                        self.status = "success"
+                        self.msg = "Swim Image {0} imported successfully".format(name)
                         self.result['msg'] = self.msg
                         self.log(self.msg, "INFO")
-                        self.status = "success"
-                        self.result['changed'] = False
                         break
-                    else:
-                        self.status = "failed"
-                        self.msg = task_details.get("failureReason", "SWIM Image {0} seems to be invalid".format(image_name))
-                        self.log(self.msg, "WARNING")
-                        self.result['response'] = self.msg
-                        return self
 
-            self.result['response'] = task_details if task_details else response
+                    if task_details and task_details.get("isError"):
+                        if "already exists" in task_details.get("failureReason", ""):
+                            self.msg = "SWIM Image {0} already exists in the Cisco Catalyst Center".format(name)
+                            self.result['msg'] = self.msg
+                            self.log(self.msg, "INFO")
+                            self.status = "success"
+                            self.result['changed'] = False
+                            break
+                        else:
+                            self.status = "failed"
+                            self.msg = task_details.get("failureReason", "SWIM Image {0} seems to be invalid".format(image_name))
+                            self.log(self.msg, "WARNING")
+                            self.result['response'] = self.msg
+                            return self
+
+                self.result['response'] = task_details if task_details else response
 
             # Fetch image_id for the imported image for further use
             image_name = image_name.split('/')[-1]

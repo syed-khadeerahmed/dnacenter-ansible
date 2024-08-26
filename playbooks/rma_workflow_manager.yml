@@ -23,6 +23,8 @@
         timeout_interval: 100
         state: replaced
         config:
-           - faulty_device_ip_address: 204.1.2.9
-             replacement_device_ip_address: 204.1.2.10
+          #  - faulty_device_ip_address: 204.1.2.9
+          - faulty_device_serial_number: 93K2LNK8A5Y
+            replacement_device_name: Vrouter2.cisco.com
+            #  replacement_device_name: Vrouter2.cisco.com
       register: result
