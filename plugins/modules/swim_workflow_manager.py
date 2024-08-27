@@ -592,13 +592,18 @@ class Swim(DnacBase):
             self.module.fail_json(msg=self.msg)
 
         try:
+            self.log("inside try block")
             if self.dnac_version >= self.version_2_3_7_6:
+                self.log("inside if block, starting responce")
                 response = self.dnac._exec(
                     family="site_design",
                     function='get_sites',
                     op_modifies=True,
                     params={"name_hierarchy": site_name},
                 )
+                self.log("site response")
+                self.log(response)
+
                 if response:
                     self.log("Received API response from 'get_sites': {0}".format(str(response)), "DEBUG")
                     site = response.get("response")
@@ -606,6 +611,7 @@ class Swim(DnacBase):
                     site_exists = True
 
         except Exception as e:
+            self.log(e)
             self.msg = (
                 "'An exception occurred: Site '{0}' does not exist in the Cisco Catalyst Center' or 'In this version '{1}'"
                 ", 'get_sites' is not supported'".format(site_name, self.payload.get("dnac_version"))
@@ -760,6 +766,7 @@ class Swim(DnacBase):
         self.log("Received API response from 'get_device_list': {0}".format(str(response)), "DEBUG")
 
         device_list = response.get("response")
+
         if (len(device_list) == 1):
             device_id = device_list[0].get("id")
             self.log("Device Id: {0}".format(str(device_id)), "INFO")
@@ -768,7 +775,7 @@ class Swim(DnacBase):
             self.log(self.msg, "WARNING")
 
         return device_id
-
+    
     def get_device_uuids(self, site_name, device_family, device_role, device_series_name=None):
         """
         Retrieve a list of device UUIDs based on the specified criteria.
@@ -803,31 +810,76 @@ class Swim(DnacBase):
             else:
                 device_series_name = ".*" + device_series_name + ".*"
 
-        site_params = {
-            "site_id": site_id,
-            "device_family": device_family
-        }
+        if self.dnac_version <= self.version_2_3_5_3:
+            site_params = {
+                "site_id": site_id,
+                "device_family": device_family
+            }
+    
+            try:
+                response = self.dnac._exec(
+                    family="sites",
+                    function='get_membership',
+                    op_modifies=True,
+                    params=site_params,
+                )
 
-        try:
-            response = self.dnac._exec(
-                family="sites",
-                function='get_membership',
-                op_modifies=True,
-                params=site_params,
-            )
+            except Exception as e:
+                self.log("Unable to fetch the device(s) associated to the site '{0}' due to '{1}'".format(site_name, str(e)), "WARNING")
+                return device_uuid_list
 
-        except Exception as e:
-            self.log("Unable to fetch the device(s) associated to the site '{0}' due to '{1}'".format(site_name, str(e)), "WARNING")
-            return device_uuid_list
+            self.log("Received API response from 'get_membership': {0}".format(str(response)), "DEBUG")
+            response = response['device']
 
-        self.log("Received API response from 'get_membership': {0}".format(str(response)), "DEBUG")
-        response = response['device']
+            site_response_list = []
+            for item in response:
+                if item['response']:
+                    for item_dict in item['response']:
+                        site_response_list.append(item_dict)
+            self.log("family = getmembership version 2.3.5.3")
+        else:
+            pass
 
-        site_response_list = []
-        for item in response:
-            if item['response']:
-                for item_dict in item['response']:
-                    site_response_list.append(item_dict)
+        if self.dnac_version >= self.version_2_3_7_6:
+            try:
+                response = self.dnac._exec(
+                    family="site_design",
+                    function='get_site_assigned_network_devices',
+                    op_modifies=True,
+                    params=site_id,
+                )
+
+            except Exception as e:
+                self.log("Unable to fetch the device(s) associated to the site '{0}' due to '{1}'".format(site_name, str(e)), "WARNING")
+                return device_uuid_list
+            
+            self.log("Received API response from 'get_site_assigned_network_devices': {0}".format(str(response)), "DEBUG")
+            response = response['response']
+
+            device_id_list = []
+            site_response_list = []
+            for device_id in response:
+                device_id_list.append(device_id.get("deviceId"))
+        
+            for device_id in device_id_list:
+                param = {"id":device_id,
+                        "family": device_family }
+
+                try:
+                    response = self.dnac._exec(
+                        family="devices",
+                        function='get_device_list',
+                        op_modifies=True,
+                        params=param,
+                    )
+                    site_response_list.append(response.get("response"))
+
+                except Exception as e:
+                    self.log("Unable to fetch the device(s) associated to the site '{0}' due to '{1}'".format(site_name, str(e)), "WARNING")
+                    return device_uuid_list
+            self.log("family = getmembership version 2.3.7.6")
+        else:
+            pass
 
         if device_role.upper() == 'ALL':
             device_role = None
@@ -838,7 +890,7 @@ class Swim(DnacBase):
             'role': device_role
         }
         offset = 0
-        limit = self.get_device_details_limit()
+        limit = self.get_device_details_limit() # 500
         initial_exec = False
         site_memberships_ids, device_response_ids = [], []
 
@@ -895,6 +947,7 @@ class Swim(DnacBase):
 
         # Find the intersection of device IDs with the response get from get_membership api and get_device_list api with provided filters
         device_uuid_list = set(site_memberships_ids).intersection(set(device_response_ids))
+
 
         return device_uuid_list
 
@@ -1107,7 +1160,7 @@ class Swim(DnacBase):
         self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
 
         return self
-
+    
     def get_diff_import(self):
         """
         Check the image import type and fetch the image ID for the imported image for further use.
@@ -1484,6 +1537,8 @@ class Swim(DnacBase):
 
         distribution_details = self.want.get("distribution_details")
         site_name = distribution_details.get("site_name")
+        self.log("site_name")
+        self.log(site_name)
         device_family = distribution_details.get("device_family_name")
         device_role = distribution_details.get("device_role", "ALL")
         device_series_name = distribution_details.get("device_series_name")
