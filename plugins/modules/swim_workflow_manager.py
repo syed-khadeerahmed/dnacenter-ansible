@@ -659,6 +659,27 @@ class Swim(DnacBase):
         return image_id
 
     def get_cco_image_id(self, cco_image_name):
+        """
+    Retrieve the unique image ID from Cisco.com based on the provided image name.
+
+    Parameters:
+        self (object): An instance of a class used for interacting with Cisco DNA Center.
+        cco_image_name (str): The name of the software image to search for on Cisco.com.
+
+    Returns:
+        str: The image ID corresponding to the given image name.
+
+    Raises:
+        AnsibleFailJson: If the image ID cannot be found in the response.
+
+    Description:
+        This function sends a request to Cisco DNA Center to retrieve a list of software images 
+        using the `returns_list_of_software_images` API. It then iterates through the response 
+        to find a match for the provided `cco_image_name`. If a match is found, the corresponding 
+        image ID is returned. If no matching image is found, or if the image ID is not present 
+        in the response, the function logs an error message and raises an exception.
+    """
+        
         response = self.dnac._exec(
             family="software_image_management_swim",
             function='returns_list_of_software_images',
@@ -841,13 +862,16 @@ class Swim(DnacBase):
             pass
 
         if self.dnac_version >= self.version_2_3_7_6:
+            self.log("inside the version 2.3.7.6")
             try:
                 response = self.dnac._exec(
                     family="site_design",
                     function='get_site_assigned_network_devices',
                     op_modifies=True,
-                    params=site_id,
+                    params={"site_id":site_id},
                 )
+                self.log("get_site_assigned_network_device")
+                self.log(response)
 
             except Exception as e:
                 self.log("Unable to fetch the device(s) associated to the site '{0}' due to '{1}'".format(site_name, str(e)), "WARNING")
@@ -858,13 +882,18 @@ class Swim(DnacBase):
 
             device_id_list = []
             site_response_list = []
+
             for device_id in response:
                 device_id_list.append(device_id.get("deviceId"))
-        
+                
+            self.log("device_id_list")
+            self.log(device_id_list)
+
             for device_id in device_id_list:
                 param = {"id":device_id,
                         "family": device_family }
-
+                self.log("param")
+                self.log(param)
                 try:
                     response = self.dnac._exec(
                         family="devices",
@@ -872,12 +901,15 @@ class Swim(DnacBase):
                         op_modifies=True,
                         params=param,
                     )
-                    site_response_list.append(response.get("response"))
-
+                    self.log("get device list response")
+                    self.log(response)
+                    site_response_list.append(response.get("response")[0])
+                    self.log("site_response_list")
+                    self.log(site_response_list)
                 except Exception as e:
                     self.log("Unable to fetch the device(s) associated to the site '{0}' due to '{1}'".format(site_name, str(e)), "WARNING")
                     return device_uuid_list
-            self.log("family = getmembership version 2.3.7.6")
+            self.log("family = 'get_site_assigned_network_devices' version 2.3.7.6")
         else:
             pass
 
@@ -1537,8 +1569,6 @@ class Swim(DnacBase):
 
         distribution_details = self.want.get("distribution_details")
         site_name = distribution_details.get("site_name")
-        self.log("site_name")
-        self.log(site_name)
         device_family = distribution_details.get("device_family_name")
         device_role = distribution_details.get("device_role", "ALL")
         device_series_name = distribution_details.get("device_series_name")
