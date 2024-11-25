@@ -1437,7 +1437,6 @@ class ApplicationPolicy(DnacBase):
             self.log(self.msg, "ERROR")
             return self
         
-        # Extract application_queuing_details from the first element (assuming it's a list of dicts)
         config_data = self.config[0] if self.config else {}
 
         # Ensure application_queuing_details is a list
@@ -1451,7 +1450,7 @@ class ApplicationPolicy(DnacBase):
         application_set_details = config_data.get('application_set_details', [])
         if not isinstance(application_set_details, list):
             self.status = "failed"
-            self.msg = "'application_set_details' should be a list, found: {0}".format(type(application_queuing_details))
+            self.msg = "'application_set_details' should be a list, found: {0}".format(type(application_set_details))
             self.log(self.msg, "ERROR")
             return self
 
@@ -1648,8 +1647,10 @@ class ApplicationPolicy(DnacBase):
         """
 
         self.config = config
+
         if config.get("application_queuing_details"):
             self.get_diff_queuing_profile().check_return_status()
+
         if config.get("application_set_details"):
             self.get_diff_application_set().check_return_status()
 
@@ -1748,10 +1749,13 @@ class ApplicationPolicy(DnacBase):
 
         if queuing_profile_details.get("queuing_profile_exists") == False:
             self.create_queuing_profile()
+        
+        # queuing_profile_id = 
+        
         return self
 
     def create_queuing_profile(self):
-        self.log(self.config)
+
         new_queuing_profile_details = self.config.get("application_queuing_details", [])[0]
         self.log(f"Queuing Profile Details: {new_queuing_profile_details}")
 
@@ -1768,44 +1772,94 @@ class ApplicationPolicy(DnacBase):
                 self.result['response'] = self.msg
                 self.check_return_status()
 
-        for interface in new_queuing_profile_details['bandwidth_settings']['interface_speed_settings']:
-            total_percentage = sum(int(value) for value in interface['bandwidth_percentages'].values())
+        if new_queuing_profile_details['type'] == "bandwidth_settings":
+            for interface in new_queuing_profile_details['bandwidth_settings']['interface_speed_settings']:
+                total_percentage = sum(int(value) for value in interface['bandwidth_percentages'].values())
 
-            if total_percentage != 100:
-                msg = (f"Validation ERROR at interface speed: {interface['interface_speed']} (Total: {total_percentage}%) Should be total 100% ")
-                self.status = "failed"
-                self.msg = msg
-                self.log(msg, "ERROR")
-                self.result['response'] = self.msg
-                self.check_return_status()
+                if total_percentage != 100:
+                    msg = (f"Validation ERROR at interface speed: {interface['interface_speed']} (Total: {total_percentage}%) Should be total 100% ")
+                    self.status = "failed"
+                    self.msg = msg
+                    self.log(msg, "ERROR")
+                    self.result['response'] = self.msg
+                    self.check_return_status()
 
         # Construct payload
-        if new_queuing_profile_details['bandwidth_settings']['is_common_between_all_interface_speeds'] == True:
-
+        if new_queuing_profile_details.get('bandwidth_settings', {}).get('is_common_between_all_interface_speeds') == True or new_queuing_profile_details.get('type') == ['dscp']:
             self.log("As we are passing common traffic class bandwidth percentage for all the interface speeds")
             param = {
-                    "description": new_queuing_profile_details.get('queuing_policy_description', ''),
-                    "name": new_queuing_profile_details.get('queuing_profile_name', ''),
-                    "clause": [
+                "name": new_queuing_profile_details.get('queuing_profile_name', ''),
+                "description": new_queuing_profile_details.get('queuing_policy_description', ''),
+                "clause": []
+            }
+
+            if 'bandwidth' in new_queuing_profile_details['type']:
+                bandwidth_clause = {
+                    "type": "BANDWIDTH",
+                    "isCommonBetweenAllInterfaceSpeeds": new_queuing_profile_details['bandwidth_settings'].get(
+                        'is_common_between_all_interface_speeds', False
+                    ),
+                    "interfaceSpeedBandwidthClauses": [
                         {
-                            "type": new_queuing_profile_details['type'][0].upper(),
-                            "isCommonBetweenAllInterfaceSpeeds": new_queuing_profile_details['bandwidth_settings'].get('is_common_between_all_interface_speeds', False),
-                            "interfaceSpeedBandwidthClauses": [
+                            "interfaceSpeed": new_queuing_profile_details['bandwidth_settings'].get('interface_speed', ''),
+                            "tcBandwidthSettings": [
                                 {
-                                    "interfaceSpeed": new_queuing_profile_details['bandwidth_settings'].get('interface_speed', ''),
-                                    "tcBandwidthSettings": [
-                                        {
-                                            "trafficClass": key.upper(),
-                                            "bandwidthPercentage": value
-                                        }
-                                        for key, value in new_queuing_profile_details['bandwidth_settings']['bandwidth_percentages'].items()
-                                    ]
+                                    "trafficClass": key.upper(),
+                                    "bandwidthPercentage": int(value)
                                 }
+                                for key, value in new_queuing_profile_details['bandwidth_settings']['bandwidth_percentages'].items()
                             ]
                         }
                     ]
                 }
-            
+                param['clause'].append(bandwidth_clause)
+
+            else:
+                traffic_class = {
+                                "MULTIMEDIA_CONFERENCING": "10",
+                                "OPS_ADMIN_MGMT": "2",
+                                "TRANSACTIONAL_DATA": "10",
+                                "VOIP_TELEPHONY": "10",
+                                "MULTIMEDIA_STREAMING": "10",
+                                "BROADCAST_VIDEO": "10",
+                                "NETWORK_CONTROL": "3",
+                                "BEST_EFFORT": "25",
+                                "SIGNALING": "2",
+                                "BULK_DATA": "4",
+                                "SCAVENGER": "1",
+                                "REAL_TIME_INTERACTIVE": "13"
+                            }
+                bandwidth_clause = {
+                    "type": "BANDWIDTH",
+                    "isCommonBetweenAllInterfaceSpeeds": True,
+                    "interfaceSpeedBandwidthClauses": [
+                        {
+                            "interfaceSpeed": "ALL",
+                            "tcBandwidthSettings": [
+                                {
+                                    "trafficClass": key.upper(),
+                                    "bandwidthPercentage": int(value)
+                                }
+                                for key, value in traffic_class.items()
+                            ]
+                        }
+                    ]
+                }
+                param['clause'].append(bandwidth_clause)
+
+            if 'dscp' in new_queuing_profile_details['type']:
+                dscp_clause = {
+                    "type": "DSCP_CUSTOMIZATION",
+                    "tcDscpSettings": [
+                        {
+                            "trafficClass": key.upper(),
+                            "dscp": value
+                        }
+                        for key, value in new_queuing_profile_details['dscp_settings'].items()
+                    ]
+                }
+                param['clause'].append(dscp_clause)
+
         elif new_queuing_profile_details['bandwidth_settings']['is_common_between_all_interface_speeds'] == False:
 
             self.log("As we are passing different traffic class bandwidth percentage for six different the interface speeds")
@@ -1827,7 +1881,7 @@ class ApplicationPolicy(DnacBase):
                 for speed in interface_speeds:
                     # Create the interface speed clause
                     interface_speed_clause = {
-                        "interfaceSpeed": speed.strip(),  # Strip any extra spaces
+                        "interfaceSpeed": speed.strip(),
                         "tcBandwidthSettings": [
                             {
                                 "trafficClass": key.upper(),
@@ -1838,6 +1892,19 @@ class ApplicationPolicy(DnacBase):
                     }
                     # Append the clause to the main structure
                     param["clause"][0]["interfaceSpeedBandwidthClauses"].append(interface_speed_clause)
+
+            if 'dscp' in new_queuing_profile_details['type']:
+                dscp_clause = {
+                    "type": "DSCP_CUSTOMIZATION",
+                    "tcDscpSettings": [
+                        {
+                            "trafficClass": key.upper(),
+                            "dscp": value
+                        }
+                        for key, value in new_queuing_profile_details['dscp_settings'].items()
+                    ]
+                }
+                param['clause'].append(dscp_clause)
 
         self.log(f"Payload for Queuing Profile: {json.dumps(param, indent=4)}")
 
@@ -1884,25 +1951,93 @@ class ApplicationPolicy(DnacBase):
         """
 
         self.config = config
+
         if config.get("application_set_details"):
             self.delete_application_set().check_return_status()
 
-    def delete_application_set(self):
+        if config.get("application_queuing_details"):
+            self.delete_application_queuing_profile().check_return_status()
+
+    def delete_application_queuing_profile(self):
         """
         Deletes an existing application set in Cisco Catalyst Center.
-
         Description:
             This method checks if the specified application set exists in Cisco Catalyst Center. If the application set does 
             not exist or has already been deleted, it logs the status and exits without performing any operations. If the 
             application set exists, the method retrieves its ID and triggers the appropriate API call to delete it. The 
             method monitors the task's response status and logs the outcome.
-
         Parameters:
             None: The method uses the `config` attribute to retrieve application set details, such as `application_set_name`.
-
         Returns:
             self: The current instance of the class, updated with the result of the delete operation.
+        Raises:
+            None: Any errors or unexpected behaviors are handled within the method and logged appropriately.
+        """
 
+        application_queuing_profile_details = self.config.get("application_queuing_details", [])[0]
+        self.log(f"Queuing Profile Details: {application_queuing_profile_details}")
+        application_queuing_profile_name = application_queuing_profile_details.get("queuing_profile_name")
+        application_queuing_profile_details = self.have
+        self.log(application_queuing_profile_details)
+
+        if application_queuing_profile_details.get("queuing_profile_exists") == False:
+            self.status = "success"
+            self.result['changed'] = False
+            self.msg = "application queuing profile '{0}' does not present in the cisco catalyst center or its been already deleted".format(application_queuing_profile_name)
+            self.result['msg'] = self.msg
+            self.result['response'] = self.msg
+            self.log(self.msg, "INFO")
+            return self
+
+        queuing_profile_id = application_queuing_profile_details.get('current_queuing_profile', [])[0].get('id', None)
+        self.log(queuing_profile_id)
+
+        try:
+            response = self.dnac._exec(
+                family="application_policy",
+                function='delete_application_policy_queuing_profile',
+                op_modifies= True,
+                params= {'id': queuing_profile_id,}
+                )
+
+            self.log(f"Received API response from 'create_application_set': {response}", "DEBUG")
+            self.check_tasks_response_status(response, "create_application_policy_queuing_profile")
+
+            if self.status not in ["failed", "exited"]:
+                self.log("application policy queuing profile '{0}' deleted successfully.".format(application_queuing_profile_name), "INFO")
+                self.status = "success"
+                self.result['changed'] = True
+                self.msg = ("application policy queuing profile '{0}' deleted successfully.".format(application_queuing_profile_name))
+                self.result['response'] = self.msg
+                return self
+
+            if self.status == "failed":
+                fail_reason = self.msg
+                self.status = "failed"
+                self.msg = "deletion of the application policy queuing profile failed due to - {0}".format(fail_reason)
+                self.result['response'] = self.msg
+                self.log(self.msg, "ERROR")
+                self.check_return_status()
+
+        except Exception as e:
+            self.status = "failed"
+            self.msg = "".format()
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
+
+    def delete_application_set(self):
+        """
+        Deletes an existing application set in Cisco Catalyst Center.
+        Description:
+            This method checks if the specified application set exists in Cisco Catalyst Center. If the application set does 
+            not exist or has already been deleted, it logs the status and exits without performing any operations. If the 
+            application set exists, the method retrieves its ID and triggers the appropriate API call to delete it. The 
+            method monitors the task's response status and logs the outcome.
+        Parameters:
+            None: The method uses the `config` attribute to retrieve application set details, such as `application_set_name`.
+        Returns:
+            self: The current instance of the class, updated with the result of the delete operation.
         Raises:
             None: Any errors or unexpected behaviors are handled within the method and logged appropriately.
         """
