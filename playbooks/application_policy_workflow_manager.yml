@@ -20,45 +20,66 @@
         config_verify: True
         dnac_api_task_timeout: 1000
         dnac_task_poll_interval: 1
-        state: merged
+        state: deleted
         config:
+          - application_details:
+              application_name: app21
+              
+              # type: url
+              # url: "www.example5.com"
+              # app_protocol: "TCP"
+              # # network_identity_setting:
+              # #   protocol: TCP
+              # #   port: 2002
+              # # dscp: 6
+              # ignore_conflict: true
+              # traffic_class: BROADCAST_VIDEO
+              # category_id: f502f995-b90f-4c77-ba8e-7acc970dec34
+              # application_set_name: sampleapplsetTTT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           # - application_queuing_details:
           #     - queuing_profile_name: "newprofile10"
 
-          - application_queuing_details:
-              - queuing_profile_name: Asampleq9
-                queuing_profile_new_name: Asampleq10
-                queuing_policy_description: "sample 12234567876543q"
-                type: ["dscp", "bandwidth"]
-                bandwidth_settings:
-                  is_common_between_all_interface_speeds: true
-                  interface_speed: "ALL"
-                  bandwidth_percentages:
-                      transactional_data: "5"
-                      best_effort: "10"
-                      voip_telephony: "15"
-                      multimedia_streaming: "10"
-                      real_time_interactive: "20"
-                      multimedia_conferencing: "10"
-                      signaling: "10"
-                      scavenger: "5"
-                      ops_admin_mgmt: "5"
-                      broadcast_video: "2"
-                      network_control: "3"
-                      bulk_data: "5"
-                dscp_settings:
-                  multimedia_conferencing: "20"
-                  ops_admin_mgmt: "23"
-                  transactional_data: "28"
-                  voip_telephony: "45"
-                  multimedia_streaming: "27"
-                  broadcast_video: "46"
-                  network_control: "48"
-                  best_effort: "0"
-                  signaling: "4"
-                  bulk_data: "10"
-                  scavenger: "2"
-                  real_time_interactive: "34"
+          # - application_queuing_details:
+          #     - queuing_profile_name: Asampleqdscp2
+          #       queuing_profile_new_name: Asampleq10
+          #       queuing_policy_description: "sample 12234567876543q"
+          #       type: ["dscp"]
+          #       dscp_settings:
+          #         multimedia_conferencing: "20"
+          #         ops_admin_mgmt: "23"
+          #         transactional_data: "28"
+          #         voip_telephony: "45"
+          #         multimedia_streaming: "27"
+          #         broadcast_video: "46"
+          #         network_control: "48"
+          #         best_effort: "0"
+          #         signaling: "4"
+          #         bulk_data: "10"
+          #         scavenger: "2"
+          #         real_time_interactive: "34"
 
 
 
@@ -148,7 +169,7 @@
               #         scavenger: "2"
               #         real_time_interactive: "34"
 
-
+ 
         # - application_queuing_details:
         #     - queuing_profile_name: "sample4"
         #       queuing_policy_description: "sample1"

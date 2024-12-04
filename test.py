@@ -1,137 +1,103 @@
-# config = {'queuing_profile_name': 'newprofile15', 'queuing_policy_description': 'sample desc', 'type': ['bandwidth'], 'bandwidth_settings': {'is_common_between_all_interface_speeds': False, 'interface_speed_settings': [{'interface_speed': 'HUNDRED_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}, {'interface_speed': 'TEN_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}, {'interface_speed': 'ONE_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}, {'interface_speed': 'HUNDRED_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}, {'interface_speed': 'TEN_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}, {'interface_speed': 'ONE_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}]}} 
 
+application_details = {'application_name': 'app35', 'type': 'server_ip', 'server_name': 'www.example1.com', 'network_identity_setting': {'protocol': 'TCP', 'port': 2001}, 'dscp': 5, 'traffic_class': 'BROADCAST_VIDEO', 'category_id': 'f502f995-b90f-4c77-ba8e-7acc970dec34', 'application_set_name': 'sampleapplsetTTT'} 
 
-# def map_config_to_payload(config):
-#   payload = {
-#     "name": config['queuing_profile_name'],
-#     "description": config['queuing_policy_description'],
-#     "clause": [
-#       {
-#         "type": config['type'][0].upper(),
-#         "isCommonBetweenAllInterfaceSpeeds": config['bandwidth_settings']['is_common_between_all_interface_speeds'],
-#         "interfaceSpeedBandwidthClauses": []
-#       }
-#     ]
-#   }
+application_set_id = 1111111
 
-#   for interface in config['bandwidth_settings']['interface_speed_settings']:
-#     interface_speed_clause = {
-#       "interfaceSpeed": interface['interface_speed'],
-#       "tcBandwidthSettings": [
-#         {
-#           "trafficClass": key.upper(),
-#           "bandwidthPercentage": int(value)
-#         }
-#         for key, value in interface['bandwidth_percentages'].items()
-#       ]
-#     }
-#     payload["clause"][0]["interfaceSpeedBandwidthClauses"].append(interface_speed_clause)
+# Prepare common application data, ignoring optional fields if not provided
+network_application = {
+    "applicationType": "CUSTOM",
+    "trafficClass": application_details.get("traffic_class"),
+    "categoryId": application_details.get("category_id"),
+    "type": "_server-ip" if application_details.get("type") == "server_ip" else
+            "_url" if application_details.get("type") == "url" else "_servername"
+}
 
-#   return [payload]
+# Add optional fields if they exist in the application_details
+optional_fields = [
+    ("ignore_conflict", "ignoreConflict"),
+    ("rank", "rank"),
+    ("engine_id", "engineId"),
+    ("helpstring", "helpString"),
+    ("description", "longDescription")
+]
 
-# # Example usage
-# transformed_payload = map_config_to_payload(config)
-# print(transformed_payload)
+for field, key in optional_fields:
+    value = application_details.get(field)
+    if value is not None:  # Only add to payload if the value exists
+        network_application[key] = value if key not in ("rank", "engineId") else int(value)
 
+# Add specific fields for 'server_name', 'url', or 'server_ip'
+app_type = application_details.get("type")
 
-# config = {
-#     'queuing_profile_name': 'newprofile19',
-#     'queuing_policy_description': 'sample desc',
-#     'type': ['bandwidth'],
-#     'bandwidth_settings': {
-#         'is_common_between_all_interface_speeds': False,
-#         'interface_speed_settings': [
-#             {'interface_speed': 'HUNDRED_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '20', 'multimedia_streaming': '5', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}},
-#             {'interface_speed': 'TEN_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '15', 'voip_telephony': '25', 'multimedia_streaming': '5', 'real_time_interactive': '20', 'multimedia_conferencing': '5', 'signaling': '5', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}},
-#             {'interface_speed': 'ONE_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}},
-#             {'interface_speed': 'HUNDRED_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '5', 'multimedia_streaming': '15', 'real_time_interactive': '25', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}},
-#             {'interface_speed': 'TEN_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}},
-#             {'interface_speed': 'ONE_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '5', 'voip_telephony': '25', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '5', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}
-#         ]
-#     }
-# }
+if app_type == "server_name":
+    if application_details.get("server_name") is None:
+        raise ValueError("server_name is required for the type - server_name")
+    network_application["serverName"] = application_details.get("server_name")
+elif app_type == "url":
+    if application_details.get("app_protocol") is None or application_details.get("url") is None:
+        raise ValueError("app_protocol and url are required for the type - url")
+    network_application["appProtocol"] = application_details.get("app_protocol")
+    network_application["url"] = application_details.get("url")
 
-# for interface in config['bandwidth_settings']['interface_speed_settings']:
-#     total_percentage = sum(int(value) for value in interface['bandwidth_percentages'].values())
-#     if total_percentage != 100:
-#         print(f"fail at interface speed: {interface['interface_speed']} (Total: {total_percentage}%)")
+# Handle the conditional inclusion of `dscp` or `network_identity_setting` (or both)
+dscp = application_details.get("dscp")
+network_identity_setting = application_details.get("network_identity_setting", {})
 
-def expand_comma_separated_speeds(data):
-    expanded_settings = []
+network_identity_list = None  # Default to None
 
-    # Loop through each entry in the interface_speed_settings
-    for entry in data['bandwidth_settings']['interface_speed_settings']:
-        # Split the 'interface_speed' by commas if there are multiple speeds
-        speeds = entry['interface_speed'].split(',')
-        
-        # For each speed, create a new entry with the same bandwidth_percentages
-        for speed in speeds:
-            new_entry = entry.copy()  # Copy the original entry
-            new_entry['interface_speed'] = speed.strip()  # Clean up any spaces
-            expanded_settings.append(new_entry)
-    
-    # Update the original data with the expanded interface_speed_settings
-    data['bandwidth_settings']['interface_speed_settings'] = expanded_settings
-    return data
+if app_type == "server_ip":
+    if not dscp and not network_identity_setting:
+        raise ValueError("Either 'dscp' or 'network_identity_setting' must be provided.")
 
-# Original data
-data = {
-    'queuing_profile_name': 'newprofile20',
-    'queuing_policy_description': 'sample desc',
-    'type': ['bandwidth'],
-    'bandwidth_settings': {
-        'is_common_between_all_interface_speeds': False,
-        'interface_speed_settings': [
-            {'interface_speed': 'HUNDRED_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '20', 'multimedia_streaming': '5', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}},
-            {'interface_speed': 'TEN_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '5', 'voip_telephony': '25', 'multimedia_streaming': '5', 'real_time_interactive': '20', 'multimedia_conferencing': '5', 'signaling': '6', 'scavenger': '5', 'ops_admin_mgmt': '4', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '15'}},
-            {'interface_speed': 'ONE_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}},
-            {'interface_speed': 'HUNDRED_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '5', 'multimedia_streaming': '15', 'real_time_interactive': '25', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}},
-            {'interface_speed': 'TEN_MBPS,ONE_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}
+    # Add dscp if present
+    if dscp:
+        network_application["dscp"] = dscp
+
+    # Add network_identity_setting if present
+    if network_identity_setting:
+        protocol = network_identity_setting.get("protocol")
+        ports = network_identity_setting.get("port")
+
+        # Raise an error if mandatory fields are missing
+        if not protocol or not ports:
+            raise ValueError("Both 'protocol' and 'ports' are required for server_ip type.")
+
+        # Prepare networkIdentity dictionary with mandatory and optional fields
+        network_identity = {
+            "protocol": protocol,
+            "ports": str(ports)  # Ensure port is a string
+        }
+
+        # Optional fields for networkIdentity
+        optional_network_identity_fields = [
+            ("ip_subnet", "ipv4Subnet"),
+            ("lower_port", "lowerPort"),
+            ("upper_port", "upperPort")
         ]
-    }
-}
- 
-# Expand the interface speeds from comma-separated values
-expanded_data = expand_comma_separated_speeds(data)
 
-# Output the modified data
-print(expanded_data)
+        for field, key in optional_network_identity_fields:
+            value = network_identity_setting.get(field)
+            if value is not None:
+                network_identity[key] = value
 
+        # Include networkIdentity in the payload
+        network_identity_list = [network_identity]
 
-
-new_queuing_profile_details = {'queuing_profile_name': 'newprofile20', 'queuing_policy_description': 'sample desc', 'type': ['bandwidth'], 'bandwidth_settings': {'is_common_between_all_interface_speeds': False, 'interface_speed_settings': [{'interface_speed': 'HUNDRED_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '20', 'multimedia_streaming': '5', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}, {'interface_speed': 'TEN_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '5', 'voip_telephony': '25', 'multimedia_streaming': '5', 'real_time_interactive': '20', 'multimedia_conferencing': '5', 'signaling': '6', 'scavenger': '5', 'ops_admin_mgmt': '4', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '15'}}, {'interface_speed': 'ONE_GBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}, {'interface_speed': 'HUNDRED_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '5', 'multimedia_streaming': '15', 'real_time_interactive': '25', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}, {'interface_speed': 'TEN_MBPS,ONE_MBPS', 'bandwidth_percentages': {'transactional_data': '5', 'best_effort': '10', 'voip_telephony': '15', 'multimedia_streaming': '10', 'real_time_interactive': '20', 'multimedia_conferencing': '10', 'signaling': '10', 'scavenger': '5', 'ops_admin_mgmt': '5', 'broadcast_video': '2', 'network_control': '3', 'bulk_data': '5'}}]}} 
-
-
+# Prepare the rest of the payload
 param = {
-    "name": new_queuing_profile_details['queuing_profile_name'],
-    "description": new_queuing_profile_details['queuing_policy_description'],
-    "clause": [
-        {
-            "type": new_queuing_profile_details['type'][0].upper(),
-            "isCommonBetweenAllInterfaceSpeeds": new_queuing_profile_details['bandwidth_settings']['is_common_between_all_interface_speeds'],
-            "interfaceSpeedBandwidthClauses": []
-        }
-    ]
+    "name": application_details.get("application_name"),
+    "parentScalableGroup": {
+        "idRef": application_set_id
+    },
+    "scalableGroupType": "APPLICATION",
+    "type": "scalablegroup",
+    "networkApplications": [network_application],
 }
 
-for interface in new_queuing_profile_details['bandwidth_settings']['interface_speed_settings']:
-    # Split the comma-separated interface speeds
-    interface_speeds = interface['interface_speed'].split(',')
-    for speed in interface_speeds:
-        # Create the interface speed clause
-        interface_speed_clause = { 
-            "interfaceSpeed": speed.strip(),  # Strip any extra spaces
-            "tcBandwidthSettings": [
-                {
-                    "trafficClass": key.upper(),
-                    "bandwidthPercentage": int(value)
-                }
-                for key, value in interface['bandwidth_percentages'].items()
-            ]
-        }
-        # Append the clause to the main structure
-        param["clause"][0]["interfaceSpeedBandwidthClauses"].append(interface_speed_clause)
+# Add networkIdentity if it exists
+if network_identity_list:
+    param["networkIdentity"] = network_identity_list
 
-# Print or use the final param as needed
+# Convert to JSON for output
 import json
-print(json.dumps(param, indent=2))
+print(json.dumps([param], indent=4))
