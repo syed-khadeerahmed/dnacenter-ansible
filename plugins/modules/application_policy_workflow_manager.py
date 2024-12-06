@@ -2023,72 +2023,14 @@ class ApplicationPolicy(DnacBase):
         queuing_profile = queuing_profile_details["current_queuing_profile"][0]
         queuing_profile_id = queuing_profile_details["current_queuing_profile"][0]["id"]
         input_details = required_queuing_profile_details["application_queuing_details"][0]
-        input_bandwidth_settings = input_details["bandwidth_settings"]["bandwidth_percentages"]
-        input_dscp_settings = input_details["dscp_settings"]
+        # input_bandwidth_settings = input_details["bandwidth_settings"]["bandwidth_percentages"]
+        # input_dscp_settings = input_details["dscp_settings"]
 
-        existing_bandwidth_settings = {}
-        existing_dscp_settings = {}
-
-        for clause in queuing_profile["clause"]:
-            if clause["type"] == "BANDWIDTH":
-                for interface_speed in clause["interfaceSpeedBandwidthClauses"]:
-                    for tc_bandwidth in interface_speed["tcBandwidthSettings"]:
-                        traffic_class = tc_bandwidth["trafficClass"].lower()
-                        bandwidth_percentage = tc_bandwidth["bandwidthPercentage"]
-                        existing_bandwidth_settings[traffic_class] = str(bandwidth_percentage)
-
-            if clause["type"] == "DSCP_CUSTOMIZATION":
-                for tc_dscp in clause["tcDscpSettings"]:
-                    traffic_class = tc_dscp["trafficClass"].lower()
-                    dscp_value = tc_dscp["dscp"]
-                    existing_dscp_settings[traffic_class] = dscp_value
+        self.log(input_details)
+        self.log(queuing_profile)
 
 
-        bandwidth_mismatches = {}
-        for traffic_class, percentage in input_bandwidth_settings.items():
-            if traffic_class in existing_bandwidth_settings:
-                if percentage != existing_bandwidth_settings[traffic_class]:
-                    bandwidth_mismatches[traffic_class] = [percentage, existing_bandwidth_settings[traffic_class]]
-            else:
-                bandwidth_mismatches[traffic_class] = [percentage, None]
 
-
-        dscp_mismatches = {}
-        for traffic_class, dscp in input_dscp_settings.items():
-            if traffic_class in existing_dscp_settings:
-                if dscp != existing_dscp_settings[traffic_class]:
-                    dscp_mismatches[traffic_class] = [dscp, existing_dscp_settings[traffic_class]]
-            else:
-                dscp_mismatches[traffic_class] = [dscp, None]
-
-        update_required = False
-
-        for mismatch_type, mismatches in [("Bandwidth", bandwidth_mismatches), ("DSCP", dscp_mismatches)]:
-            if mismatches:
-                update_required = True
-                self.log(f"{mismatch_type} mismatches found:")
-                for traffic_class, values in mismatches.items():
-                    self.log(f"  {traffic_class}: new value is {values[0]} and old value was {values[1]}")
-            else:
-                self.log(f"Update is not required for {mismatch_type.lower()}")
-
-        if not update_required:  
-            self.status = "success"
-            self.result['changed'] = False
-            self.msg = "application queuing profile does not need any update "
-            self.result['msg'] = self.msg
-            self.result['response'] = self.msg
-            self.log(self.msg, "INFO")
-            return self
-
-        # self.log(queuing_profile_details["current_queuing_profile"][0])
-        # response = self.dnac._exec(
-        #     family="application_policy",
-        #     function='update_application_policy_queuing_profile',
-        #     op_modifies= True,
-        #     params = {"payload": [param]}
-        # )
-        return self
 
     def create_queuing_profile(self):
 
@@ -2096,7 +2038,7 @@ class ApplicationPolicy(DnacBase):
         self.log(f"Queuing Profile Details: {new_queuing_profile_details}")
 
         # Check for mandatory fields
-        mandatory_fields = ["queuing_profile_name", "type"]
+        mandatory_fields = ["queuing_profile_name"]
 
         for field in mandatory_fields:
             if not new_queuing_profile_details.get(field):
@@ -2108,70 +2050,71 @@ class ApplicationPolicy(DnacBase):
                 self.result['response'] = self.msg
                 self.check_return_status()
 
-        if new_queuing_profile_details['type'] == "bandwidth_settings":
-            for interface in new_queuing_profile_details['bandwidth_settings']['interface_speed_settings']:
-                total_percentage = sum(int(value) for value in interface['bandwidth_percentages'].values())
+        if new_queuing_profile_details['bandwidth_settings']['is_common_between_all_interface_speeds'] == False:
+            if 'bandwidth_settings' in new_queuing_profile_details:
+                for interface in new_queuing_profile_details['bandwidth_settings']['interface_speed_settings']:
+                    total_percentage = sum(int(value) for value in interface['bandwidth_percentages'].values())
 
-                if total_percentage != 100:
-                    msg = (f"Validation ERROR at interface speed: {interface['interface_speed']} (Total: {total_percentage}%) Should be total 100% ")
-                    self.status = "failed"
-                    self.msg = msg
-                    self.log(msg, "ERROR")
-                    self.result['response'] = self.msg
-                    self.check_return_status()
+                    if total_percentage != 100:
+                        msg = (f"Validation ERROR at interface speed: {interface['interface_speed']} "
+                            f"(Total: {total_percentage}%) Should be total 100%")
+                        self.status = "failed"
+                        self.msg = msg
+                        self.log(msg, "ERROR")
+                        self.result['response'] = self.msg
+                        self.check_return_status()
 
         # Construct payload
         if new_queuing_profile_details.get('bandwidth_settings', {}).get('is_common_between_all_interface_speeds') == True or new_queuing_profile_details.get('type') == ['dscp']:
-            self.log("As we are passing common traffic class bandwidth percentage for all the interface speeds")
-            param = {
-                "name": new_queuing_profile_details.get('queuing_profile_name', ''),
-                "description": new_queuing_profile_details.get('queuing_policy_description', ''),
-                "clause": []
-            }
+          param = {
+              "name": new_queuing_profile_details.get('queuing_profile_name', ''),
+              "description": new_queuing_profile_details.get('queuing_policy_description', ''),
+              "clause": []
+          }
 
-            if 'bandwidth' in new_queuing_profile_details['type']:
-                bandwidth_clause = {
-                    "type": "BANDWIDTH",
-                    "isCommonBetweenAllInterfaceSpeeds": new_queuing_profile_details['bandwidth_settings'].get(
-                        'is_common_between_all_interface_speeds', False
-                    ),
-                    "interfaceSpeedBandwidthClauses": [
-                        {
-                            "interfaceSpeed": new_queuing_profile_details['bandwidth_settings'].get('interface_speed', ''),
-                            "tcBandwidthSettings": [
-                                {
-                                    "trafficClass": key.upper(),
-                                    "bandwidthPercentage": int(value)
-                                }
-                                for key, value in new_queuing_profile_details['bandwidth_settings']['bandwidth_percentages'].items()
-                            ]
-                        }
-                    ]
-                }
-                param['clause'].append(bandwidth_clause)
-            # no default values will be used for bandwidth
-            if 'dscp' in new_queuing_profile_details['type']:
-                dscp_clause = {
-                    "type": "DSCP_CUSTOMIZATION",
-                    "tcDscpSettings": [
-                        {
-                            "trafficClass": key.upper(),
-                            "dscp": value
-                        }
-                        for key, value in new_queuing_profile_details['dscp_settings'].items()
-                    ]
-                }
-                param['clause'].append(dscp_clause)
+          if new_queuing_profile_details.get('bandwidth_settings'):
+              self.log("As we are passing common traffic class bandwidth percentage for all the interface speeds")
+              bandwidth_clause = {
+                  "type": "BANDWIDTH",
+                  "isCommonBetweenAllInterfaceSpeeds": new_queuing_profile_details['bandwidth_settings'].get(
+                      'is_common_between_all_interface_speeds', False
+                  ),
+                  "interfaceSpeedBandwidthClauses": [
+                      {
+                          "interfaceSpeed": new_queuing_profile_details['bandwidth_settings'].get('interface_speed', ''),
+                          "tcBandwidthSettings": [
+                              {
+                                  "trafficClass": key.upper(),
+                                  "bandwidthPercentage": int(value)
+                              }
+                              for key, value in new_queuing_profile_details['bandwidth_settings']['bandwidth_percentages'].items()
+                          ]
+                      }
+                  ]
+              }
+              param['clause'].append(bandwidth_clause)
+
+          if new_queuing_profile_details.get('dscp_settings'):
+              dscp_clause = {
+                  "type": "DSCP_CUSTOMIZATION",
+                  "tcDscpSettings": [
+                      {
+                          "trafficClass": key.upper(),
+                          "dscp": value
+                      }
+                      for key, value in new_queuing_profile_details['dscp_settings'].items()
+                  ]
+              }
+              param['clause'].append(dscp_clause)
 
         elif new_queuing_profile_details['bandwidth_settings']['is_common_between_all_interface_speeds'] == False:
 
-            self.log("As we are passing different traffic class bandwidth percentage for six different the interface speeds")
+            self.log("As we are passing different traffic class bandwidth percentage for six different interface speeds")
             param = {
                 "name": new_queuing_profile_details['queuing_profile_name'],
                 "description": new_queuing_profile_details['queuing_policy_description'],
                 "clause": [
                     {
-                        "type": new_queuing_profile_details['type'][0].upper(),
                         "isCommonBetweenAllInterfaceSpeeds": new_queuing_profile_details['bandwidth_settings']['is_common_between_all_interface_speeds'],
                         "interfaceSpeedBandwidthClauses": []
                     }
@@ -2196,7 +2139,8 @@ class ApplicationPolicy(DnacBase):
                     # Append the clause to the main structure
                     param["clause"][0]["interfaceSpeedBandwidthClauses"].append(interface_speed_clause)
 
-            if 'dscp' in new_queuing_profile_details['type']:
+            # Add dscp settings if available
+            if 'dscp_settings' in new_queuing_profile_details:
                 dscp_clause = {
                     "type": "DSCP_CUSTOMIZATION",
                     "tcDscpSettings": [
@@ -2230,10 +2174,10 @@ class ApplicationPolicy(DnacBase):
             return self
 
         if self.status == "failed":
+            fail_reason = self.msg
             self.status = "failed"
             self.msg = (
-                "failed to create application queing profile"
-            ).format(field)
+                "failed to create application queing profile reason - {0}").format(fail_reason)
             self.log(self.msg, "ERROR")
             self.result['response'] = self.msg
             self.check_return_status()
@@ -2262,7 +2206,7 @@ class ApplicationPolicy(DnacBase):
             self.delete_application_queuing_profile().check_return_status()
 
         if config.get("application_details"):
-            self.delete_application_set2().check_return_status()
+            self.delete_application().check_return_status()
 
     def delete_application_queuing_profile(self):
         """
@@ -2399,7 +2343,7 @@ class ApplicationPolicy(DnacBase):
             self.log(self.msg, "ERROR")
             self.check_return_status()
 
-    def delete_application_set2(self):
+    def delete_application(self):
 
         application_details = self.config.get("application_details", [])
         self.log(f"application Details: {application_details}")
