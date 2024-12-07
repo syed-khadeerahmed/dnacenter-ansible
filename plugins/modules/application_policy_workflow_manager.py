@@ -1769,10 +1769,157 @@ class ApplicationPolicy(DnacBase):
     def get_diff_application(self):
 
         application_details = self.have
+        required_application_details = self.want.get("application_details")
+
         if application_details.get("application_set_exists") == False:
-           self.create_application_set()
+            self.create_application_set()
+            return self
         if application_details.get("application_exists") == False:
             self.create_application()
+            return self
+
+        current_application_details = application_details.get("current_application")[0]
+        application_set_id = application_details.get("current_application_set")[0].get("id")
+        application_name = current_application_details.get("name")
+        self.log(current_application_details)
+        if required_application_details.get("application_name") != current_application_details.get("name"):
+            self.log("application name cant be updated")
+
+        # Define the mappings for comparison
+        fields_to_check = {
+            "description": "longDescription",
+            "helpstring": "helpString",
+            "traffic_class": "trafficClass",
+            "server_name": "serverName"
+        }
+
+        update_required_keys = []
+
+        # Check and log messages if update not required
+        for required_key, current_key in fields_to_check.items():
+            # Skip if any field is None or not present
+            required_value = required_application_details.get(required_key)
+            current_value = current_application_details.get("networkApplications")[0].get(current_key)
+
+            if required_value is None or current_value is None:
+                self.log(f"Skipping comparison for {required_key} as one or more values are None or missing.")
+                continue
+
+            if required_value == current_value:
+                self.log(f"Update not required for {required_key}")
+            else:
+                self.log(f"Update required for {required_key}")
+                update_required_keys.append(required_key)
+
+
+        # Check for application_set_id
+        if application_set_id == current_application_details.get("parentScalableGroup").get("idRef"):
+            self.log("update not required for application_set")
+        else:
+            self.log("update required for application set")
+            update_required_keys.append("application_set")
+
+        # if not update_required_keys:
+        #     self.status = "success"
+        #     self.result['changed'] = False
+        #     self.msg = "application '{0}' does not need any update. ".format(application_name)
+        #     self.result['msg'] = self.msg
+        #     self.result['response'] = self.msg
+        #     self.log(self.msg, "INFO")
+        #     return self
+
+        #construct payload for Updation
+        network_application_payload = {
+            "id": current_application_details.get("networkApplications")[0].get("id"),
+            "applicationSubType": current_application_details.get("networkApplications")[0].get("applicationSubType"),
+            "applicationType": current_application_details.get("networkApplications")[0].get("applicationType"),
+            "categoryId": current_application_details.get("networkApplications")[0].get("categoryId"),
+            "displayName": current_application_details.get("networkApplications")[0].get("displayName"),
+            "helpString": required_application_details.get("helpstring") if "helpstring" in update_required_keys else current_application_details.get("networkApplications")[0].get("helpString"),
+            "longDescription": required_application_details.get("description") if "description" in update_required_keys else current_application_details.get("networkApplications")[0].get("longDescription"),
+            "name": current_application_details.get("networkApplications")[0].get("name"),
+            "popularity": current_application_details.get("networkApplications")[0].get("popularity"),
+            "rank": required_application_details.get("rank") if "rank" in update_required_keys else current_application_details.get("networkApplications")[0].get("rank"),
+            "selectorId": current_application_details.get("networkApplications")[0].get("selectorId"),
+            "trafficClass": required_application_details.get("traffic_class") if "traffic_class" in update_required_keys else current_application_details.get("networkApplications")[0].get("trafficClass"),
+        }
+
+        # Add serverName only if it exists
+        # if "serverName" in current_application_details.get("networkApplications")[0]:
+        #     network_application_payload["serverName"] = current_application_details.get("networkApplications")[0].get("serverName")
+
+
+        self.log(update_required_keys)
+        if "server_name" in required_application_details:
+            network_application_payload["serverName"] = required_application_details.get("server_name")
+            if "serverName" in current_application_details.get("networkApplications")[0]:
+                network_application_payload["serverName"] = current_application_details.get("networkApplications")[0].get("serverName")
+        else:
+          if "url" in required_application_details:
+            network_application_payload["url"] = required_application_details.get("url")
+          if "url" in current_application_details.get("networkApplications")[0]:
+              network_application_payload["url"] = current_application_details.get("networkApplications")[0].get("url")
+          if "app_protocol" in required_application_details:
+                network_application_payload["appProtocol"] = required_application_details.get("app_protocol")
+          if "appProtocol" in current_application_details.get("networkApplications")[0]:
+              network_application_payload["appProtocol"] = current_application_details.get("networkApplications")[0].get("appProtocol")
+
+        # Construct the full payload
+        param = [
+            {
+                "id": current_application_details.get("id"),
+                "instanceId": current_application_details.get("instanceId"),
+                "displayName": current_application_details.get("displayName"),
+                "instanceVersion": current_application_details.get("instanceVersion"),
+                "name": current_application_details.get("name"),
+                "namespace": current_application_details.get("namespace"),
+                "networkApplications": [network_application_payload],
+                "parentScalableGroup": {
+                    "idRef": application_set_id
+                },
+                "qualifier": current_application_details.get("qualifier"),
+                "scalableGroupExternalHandle": current_application_details.get("scalableGroupExternalHandle"),
+                "scalableGroupType": current_application_details.get("scalableGroupType"),
+                "type": current_application_details.get("type"),
+            }
+        ]
+
+
+        self.log(f"Payload for update application: {json.dumps(param, indent=4)}")
+
+        try:
+            response = self.dnac._exec(
+                family="application_policy",
+                function='edit_applications',
+                op_modifies= True,
+                params= {"payload": param}
+                )
+
+            self.log(f"Received API response from 'edit_applications': {response}", "DEBUG")
+            self.check_tasks_response_status(response, "edit_applications")
+
+            if self.status not in ["failed", "exited"]:
+                self.log("application '{0}' updated successfully.".format(application_name), "INFO")
+                self.status = "success"
+                self.result['changed'] = True
+                self.msg = ("application '{0}' updated successfully.".format(application_name))
+                self.result['response'] = self.msg
+                return self
+
+            if self.status == "failed":
+                fail_reason = self.msg
+                self.status = "failed"
+                self.msg = "updation of the application failed due to - {0}".format(fail_reason)
+                self.result['response'] = self.msg
+                self.log(self.msg, "ERROR")
+                self.check_return_status()
+
+        except Exception as e:
+            self.status = "failed"
+            self.msg = "updation of the application failed".format()
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
 
     def create_application(self):
 
@@ -2028,9 +2175,6 @@ class ApplicationPolicy(DnacBase):
 
         self.log(input_details)
         self.log(queuing_profile)
-
-
-
 
     def create_queuing_profile(self):
 
