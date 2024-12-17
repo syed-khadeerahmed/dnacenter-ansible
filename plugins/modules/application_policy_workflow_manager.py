@@ -1682,10 +1682,50 @@ class ApplicationPolicy(DnacBase):
 
         except Exception as e:
             self.status = "failed"
-            # self.msg = "".format()
-            # self.result['response'] = self.msg
-            # self.log(self.msg, "ERROR")
-            # self.check_return_status()
+            self.msg = "".format()
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
+
+    def get_application_details_v1(self):
+        """
+        Fetch application details from the application policy module.
+
+        Returns:
+            dict: A dictionary containing current application details, if available.
+        """
+        current_application = {}
+
+        try:
+            # Fetching application data
+            response = self.dnac._exec(
+                family="application_policy",
+                function="get_applications",
+                params={"attributes": "application", "offset": 1, "limit": 500}
+            )
+
+            self.log("Received API response from 'get_applications': {0}".format(response), "DEBUG")
+
+            # Check if the response contains data
+            if not response.get("response"):
+                self.log("Empty response received: {0}".format(response))
+                return current_application
+
+            current_application = response.get("response")
+
+            self.log(
+                "Retrieved application details successfully. Application Data: {0}".format(current_application),
+                "DEBUG"
+            )
+            return current_application
+
+        except Exception as e:
+            self.status = "failed"
+            self.msg = "Error occurred while fetching application details: {0}".format(str(e))
+            self.result["response"] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
+
 
     def get_have(self):
         """
@@ -1764,7 +1804,10 @@ class ApplicationPolicy(DnacBase):
             self.get_diff_application_set().check_return_status()
 
         if config.get("application_details"):
-            self.get_diff_application()
+            self.get_diff_application().check_return_status()
+        
+        # if config.get("application_details"):
+        #     self.get_application_policy().check_return_status()
 
     def get_diff_application(self):
 
@@ -1772,8 +1815,14 @@ class ApplicationPolicy(DnacBase):
         required_application_details = self.want.get("application_details")
 
         if application_details.get("application_set_exists") == False:
-            self.create_application_set()
+            self.status = "success"
+            self.result['changed'] = False
+            self.msg = " the application set '{0}' is not avalable in the Cisco catalyst center".format(application_name)
+            self.result['msg'] = self.msg
+            self.result['response'] = self.msg
+            self.log(self.msg, "INFO")
             return self
+
         if application_details.get("application_exists") == False:
             self.create_application()
             return self
@@ -1811,8 +1860,10 @@ class ApplicationPolicy(DnacBase):
                 self.log(f"Update required for {required_key}")
                 update_required_keys.append(required_key)
 
-
         # Check for application_set_id
+        self.log(current_application_details)
+        self.log(current_application_details.get("parentScalableGroup").get("idRef"))
+
         if application_set_id == current_application_details.get("parentScalableGroup").get("idRef"):
             self.log("update not required for application_set")
         else:
@@ -1844,12 +1895,6 @@ class ApplicationPolicy(DnacBase):
             "trafficClass": required_application_details.get("traffic_class") if "traffic_class" in update_required_keys else current_application_details.get("networkApplications")[0].get("trafficClass"),
         }
 
-        # Add serverName only if it exists
-        # if "serverName" in current_application_details.get("networkApplications")[0]:
-        #     network_application_payload["serverName"] = current_application_details.get("networkApplications")[0].get("serverName")
-
-
-        self.log(update_required_keys)
         if "server_name" in required_application_details:
             network_application_payload["serverName"] = required_application_details.get("server_name")
             if "serverName" in current_application_details.get("networkApplications")[0]:
@@ -1929,6 +1974,23 @@ class ApplicationPolicy(DnacBase):
         application_details = self.want.get("application_details")
         application_name = application_details.get("application_name")
         application_type = application_details.get("type")
+        application_details_set = self.have
+        get_application_set  = application_details.get("current_application_set")
+
+        self.log(application_set_id)
+        get_application_list = self.get_application_details_v1()
+        self.log(get_application_list)
+        category_id = None  # Default value
+
+        for app in get_application_list:
+            if app.get("applicationSet", {}).get("idRef") == application_set_id:
+                network_applications = app.get("networkApplications")
+                if network_applications and isinstance(network_applications, list):
+                    category_id = network_applications[0].get("categoryId")  # Access the first element
+                break  # Exit the loop once a match is found
+
+        self.log(category_id)
+
         supported_types = ["server_name", "url", "server_ip"]
 
         if application_details.get("type") not in ["server_name", "url", "server_ip"]:
@@ -1942,7 +2004,7 @@ class ApplicationPolicy(DnacBase):
         network_application = {
             "applicationType": "CUSTOM",
             "trafficClass": application_details.get("traffic_class"),
-            "categoryId": application_details.get("category_id"),
+            "categoryId": category_id,
             "type": "_server-ip" if application_details.get("type") == "server_ip" else
                     "_url" if application_details.get("type") == "url" else "_servername"
         }
@@ -2036,6 +2098,7 @@ class ApplicationPolicy(DnacBase):
 
         self.log(application_details)
         self.log(param)
+        self.log(1)
         try:
             response = self.dnac._exec(
                 family="application_policy",
@@ -2044,6 +2107,7 @@ class ApplicationPolicy(DnacBase):
                 params = {"payload": [param]}
                 )
 
+            self.log(2)
             self.log(f"Received API response from 'create_applications': {response}", "DEBUG")
             self.check_tasks_response_status(response, "create_applications")
 
@@ -2065,7 +2129,7 @@ class ApplicationPolicy(DnacBase):
 
         except Exception as e:
             self.status = "failed"
-            self.msg = "".format()
+            self.msg = "{0}".format(e)
             self.result['response'] = self.msg
             self.log(self.msg, "ERROR")
             self.check_return_status()
@@ -2177,6 +2241,20 @@ class ApplicationPolicy(DnacBase):
         self.log(queuing_profile)
 
     def create_queuing_profile(self):
+        """
+        Creates an application queuing profile in Cisco Catalyst Center.
+        Description:
+            This method validates the provided configuration for creating an application queuing profile. It ensures 
+            mandatory fields are present and verifies the total bandwidth percentage for different interface speeds. 
+            The method constructs a payload based on the provided bandwidth and DSCP settings, and invokes the 
+            appropriate API to create the queuing profile. The result is logged and stored in the instance attributes.
+        Parameters:
+            self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+        Returns:
+            self: The current instance of the class, updated with the result of the create operation. Updates include:
+        Raises:
+            None: Any errors or unexpected behaviors are handled within the method and logged appropriately.
+        """
 
         new_queuing_profile_details = self.config.get("application_queuing_details", [])[0]
         self.log(f"Queuing Profile Details: {new_queuing_profile_details}")
@@ -2299,31 +2377,39 @@ class ApplicationPolicy(DnacBase):
 
         self.log(f"Payload for Queuing Profile: {json.dumps(param, indent=4)}")
 
-        response = self.dnac._exec(
-            family="application_policy",
-            function='create_application_policy_queuing_profile',
-            op_modifies= True,
-            params = {"payload": [param]}
-        )
+        try:
+            response = self.dnac._exec(
+                family="application_policy",
+                function='create_application_policy_queuing_profile',
+                op_modifies= True,
+                params = {"payload": [param]}
+            )
 
-        self.log(f"Received API response from 'create_application_policy_queuing_profile': {response}", "DEBUG")
-        self.check_tasks_response_status(response, "create_application_policy_queuing_profile")
+            self.log(f"Received API response from 'create_application_policy_queuing_profile': {response}", "DEBUG")
+            self.check_tasks_response_status(response, "create_application_policy_queuing_profile")
 
-        if self.status not in ["failed", "exited"]:
-            self.log("application queuing profile created successfully.", "INFO")
-            self.status = "success"
-            self.result['changed'] = True
-            self.msg = ("application queuing profile created successfully.")
-            self.result['response'] = self.msg
-            return self
+            if self.status not in ["failed", "exited"]:
+                self.log("application queuing profile created successfully.", "INFO")
+                self.status = "success"
+                self.result['changed'] = True
+                self.msg = ("application queuing profile created successfully.")
+                self.result['response'] = self.msg
+                return self
 
-        if self.status == "failed":
-            fail_reason = self.msg
+            if self.status == "failed":
+                fail_reason = self.msg
+                self.status = "failed"
+                self.msg = (
+                    "failed to create application queing profile reason - {0}").format(fail_reason)
+                self.log(self.msg, "ERROR")
+                self.result['response'] = self.msg
+                self.check_return_status()
+
+        except Exception as e:
             self.status = "failed"
-            self.msg = (
-                "failed to create application queing profile reason - {0}").format(fail_reason)
-            self.log(self.msg, "ERROR")
+            self.msg = "".format()
             self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
             self.check_return_status()
 
     def get_diff_deleted(self,config):
@@ -2488,6 +2574,20 @@ class ApplicationPolicy(DnacBase):
             self.check_return_status()
 
     def delete_application(self):
+        """
+        Deletes an existing application in Cisco Catalyst Center.
+        Description:
+            This method checks if the specified application exists in Cisco Catalyst Center. If the application 
+            does not exist or has already been deleted, it logs the status and exits without performing any operations. 
+            If the application exists, the method retrieves its ID and triggers the appropriate API call to delete it. 
+            The method monitors the task's response status and logs the outcome.
+        Parameters:
+            None: The method uses the `config` attribute to retrieve application details, such as `application_name`.
+        Returns:
+            self: The current instance of the class, updated with the result of the delete operation. Updates include:
+        Raises:
+            None: Any errors or unexpected behaviors are handled within the method and logged appropriately.
+        """
 
         application_details = self.config.get("application_details", [])
         self.log(f"application Details: {application_details}")

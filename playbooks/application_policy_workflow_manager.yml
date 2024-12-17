@@ -22,21 +22,38 @@
         dnac_task_poll_interval: 1
         state: merged
         config:
-          - application_details:
-              application_name: "app51"
-              helpstring: "this is for testing"
-              description: "this is for testing"
-              type: "url"
-              app_protocol: "TCP"
-              url: "www.sampleapp51.com"
-              traffic_class: "NETWORK_CONTROL"
-              category_id: "f502f995-b90f-4c77-ba8e-7acc970dec34"
-              ignore_conflict: "true"
-              rank: "23"
-              engine_id: "4"
-              application_set_name: "email"
-              server_name: "www.sampleserverapp51.com" 
+            # - application_details:
+            #     application_name: "app55"
+            #     helpstring: "sample"
+            #     description: "sample"
+            #     type: "server_ip"
+            #     app_protocol: "UDP"
+            #     network_identity_setting:
+            #       protocol: "UDP"
+            #       port: 2000
+            #       ip_subnet: ["1.1.1.1","2.2.2.2","3.3.3.3"]
+            #       lower_port: 10
+            #       upper_port: 100
+            #     dscp: 2
+            #     traffic_class: "BROADCAST_VIDEO"
+            #     # category_id: 01440e2c-7cbb-48a9-aa14-df3af28b4582
+            #     ignore_conflict: true
+            #     rank: "23"
+            #     engine_id: "4"
+            #     application_set_name: "email"
 
+            - application_details:
+                application_name: "sampleApp1"       
+                description: "sample"  
+                helpstring: "sample"      
+                type: "server_name"       
+                server_name: "www.sampleserverapp.com"    
+                traffic_class: "BROADCAST_VIDEO" 
+                # category_id: 01440e2c-7cbb-48a9-aa14-df3af28b4582
+                ignore_conflict: true 
+                rank: "1"
+                engineId: "100"
+                application_set_name: "email"
           # - application_details:
           #     application_name: "sample50"       
           #     description: "this is updation"  
