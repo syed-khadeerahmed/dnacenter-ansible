@@ -1811,13 +1811,22 @@ class ApplicationPolicy(DnacBase):
 
     def get_diff_application(self):
 
+        application_name = self.want.get("application_details", {}).get("application_name")
+        application_set_name = self.want.get("application_details").get("application_set_name")
+        if application_name is None:
+            self.status = "failed"
+            self.msg = "mandatory field 'application_name' is missing"
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
+
         application_details = self.have
         required_application_details = self.want.get("application_details")
 
         if application_details.get("application_set_exists") == False:
             self.status = "success"
             self.result['changed'] = False
-            self.msg = " the application set '{0}' is not avalable in the Cisco catalyst center".format(application_name)
+            self.msg = " the application set '{0}' is not avalable in the Cisco catalyst center".format(application_set_name)
             self.result['msg'] = self.msg
             self.result['response'] = self.msg
             self.log(self.msg, "INFO")
@@ -1828,7 +1837,13 @@ class ApplicationPolicy(DnacBase):
             return self
 
         current_application_details = application_details.get("current_application")[0]
-        application_set_id = application_details.get("current_application_set")[0].get("id")
+
+        current_application_set = application_details.get("current_application_set")
+
+        application_set_id = None
+        if current_application_set and isinstance(current_application_set, list) and len(current_application_set) > 0:
+            application_set_id = current_application_set[0].get("id")
+
         application_name = current_application_details.get("name")
         self.log(current_application_details)
         if required_application_details.get("application_name") != current_application_details.get("name"):
@@ -1850,8 +1865,12 @@ class ApplicationPolicy(DnacBase):
             required_value = required_application_details.get(required_key)
             current_value = current_application_details.get("networkApplications")[0].get(current_key)
 
-            if required_value is None or current_value is None:
-                self.log(f"Skipping comparison for {required_key} as one or more values are None or missing.")
+            if current_value is None:
+                if required_value is not None:
+                    self.log(f"Update required for {required_key} as current value is None.")
+                    update_required_keys.append(required_key)
+                else:
+                    self.log(f"Skipping {required_key} as both values are None.")
                 continue
 
             if required_value == current_value:
@@ -1864,8 +1883,9 @@ class ApplicationPolicy(DnacBase):
         self.log(current_application_details)
         self.log(current_application_details.get("parentScalableGroup").get("idRef"))
 
-        if application_set_id == current_application_details.get("parentScalableGroup").get("idRef"):
+        if application_set_id == current_application_details.get("parentScalableGroup").get("idRef") or application_set_id is None:
             self.log("update not required for application_set")
+            application_set_id = current_application_details.get("parentScalableGroup").get("idRef")
         else:
             self.log("update required for application set")
             update_required_keys.append("application_set")
@@ -1909,6 +1929,25 @@ class ApplicationPolicy(DnacBase):
           if "appProtocol" in current_application_details.get("networkApplications")[0]:
               network_application_payload["appProtocol"] = current_application_details.get("networkApplications")[0].get("appProtocol")
 
+        network_identity_setting = {}
+
+        if "network_identity_setting" in required_application_details:
+            network_identity_details = required_application_details["network_identity_setting"]
+
+            key_mapping = {
+                "protocol": "protocol",
+                "port": "ports",
+                "ip_subnet": "ipv4Subnet",
+                "lower_Port": "lowerPort",
+                "upper_port": "upperPort"
+            }
+
+            for source_key, target_key in key_mapping.items():
+                if source_key in network_identity_details:
+                    network_identity_setting[target_key] = network_identity_details[source_key]
+
+        self.log(network_identity_setting)
+
         # Construct the full payload
         param = [
             {
@@ -1922,12 +1961,19 @@ class ApplicationPolicy(DnacBase):
                 "parentScalableGroup": {
                     "idRef": application_set_id
                 },
+                # Add "networkIdentity" only if the condition is met
+                **(
+                    {"networkIdentity": [network_identity_setting]}
+                    if "network_identity_setting" in required_application_details
+                    else {}
+                ),
                 "qualifier": current_application_details.get("qualifier"),
                 "scalableGroupExternalHandle": current_application_details.get("scalableGroupExternalHandle"),
                 "scalableGroupType": current_application_details.get("scalableGroupType"),
                 "type": current_application_details.get("type"),
             }
         ]
+
 
 
         self.log(f"Payload for update application: {json.dumps(param, indent=4)}")
@@ -1973,9 +2019,29 @@ class ApplicationPolicy(DnacBase):
         application_set_id = self.get_application_set_id(application_set_name)
         application_details = self.want.get("application_details")
         application_name = application_details.get("application_name")
+        application_traffic_class = application_details.get("traffic_class")
         application_type = application_details.get("type")
         application_details_set = self.have
         get_application_set  = application_details.get("current_application_set")
+
+        missing_fields = []
+
+        if application_traffic_class is None:
+            missing_fields.append("traffic_class")
+        if application_name is None:
+            missing_fields.append("application_name")
+        if application_set_name is None:
+            missing_fields.append("application_set_name")
+        if application_type is None:
+            missing_fields.append("type")
+
+        if missing_fields:
+            self.status = "failed"
+            self.msg = f"As we need to create a new application - mandatory field(s) missing: {', '.join(missing_fields)}"
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
+
 
         self.log(application_set_id)
         get_application_list = self.get_application_details_v1()
@@ -1983,13 +2049,12 @@ class ApplicationPolicy(DnacBase):
         category_id = None  # Default value
 
         for app in get_application_list:
-            if app.get("applicationSet", {}).get("idRef") == application_set_id:
+            if app.get("parentScalableGroup", {}).get("idRef") == application_set_id:
                 network_applications = app.get("networkApplications")
                 if network_applications and isinstance(network_applications, list):
                     category_id = network_applications[0].get("categoryId")  # Access the first element
                 break  # Exit the loop once a match is found
 
-        self.log(category_id)
 
         supported_types = ["server_name", "url", "server_ip"]
 
@@ -2028,11 +2093,22 @@ class ApplicationPolicy(DnacBase):
 
         if app_type == "server_name":
             if application_details.get("server_name") is None:
-                raise ValueError("server_name is required for the type - server_name")
+                self.status = "failed"
+                self.msg = ("server_name is required for the type - server_name")
+                self.result['response'] = self.msg
+                self.log(self.msg, "ERROR")
+                self.check_return_status()
+
             network_application["serverName"] = application_details.get("server_name")
+
         elif app_type == "url":
             if application_details.get("app_protocol") is None or application_details.get("url") is None:
-                raise ValueError("app_protocol and url are required for the type - url")
+                self.status = "failed"
+                self.msg = ("app_protocol and url are required for the type - url")
+                self.result['response'] = self.msg
+                self.log(self.msg, "ERROR")
+                self.check_return_status()
+
             network_application["appProtocol"] = application_details.get("app_protocol")
             network_application["url"] = application_details.get("url")
 
@@ -2044,7 +2120,12 @@ class ApplicationPolicy(DnacBase):
 
         if app_type == "server_ip":
             if not dscp and not network_identity_setting:
-                raise ValueError("Either 'dscp' or 'network_identity_setting' must be provided.")
+                self.status = "failed"
+                self.msg = ("Either 'dscp' or 'network_identity_setting' must be provided for the type - server_ip.")
+                self.result['response'] = self.msg
+                self.log(self.msg, "ERROR")
+                self.check_return_status()
+
 
             # Add dscp if present
             if dscp:
@@ -2057,7 +2138,11 @@ class ApplicationPolicy(DnacBase):
 
                 # Raise an error if mandatory fields are missing
                 if not protocol or not ports:
-                    raise ValueError("Both 'protocol' and 'ports' are required for server_ip type.")
+                    self.status = "failed"
+                    self.msg = ("Both 'protocol' and 'ports' are required for the network identity in server_ip type.")
+                    self.result['response'] = self.msg
+                    self.log(self.msg, "ERROR")
+                    self.check_return_status()
 
                 # Prepare networkIdentity dictionary with mandatory and optional fields
                 network_identity = {
@@ -2094,11 +2179,7 @@ class ApplicationPolicy(DnacBase):
         # Add networkIdentity if it exists
         if network_identity_list:
             param["networkIdentity"] = network_identity_list
-
-
-        self.log(application_details)
         self.log(param)
-        self.log(1)
         try:
             response = self.dnac._exec(
                 family="application_policy",
@@ -2107,7 +2188,6 @@ class ApplicationPolicy(DnacBase):
                 params = {"payload": [param]}
                 )
 
-            self.log(2)
             self.log(f"Received API response from 'create_applications': {response}", "DEBUG")
             self.check_tasks_response_status(response, "create_applications")
 
@@ -2392,7 +2472,7 @@ class ApplicationPolicy(DnacBase):
                 self.log("application queuing profile created successfully.", "INFO")
                 self.status = "success"
                 self.result['changed'] = True
-                self.msg = ("application queuing profile created successfully.")
+                self.msg = ("application queuing profile created successfully.").format()
                 self.result['response'] = self.msg
                 return self
 
