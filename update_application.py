@@ -1,7 +1,7 @@
 application_set_name = [{'clause_type': '“BUSINESS_RELEVANCE"', 'relevance_details': [{'relevance': 'BUSINESS_RELEVANT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}, {'relevance': 'BUSINESS_IRRELEVANT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}, {'relevance': 'DEFAULT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}]}]
 
 # Initialize empty lists for each relevance
-business_relevant = []
+business_relevant  = []
 business_irrelevant = []
 default = []
 
