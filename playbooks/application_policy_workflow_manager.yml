@@ -35,7 +35,7 @@
                 - clause_type: “BUSINESS_RELEVANCE"  
                   relevance_details:                            
                     - relevance: "BUSINESS_RELEVANT"                            
-                      application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
+                      application_set_name: ["email", "backup-and-storage", "general-misc", "tunneling"]
                     - relevance: "BUSINESS_IRRELEVANT"                            
                       application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
                     - relevance: "DEFAULT"                            

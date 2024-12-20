@@ -1641,14 +1641,14 @@ class ApplicationPolicy(DnacBase):
 
             if not response.get("response"):
                 self.log("empty responce {0}".format(response))
-                raise Exception
+                raise Exception("No application set found in the Cisco Catalyst Center")
 
             current_application_set = response.get("response")
             application_set_id = current_application_set[0].get('id')
 
         except Exception as e:
             self.status = "failed"
-            self.msg = "".format()
+            self.msg = "{0}".format(e)
             self.result['response'] = self.msg
             self.log(self.msg, "ERROR")
             self.check_return_status()
@@ -1880,47 +1880,95 @@ class ApplicationPolicy(DnacBase):
         
         application_set_names = new_application_policy_details.get("clause")
         self.log(application_set_names)
-        example_policy = {
-                            "createList": [
-                                {
-                                    "name": "string",
-                                    "deletePolicyStatus": "string",
-                                    "policyScope": "string",
-                                    "priority": "string",
-                                    "advancedPolicyScope": {
-                                        "name": "string",
-                                        "advancedPolicyScopeElement": [
-                                            {
-                                                "groupId": [
-                                                    "string"
-                                                ],
-                                                "ssid": [
-                                                    "string"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "exclusiveContract": {
-                                        "clause": [
-                                            {
-                                                "type": "string",
-                                                "relevanceLevel": "string",
-                                            }
-                                        ]
-                                    },
-                                    "contract": {
-                                        "idRef": "string"
-                                    },
-                                    "producer": {
-                                        "scalableGroup": [
-                                            {
-                                                "idRef": "string"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                            }
+
+        # Initialize empty lists for each relevance
+        # Initialize empty lists for each relevance
+        business_relevant_set_name, business_relevant_set_id = [], []
+        business_irrelevant_set_name, business_irrelevant_set_id = [], []
+        default_set_name, default_set_id = [], []
+
+        # Populate the lists based on relevance
+        for item in application_set_names:
+            for relevance in item['relevance_details']:
+                if relevance['relevance'] == 'BUSINESS_RELEVANT':
+                    business_relevant_set_name.extend(relevance['application_set_name'])
+                elif relevance['relevance'] == 'BUSINESS_IRRELEVANT':
+                    business_irrelevant_set_name.extend(relevance['application_set_name'])
+                elif relevance['relevance'] == 'DEFAULT':
+                    default_set_name.extend(relevance['application_set_name'])
+
+        # Get application set IDs for business_relevant
+        for app_set_name in business_relevant_set_name:
+            app_set_id = self.get_application_set_id(app_set_name)
+            if app_set_id:
+                business_relevant_set_id.append(app_set_id)
+            else:
+                self.log(f"No app set found for {app_set_name}")
+
+        # Get application set IDs for business_irrelevant
+        for app_set_name in business_irrelevant_set_name:
+            app_set_id = self.get_application_set_id(app_set_name)
+            if app_set_id:
+                business_irrelevant_set_id.append(app_set_id)
+            else:
+                self.log(f"No app set found for {app_set_name}")
+
+        # Get application set IDs for default
+        for app_set_name in default_set_name:
+            app_set_id = self.get_application_set_id(app_set_name)
+            if app_set_id:
+                default_set_id.append(app_set_id)
+            else:
+                self.log(f"No app set found for {app_set_name}")
+
+        # Log the final lists
+        self.log(f"Business Relevant Set IDs: {business_relevant_set_id}")
+        self.log(f"Business Irrelevant Set IDs: {business_irrelevant_set_id}")
+        self.log(f"Default Set IDs: {default_set_id}")
+
+        
+
+        # example_policy = {
+        #                     "createList": [
+        #                         {
+        #                             "name": "string",
+        #                             "deletePolicyStatus": "string",
+        #                             "policyScope": "string",
+        #                             "priority": "string",
+        #                             "advancedPolicyScope": {
+        #                                 "name": "string",
+        #                                 "advancedPolicyScopeElement": [
+        #                                     {
+        #                                         "groupId": [
+        #                                             "string"
+        #                                         ],
+        #                                         "ssid": [
+        #                                             "string"
+        #                                         ]
+        #                                     }
+        #                                 ]
+        #                             },
+        #                             "exclusiveContract": {
+        #                                 "clause": [
+        #                                     {
+        #                                         "type": "string",
+        #                                         "relevanceLevel": "string",
+        #                                     }
+        #                                 ]
+        #                             },
+        #                             "contract": {
+        #                                 "idRef": "string"
+        #                             },
+        #                             "producer": {
+        #                                 "scalableGroup": [
+        #                                     {
+        #                                         "idRef": "string"
+        #                                     }
+        #                                 ]
+        #                             }
+        #                         }
+        #                     ]
+        #                     }
 
     def get_diff_application(self):
 
