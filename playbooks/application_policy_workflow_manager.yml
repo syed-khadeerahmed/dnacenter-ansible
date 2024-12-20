@@ -23,16 +23,20 @@
         state: merged
         config:
           - application_policy_details:
-            - application_policy_name: "sample_application_policy"
-              policy_status: "deployed"                                   
-              site_name: "global/Chennai/FLOOR1"       
-              device_type: "wired"                 
-              application_queuing_profile_name: "sample_queuing_profile" 
+              application_policy_name: "sample_application_policy"
+              policy_status: "deployed"                                  
+              site_name: "global/Chennai/LTTS/FLOOR1"       
+              device_type: "wired"
+              # device:              
+              #   - device_ip: "204.192.6.200"
+              #     vlan_id: ""
+              application_queuing_profile_name: "sample_queuing_profile"      
               clause: 
-                - clause_type: “BUSINESS_RELEVANCE"                              
-                  relevance: "BUSINESS_RELEVANT"                            
-                    application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
-                  relevance: "BUSINESS_IRRELEVANT"                            
-                    application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
-                  relevance: "DEFAULT"                            
-                    application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
+                - clause_type: “BUSINESS_RELEVANCE"  
+                  relevance_details:                            
+                    - relevance: "BUSINESS_RELEVANT"                            
+                      application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
+                    - relevance: "BUSINESS_IRRELEVANT"                            
+                      application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
+                    - relevance: "DEFAULT"                            
+                      application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]

@@ -1,0 +1,38 @@
+12-19-2024 17:48:25 DEBUG  ApplicationPolicy: __init__: 110: Logging configured and initiated 
+
+12-19-2024 17:48:25 DEBUG  ApplicationPolicy: __init__: 116: Cisco Catalyst Center parameters: {'dnac_host': '172.23.241.186', 'dnac_port': '443', 'dnac_username': 'admin', 'dnac_password': 'Maglev123', 'dnac_version': '2.3.7.6', 'dnac_verify': False, 'dnac_debug': True, 'dnac_log': True, 'dnac_log_level': 'DEBUG', 'dnac_log_file_path': 'dnac.log', 'dnac_log_append': True} 
+
+12-19-2024 17:48:25 INFO  ApplicationPolicy: validate_input: 1475: Successfully validated playbook config params 
+
+12-19-2024 17:48:25 DEBUG  ApplicationPolicy: check_return_status: 302: Line No: 2937 status: success, msg: Successfully validated playbook config params 
+
+12-19-2024 17:48:25 INFO  ApplicationPolicy: get_want: 1503: Desired State (want): {'application_queuing_details': None, 'application_set_details': None, 'application_details': None, 'application_policy_details': {'application_policy_name': 'sample_application_policy', 'policy_status': 'deployed', 'site_name': 'global/Chennai/LTTS/FLOOR1', 'device_type': 'wired', 'application_queuing_profile_name': 'sample_queuing_profile', 'clause': [{'clause_type': '“BUSINESS_RELEVANCE"', 'relevance_details': [{'relevance': 'BUSINESS_RELEVANT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}, {'relevance': 'BUSINESS_IRRELEVANT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}, {'relevance': 'DEFAULT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}]}]}} 
+
+12-19-2024 17:48:25 DEBUG  ApplicationPolicy: check_return_status: 302: Line No: 2942 status: success, msg: Successfully validated playbook config params 
+
+12-19-2024 17:48:25 WARNING  ApplicationPolicy: get_have: 1797: sample_application_policy 
+
+12-19-2024 17:48:25 WARNING  ApplicationPolicy: get_have: 1810: sample_application_policy 
+
+12-19-2024 17:48:26 DEBUG  ApplicationPolicy: get_application_policy_details: 1741: Received API response from 'get_application_sets': {'response': [], 'version': '1.0'} 
+
+12-19-2024 17:48:26 WARNING  ApplicationPolicy: get_application_policy_details: 1748: empty responce {'response': [], 'version': '1.0'} 
+
+12-19-2024 17:48:26 INFO  ApplicationPolicy: get_have: 1833: Current State (have): {'current_application_policy': {}, 'application_policy_exists': False} 
+
+12-19-2024 17:48:26 DEBUG  ApplicationPolicy: check_return_status: 302: Line No: 2943 status: success, msg: Successfully validated playbook config params 
+
+12-19-2024 17:48:26 DEBUG  ApplicationPolicy: get_site: 809: Initiating retrieval of site details for site name: 'global/Chennai/LTTS/FLOOR1'. 
+
+12-19-2024 17:48:26 DEBUG  ApplicationPolicy: get_site: 817: Using 'get_sites' API for Catalyst Center version: '2376'. 
+
+12-19-2024 17:48:26 DEBUG  ApplicationPolicy: execute_get_request: 1830: Initiating GET API call for Function: get_sites from Family: site_design with Parameters: {'name_hierarchy': 'global/Chennai/LTTS/FLOOR1'}. 
+
+12-19-2024 17:48:26 INFO  ApplicationPolicy: execute_get_request: 1846: Response received from GET API call to Function: 'get_sites' from Family: 'site_design' is Response: {'response': [{'id': '03072c33-bd11-4914-9c0e-3c53379b2813', 'parentId': 'c3293908-c136-45b9-b74f-d5dfaabb26a9', 'name': 'FLOOR1', 'nameHierarchy': 'Global/Chennai/LTTS/FLOOR1', 'type': 'floor', 'floorNumber': 1, 'rfModel': 'Cubes And Walled Offices', 'width': 177.0, 'length': 171.0, 'height': 10.0, 'unitsOfMeasure': 'feet'}], 'version': '1.0'} 
+
+12-19-2024 17:48:26 DEBUG  ApplicationPolicy: get_site_id: 845: Site details retrieved for site 'global/Chennai/LTTS/FLOOR1'': {'response': [{'id': '03072c33-bd11-4914-9c0e-3c53379b2813', 'parentId': 'c3293908-c136-45b9-b74f-d5dfaabb26a9', 'name': 'FLOOR1', 'nameHierarchy': 'Global/Chennai/LTTS/FLOOR1', 'type': 'floor', 'floorNumber': 1, 'rfModel': 'Cubes And Walled Offices', 'width': 177.0, 'length': 171.0, 'height': 10.0, 'unitsOfMeasure': 'feet'}], 'version': '1.0'} 
+
+12-19-2024 17:48:26 WARNING  ApplicationPolicy: create_application_policy: 1882: [{'clause_type': '“BUSINESS_RELEVANCE"', 'relevance_details': [{'relevance': 'BUSINESS_RELEVANT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}, {'relevance': 'BUSINESS_IRRELEVANT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}, {'relevance': 'DEFAULT', 'application_set_name': ['sample_application_set', 'sample_application_set', 'sample_application_set', 'sample_application_set']}]}] 
+
+12-19-2024 17:48:26 DEBUG  ApplicationPolicy: check_return_status: 302: Line No: 1864 status: success, msg: Successfully validated playbook config params 
+

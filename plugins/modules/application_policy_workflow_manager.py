@@ -1497,6 +1497,7 @@ class ApplicationPolicy(DnacBase):
         want["application_queuing_details"] = config.get("application_queuing_details")
         want["application_set_details"] = config.get("application_set_details")
         want["application_details"] = config.get("application_details")
+        want["application_policy_details"] = config.get("application_policy_details")
 
         self.want = want
         self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
@@ -1726,6 +1727,38 @@ class ApplicationPolicy(DnacBase):
             self.log(self.msg, "ERROR")
             self.check_return_status()
 
+    def get_application_policy_details(self, name):
+
+        application_policy_exists = False
+        current_application_policy = {}
+        try:
+            
+            response = self.dnac._exec(
+                family="application_policy",
+                function='get_application_policy',
+                params={"policyScope": name}
+            )
+            self.log("Received API response from 'get_application_sets': {0}".format(str(response)), "DEBUG")
+
+            if not response:
+                self.log("Unexpected response received:", "ERROR")
+                raise Exception
+
+            if not response.get("response"):
+                self.log("empty responce {0}".format(response))
+                return application_policy_exists, current_application_policy
+
+            current_application_policy = response.get("response")
+            application_policy_exists = True
+            self.log("got the details for queuing_profile_exists: {0} and  current_application_policy: {1}".format(application_policy_exists, current_application_policy))
+            return application_policy_exists, current_application_policy
+
+        except Exception as e:
+            self.status = "failed"
+            self.msg = "{0}".format(e)
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
 
     def get_have(self):
         """
@@ -1757,6 +1790,27 @@ class ApplicationPolicy(DnacBase):
                 application_set_exists, current_application_set = self.get_application_set_details(application_set_name)
                 have["current_application_set"] = current_application_set
                 have["application_set_exists"] = application_set_exists
+
+        if self.want.get("application_policy_details"):
+            application_policy_details = self.want.get("application_policy_details")
+            application_policy_name = self.want.get("application_policy_details", {}).get("application_policy_name")
+            self.log(application_policy_name)
+
+            if not application_policy_name:
+                self.status = "failed"
+                self.msg = (
+                    "The following parameter(s): 'name' could not be found  and are mandatory to create application policy ."
+                )
+                self.log(self.msg, "ERROR")
+                self.result['response'] = self.msg
+                self.check_return_status()
+
+            if application_policy_details.get("application_policy_name"):
+                application_policy_name = application_policy_details.get("application_policy_name")
+                self.log(application_policy_name)
+                application_policy_exists, current_application_policy = self.get_application_policy_details(application_policy_name)
+                have["current_application_policy"] = current_application_policy
+                have["application_policy_exists"] = application_policy_exists
 
         if self.want.get("application_details"):
             self.log("inside application")
@@ -1805,9 +1859,68 @@ class ApplicationPolicy(DnacBase):
 
         if config.get("application_details"):
             self.get_diff_application().check_return_status()
+
+        if config.get("application_policy_details"):
+            self.get_diff_application_policy().check_return_status()
         
-        # if config.get("application_details"):
-        #     self.get_application_policy().check_return_status()
+    def get_diff_application_policy(self):
+
+        application_policy_details = self.have
+
+        if application_policy_details.get("application_policy_exists") == False:
+            self.create_application_policy()
+            return self
+
+    def create_application_policy(self):
+
+        new_application_policy_details = self.config.get("application_policy_details")
+        application_policy_name = self.want.get("application_policy_details", {}).get("application_policy_name")
+        site_name = new_application_policy_details.get("site_name")
+        site_exists, site_id = self.get_site_id(site_name)
+        
+        application_set_names = new_application_policy_details.get("clause")
+        self.log(application_set_names)
+        example_policy = {
+                            "createList": [
+                                {
+                                    "name": "string",
+                                    "deletePolicyStatus": "string",
+                                    "policyScope": "string",
+                                    "priority": "string",
+                                    "advancedPolicyScope": {
+                                        "name": "string",
+                                        "advancedPolicyScopeElement": [
+                                            {
+                                                "groupId": [
+                                                    "string"
+                                                ],
+                                                "ssid": [
+                                                    "string"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "exclusiveContract": {
+                                        "clause": [
+                                            {
+                                                "type": "string",
+                                                "relevanceLevel": "string",
+                                            }
+                                        ]
+                                    },
+                                    "contract": {
+                                        "idRef": "string"
+                                    },
+                                    "producer": {
+                                        "scalableGroup": [
+                                            {
+                                                "idRef": "string"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                            }
 
     def get_diff_application(self):
 
@@ -2517,6 +2630,72 @@ class ApplicationPolicy(DnacBase):
 
         if config.get("application_details"):
             self.delete_application().check_return_status()
+
+        if config.get("application_policy_details"):
+            self.delete_application_policy().check_return_status()
+
+    def delete_application_policy(self):
+        application_policy_details = self.config.get("application_policy_details")
+        self.log(f"Queuing Profile Details: {application_policy_details}")
+        application_policy_name = application_policy_details.get("application_policy_name")
+        application_policy_details = self.have
+
+
+        if application_policy_details.get("application_policy_exists") == False:
+            self.status = "success"
+            self.result['changed'] = False
+            self.msg = "application policy '{0}' does not present in the cisco catalyst center or its been already deleted".format(application_policy_name)
+            self.result['msg'] = self.msg
+            self.result['response'] = self.msg
+            self.log(self.msg, "INFO")
+            return self
+
+        get_ids = self.have
+        # Initialize an empty list to store the IDs
+        ids_list = []
+
+        # Check if "current_application_policy" exists in the response
+        if "current_application_policy" in get_ids:
+            # Iterate over each policy in the list
+            for policy in get_ids["current_application_policy"]:
+                # Check if "id" exists in the policy
+                if "id" in policy:
+                    # Append the "id" value to the list
+                    ids_list.append(policy["id"])
+
+        try:
+            response = self.dnac._exec(
+                family="application_policy",
+                function='application_policy_intent',
+                op_modifies= True,
+                params= {'deleteList': ids_list,}
+                )
+
+            self.log(f"Received API response from 'application_policy_intent' for deletion: {response}", "DEBUG")
+            self.check_tasks_response_status(response, "application_policy_intent")
+
+            if self.status not in ["failed", "exited"]:
+                self.log("application policy '{0}' deleted successfully.".format(application_policy_name), "INFO")
+                self.status = "success"
+                self.result['changed'] = True
+                self.msg = ("application policy '{0}' deleted successfully.".format(application_policy_name))
+                self.result['response'] = self.msg
+                return self
+
+            if self.status == "failed":
+                fail_reason = self.msg
+                self.status = "failed"
+                self.msg = "deletion of the application policy failed due to - {0}".format(fail_reason)
+                self.result['response'] = self.msg
+                self.log(self.msg, "ERROR")
+                self.check_return_status()
+
+        except Exception as e:
+            self.status = "failed"
+            self.msg = "{0}".format(e)
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
 
     def delete_application_queuing_profile(self):
         """
