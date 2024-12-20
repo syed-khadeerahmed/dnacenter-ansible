@@ -1805,6 +1805,12 @@ class ApplicationPolicy(DnacBase):
                 self.result['response'] = self.msg
                 self.check_return_status()
 
+            if application_policy_details.get("application_queuing_profile_name"):
+                queuing_profile_name = application_policy_details.get("application_queuing_profile_name")
+                queuing_profile_exists, current_queuing_profile = self.get_queuing_profile_details(queuing_profile_name)
+                have["current_queuing_profile"] = current_queuing_profile
+                have["queuing_profile_exists"] = queuing_profile_exists
+
             if application_policy_details.get("application_policy_name"):
                 application_policy_name = application_policy_details.get("application_policy_name")
                 self.log(application_policy_name)
@@ -1877,11 +1883,14 @@ class ApplicationPolicy(DnacBase):
         application_policy_name = self.want.get("application_policy_details", {}).get("application_policy_name")
         site_name = new_application_policy_details.get("site_name")
         site_exists, site_id = self.get_site_id(site_name)
-        
+        application_policy_details = self.have
         application_set_names = new_application_policy_details.get("clause")
-        self.log(application_set_names)
+        application_queuing_profile_name = new_application_policy_details.get("application_queuing_profile_name")
+        queuing_profile_id = application_policy_details.get('current_queuing_profile', [])[0].get('id', None)
 
-        # Initialize empty lists for each relevance
+        self.log(application_queuing_profile_name)
+        self.log(queuing_profile_id)
+        self.log(new_application_policy_details)
         # Initialize empty lists for each relevance
         business_relevant_set_name, business_relevant_set_id = [], []
         business_irrelevant_set_name, business_irrelevant_set_id = [], []
@@ -1901,7 +1910,7 @@ class ApplicationPolicy(DnacBase):
         for app_set_name in business_relevant_set_name:
             app_set_id = self.get_application_set_id(app_set_name)
             if app_set_id:
-                business_relevant_set_id.append(app_set_id)
+                business_relevant_set_id.append({"name": app_set_name, "id": app_set_id})
             else:
                 self.log(f"No app set found for {app_set_name}")
 
@@ -1909,7 +1918,7 @@ class ApplicationPolicy(DnacBase):
         for app_set_name in business_irrelevant_set_name:
             app_set_id = self.get_application_set_id(app_set_name)
             if app_set_id:
-                business_irrelevant_set_id.append(app_set_id)
+                business_irrelevant_set_id.append({"name": app_set_name, "id": app_set_id})
             else:
                 self.log(f"No app set found for {app_set_name}")
 
@@ -1917,7 +1926,7 @@ class ApplicationPolicy(DnacBase):
         for app_set_name in default_set_name:
             app_set_id = self.get_application_set_id(app_set_name)
             if app_set_id:
-                default_set_id.append(app_set_id)
+                default_set_id.append({"name": app_set_name, "id": app_set_id})
             else:
                 self.log(f"No app set found for {app_set_name}")
 
@@ -1926,49 +1935,123 @@ class ApplicationPolicy(DnacBase):
         self.log(f"Business Irrelevant Set IDs: {business_irrelevant_set_id}")
         self.log(f"Default Set IDs: {default_set_id}")
 
-        
+        # Determine the deletePolicyStatus
+        policy_status = new_application_policy_details.get("policy_status")
+        delete_policy_status = {
+            "deployed": "NONE",
+            "deleted": "DELETED",
+            "restored": "RESTORED"
+        }.get(policy_status, "NONE")
 
-        # example_policy = {
-        #                     "createList": [
-        #                         {
-        #                             "name": "string",
-        #                             "deletePolicyStatus": "string",
-        #                             "policyScope": "string",
-        #                             "priority": "string",
-        #                             "advancedPolicyScope": {
-        #                                 "name": "string",
-        #                                 "advancedPolicyScopeElement": [
-        #                                     {
-        #                                         "groupId": [
-        #                                             "string"
-        #                                         ],
-        #                                         "ssid": [
-        #                                             "string"
-        #                                         ]
-        #                                     }
-        #                                 ]
-        #                             },
-        #                             "exclusiveContract": {
-        #                                 "clause": [
-        #                                     {
-        #                                         "type": "string",
-        #                                         "relevanceLevel": "string",
-        #                                     }
-        #                                 ]
-        #                             },
-        #                             "contract": {
-        #                                 "idRef": "string"
-        #                             },
-        #                             "producer": {
-        #                                 "scalableGroup": [
-        #                                     {
-        #                                         "idRef": "string"
-        #                                     }
-        #                                 ]
-        #                             }
-        #                         }
-        #                     ]
-        #                     }
+        # Map relevance to application set IDs
+        relevance_map = {
+            "BUSINESS_RELEVANT": business_relevant_set_id,
+            "BUSINESS_IRRELEVANT": business_irrelevant_set_id,
+            "DEFAULT": default_set_id
+        }
+
+        # Generate payload
+        payload = []
+        # for queuing profile
+        payload.append({
+                    "name": f"{application_policy_name}_{application_queuing_profile_name}",
+                    "deletePolicyStatus": delete_policy_status,
+                    "policyScope": f"{application_policy_name}",
+                    "priority": "100",
+                    "advancedPolicyScope": {
+                        "name": f"{application_policy_name}",
+                        "advancedPolicyScopeElement": [
+                            {
+                                "groupId": [
+                                    site_id
+                                ],
+                                "ssid": []
+                            }
+                        ]
+                    },
+                    "contract": {
+                        "idRef": queuing_profile_id
+                    }
+                },
+        )
+
+        for relevance_detail in new_application_policy_details['clause'][0]['relevance_details']:
+            relevance_level = relevance_detail['relevance']
+            application_set_names = relevance_detail['application_set_name']
+            
+            for app_set_name in application_set_names:
+                # Find the matching application set ID
+                matching_set = next((item for item in relevance_map[relevance_level] if item['name'] == app_set_name), None)
+                if not matching_set:
+                    continue
+                
+                # Append the policy details to the payload
+                payload.append({
+                    "name": f"{application_policy_name}_{app_set_name}",
+                    "deletePolicyStatus": delete_policy_status,
+                    "policyScope": f"{application_policy_name}",
+                    "priority": "100",
+                    "advancedPolicyScope": {
+                        "name": f"{application_policy_name}",
+                        "advancedPolicyScopeElement": [
+                            {
+                                "groupId": [site_id],
+                                "ssid": []
+                            }
+                        ]
+                    },
+                    "exclusiveContract": {
+                        "clause": [
+                            {
+                                "type": "BUSINESS_RELEVANCE",
+                                "relevanceLevel": relevance_level
+                            }
+                        ]
+                    },
+                    "producer": {
+                        "scalableGroup": [
+                            {
+                                "idRef": matching_set['id']
+                            }
+                        ]
+                    }
+                })
+
+        self.log(json.dumps(payload, indent=4))
+
+        try:
+            response = self.dnac._exec(
+                family="application_policy",
+                function='application_policy_intent',
+                op_modifies= True,
+                params= {'createList': payload,}
+                )
+
+            self.log(f"Received API response from 'application_policy_intent' for creation: {response}", "DEBUG")
+            self.check_tasks_response_status(response, "application_policy_intent")
+
+            if self.status not in ["failed", "exited"]:
+                self.log("application policy '{0}' created successfully.".format(application_policy_name), "INFO")
+                self.status = "success"
+                self.result['changed'] = True
+                self.msg = ("application policy '{0}' created successfully.".format(application_policy_name))
+                self.result['response'] = self.msg
+                return self
+
+            if self.status == "failed":
+                fail_reason = self.msg
+                self.status = "failed"
+                self.msg = "creation of the application policy failed due to - {0}".format(fail_reason)
+                self.result['response'] = self.msg
+                self.log(self.msg, "ERROR")
+                self.check_return_status()
+
+        except Exception as e:
+            self.status = "failed"
+            self.msg = "{0}".format(e)
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
 
     def get_diff_application(self):
 

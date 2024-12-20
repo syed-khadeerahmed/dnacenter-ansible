@@ -22,21 +22,23 @@
         dnac_task_poll_interval: 1
         state: merged
         config:
+          # - application_queuing_details:
+          #   - queuing_profile_name: "Asampleq5"
           - application_policy_details:
               application_policy_name: "sample_application_policy"
               policy_status: "deployed"                                  
-              site_name: "global/Chennai/LTTS/FLOOR1"       
+              site_name: "Global/Testing/test_cred"
               device_type: "wired"
               # device:              
               #   - device_ip: "204.192.6.200"
               #     vlan_id: ""
-              application_queuing_profile_name: "sample_queuing_profile"      
+              application_queuing_profile_name: "Asampleq8"
               clause: 
                 - clause_type: “BUSINESS_RELEVANCE"  
                   relevance_details:                            
                     - relevance: "BUSINESS_RELEVANT"                            
-                      application_set_name: ["email", "backup-and-storage", "general-misc", "tunneling"]
+                      application_set_name: ["email"]
                     - relevance: "BUSINESS_IRRELEVANT"                            
-                      application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
+                      application_set_name: ["file-sharing"]
                     - relevance: "DEFAULT"                            
-                      application_set_name: ["sample_application_set", "sample_application_set", "sample_application_set", "sample_application_set"]
+                      application_set_name: ["collaboration-apps"]
