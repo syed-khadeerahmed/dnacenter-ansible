@@ -2651,16 +2651,11 @@ class ApplicationPolicy(DnacBase):
             return self
 
         get_ids = self.have
-        # Initialize an empty list to store the IDs
         ids_list = []
 
-        # Check if "current_application_policy" exists in the response
         if "current_application_policy" in get_ids:
-            # Iterate over each policy in the list
             for policy in get_ids["current_application_policy"]:
-                # Check if "id" exists in the policy
                 if "id" in policy:
-                    # Append the "id" value to the list
                     ids_list.append(policy["id"])
 
         try:
