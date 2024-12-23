@@ -1456,9 +1456,17 @@ class ApplicationPolicy(DnacBase):
             return self
   
         application_details = config_data.get('application_details', [])
-        if not isinstance(application_set_details, list):
+        if not isinstance(application_details, list):
             self.status = "failed"
             self.msg = "'application_details' should be a list, found: {0}".format(type(application_details))
+            self.log(self.msg, "ERROR")
+            return self
+
+        application_policy_details = config_data.get('application_policy_details', [])
+        self.log(application_policy_details)
+        if not isinstance(application_policy_details, dict):
+            self.status = "failed"
+            self.msg = "'application_policy_details' should be a dict, found: {0}".format(type(application_policy_details))
             self.log(self.msg, "ERROR")
             return self
 
@@ -1656,7 +1664,25 @@ class ApplicationPolicy(DnacBase):
         return application_set_id
 
     def get_application_details(self, name):
+        """
+        Retrieve the details of a specific application by its name.
 
+        Parameters:
+            self (object): An instance of the class used for interacting with Cisco Catalyst Center.
+            name (str): The name of the application to retrieve.
+
+        Returns:
+            tuple: A tuple containing:
+                - application_exists (bool): Indicates whether the application exists.
+                - current_application (dict): The details of the application if found, otherwise an empty dictionary.
+
+        Description:
+            This function fetches the details of a specific application using the Cisco Catalyst Center API. It sends 
+            a request to retrieve the application data by specifying its name along with additional parameters for 
+            attributes, offset, and limit. If the response contains the application details, they are returned along 
+            with a flag indicating the existence of the application. In case of an error or unexpected response, the 
+            function logs the error, updates the status, and handles the exception gracefully.
+        """
         application_exists = False
         current_application = {}
         try:
@@ -1690,10 +1716,19 @@ class ApplicationPolicy(DnacBase):
 
     def get_application_details_v1(self):
         """
-        Fetch application details from the application policy module.
+        Retrieve the details of applications from Cisco Catalyst Center.
+
+        Parameters:
+            self (object): An instance of the class used for interacting with Cisco Catalyst Center.
 
         Returns:
-            dict: A dictionary containing current application details, if available.
+            dict: A dictionary containing the details of the applications retrieved from Cisco Catalyst Center.
+
+        Description:
+            This function fetches the details of applications using the Cisco Catalyst Center API. It sends a request 
+            to retrieve application data with specified attributes, offset, and limit. If a response is received, it 
+            extracts the application details and logs the data. In case the response is empty, the function logs a 
+            message and returns an empty dictionary.
         """
         current_application = {}
 
@@ -1728,7 +1763,24 @@ class ApplicationPolicy(DnacBase):
             self.check_return_status()
 
     def get_application_policy_details(self, name):
+        """
+        Get application policy details for the specified policy name.
 
+        Parameters:
+            self (object): An instance of the class used for interacting with Cisco Catalyst Center.
+            name (str): The name of the application policy to retrieve.
+
+        Returns:
+            tuple: A tuple containing:
+                - application_policy_exists (bool): Indicates whether the application policy exists.
+                - current_application_policy (dict): The details of the application policy if found, otherwise an empty dictionary.
+
+        Description:
+            This function interacts with the Cisco Catalyst Center API to retrieve the details of an application policy 
+            specified by its name. It sends an API request to fetch the policy details and processes the response. 
+            If the response contains the policy details, they are returned along with a flag indicating its existence.
+            In case of an exception, the function updates the status and logs an appropriate error message.
+        """
         application_policy_exists = False
         current_application_policy = {}
         try:
@@ -1877,12 +1929,309 @@ class ApplicationPolicy(DnacBase):
             self.create_application_policy()
             return self
 
+        req_application_policy_details = self.config.get("application_policy_details")
+        application_policy_name = self.want.get("application_policy_details", {}).get("application_policy_name")
+        site_names = req_application_policy_details.get("site_name")
+        site_ids = []
+        for site_name in site_names:
+            site_exists, site_id = self.get_site_id(site_name)
+            site_ids.append(site_id)
+        application_set_names = req_application_policy_details.get("clause")
+        application_queuing_profile_name = req_application_policy_details.get("application_queuing_profile_name")
+        queuing_profile_id = application_policy_details.get('current_queuing_profile', [])[0].get('id', None)
+        current_application_policy = application_policy_details.get("current_application_policy")
+
+        self.log(req_application_policy_details)
+        # Initialize flags
+        is_update_required_for_queuing_profile = False
+        is_update_required_for_site = False
+
+        no_update_require = []
+        other_check_names = ["application_queuing_profile", "site_name"] 
+
+        # Check if the queuing profile name exists in current_application_policy
+        for contract in current_application_policy:
+            if 'contract' in contract and contract['contract']:
+                current_application_policy_queuing_id = contract.get("id")
+                advanced_policy_scope_for_queuing_profile = contract.get("advancedPolicyScope").get("id")
+                advanced_policy_scope_element_for_queuing_profile = contract.get("advancedPolicyScope").get("advancedPolicyScopeElement")[0].get("id")
+                name = contract.get("name")
+                if application_queuing_profile_name not in name:
+                    is_update_required_for_queuing_profile = True
+                    break
+
+        # Check if the site IDs match
+        for application_policy in current_application_policy:
+            curent_site_ids = application_policy.get("advancedPolicyScope").get("advancedPolicyScopeElement")[0].get("groupId")
+            # Compare the site_ids and curent_site_ids
+            if set(site_ids) != set(curent_site_ids):
+                is_update_required_for_site = True
+                break
+
+        if is_update_required_for_site or is_update_required_for_queuing_profile:
+            self.log("update required for queuing profile" if is_update_required_for_queuing_profile else "update required for site")
+            group_id = site_ids if is_update_required_for_site else curent_site_ids
+
+            payload = {
+                    "id": current_application_policy_queuing_id,
+                    "name": f"{application_policy_name}_{application_queuing_profile_name}",
+                    "deletePolicyStatus": current_application_policy[0].get("deletePolicyStatus"),
+                    "policyScope": current_application_policy[0].get("policyScope"),
+                    "priority": current_application_policy[0].get("priority"),
+                    "advancedPolicyScope": {
+                        "id": advanced_policy_scope_for_queuing_profile,
+                        "name": application_policy_name,
+                        "advancedPolicyScopeElement": [
+                            {
+                                "id": advanced_policy_scope_element_for_queuing_profile,
+                                "groupId": group_id,
+                                "ssid": []
+                            }
+                        ]
+                    },
+                    "contract": {
+                        "idRef": queuing_profile_id
+                    }
+                }
+            self.log(json.dumps(payload, indent=4))
+        else:
+            self.log("no update is required for queuing profile")
+            no_update_require.append("application_queuing_profile")
+
+        if is_update_required_for_site is True:
+            self.log("update required for site")
+        else:
+            self.log("no update is required for site")
+            no_update_require.append("site_name")
+
+        update_not_required = True
+        for check in other_check_names:
+            if check not in no_update_require:
+                update_not_required = False
+                break
+
+        if update_not_required:
+            self.log("no update required for application policy")
+            # self.status = "success"
+            # self.result['changed'] = False
+            # self.msg = "application '{0}' does not need any update. ".format(application_policy_name)
+            # self.result['msg'] = self.msg
+            # self.result['response'] = self.msg
+            # self.log(self.msg, "INFO")
+            # return self
+        
+        want_business_relevant_set_name, want_business_irrelevant_set_name, want_default_set_name = [], [], []
+        have_business_relevant_set_name, have_business_irrelevant_set_name, have_default_set_name = [], [], []
+        final_business_relevant_set_name, final_business_irrelevant_set_name, final_default_set_name = [], [], []
+
+        # Application data (replace with actual data or mock data)
+        application_set_names = req_application_policy_details.get("clause")
+
+        total_current_app_set = []
+        total_want_app_set = []
+        self.log(2)
+        # Populate the lists based on relevance
+        for item in application_set_names:
+            self.log(3)
+            for relevance in item['relevance_details']:
+                self.log(4)
+                if relevance['relevance'] == 'BUSINESS_RELEVANT':
+                    want_business_relevant_set_name.extend(relevance['application_set_name'])
+                    total_want_app_set.extend(relevance['application_set_name'])
+                elif relevance['relevance'] == 'BUSINESS_IRRELEVANT':
+                    want_business_irrelevant_set_name.extend(relevance['application_set_name'])
+                    total_want_app_set.extend(relevance['application_set_name'])
+                elif relevance['relevance'] == 'DEFAULT':
+                    want_default_set_name.extend(relevance['application_set_name'])
+                    total_want_app_set.extend(relevance['application_set_name'])
+
+        self.log(f"Wanted Business Irrelevant Set: {want_business_irrelevant_set_name}")
+        self.log(f"Wanted Business Relevant Set: {want_business_relevant_set_name}")
+        self.log(f"Wanted Default Set: {want_default_set_name}")
+
+
+        # Populate current application set names
+        for application_sets in current_application_policy:
+            clause = application_sets.get("exclusiveContract", {}).get("clause")
+            if clause and clause[0].get("relevanceLevel") is not None:
+                current_relevance_type = clause[0].get("relevanceLevel")
+
+                # Process Business Relevant
+                if current_relevance_type == "BUSINESS_RELEVANT":
+                    full_name = application_sets.get("name") 
+                    policy_name = application_sets.get("policyScope") + '_'
+                    app_set_name = full_name.replace(policy_name, "")
+                    have_business_relevant_set_name.append(app_set_name)
+                    total_current_app_set.append(app_set_name)
+
+                    for set_name in want_business_relevant_set_name:
+                        if set_name in application_sets.get("name"):
+                            self.log(f"No update required for: {set_name}")
+
+
+                # Process Business Irrelevant
+                elif current_relevance_type == "BUSINESS_IRRELEVANT":
+                    full_name = application_sets.get("name") 
+                    policy_name = application_sets.get("policyScope") + '_'
+                    app_set_name = full_name.replace(policy_name, "")
+                    have_business_irrelevant_set_name.append(app_set_name)
+                    total_current_app_set.append(app_set_name)
+
+                    for set_name in want_business_irrelevant_set_name:
+                        if set_name in application_sets.get("name"):
+                            self.log(f"No update required for: {set_name}")
+
+                # Process Default
+                elif current_relevance_type == "DEFAULT":
+                    full_name = application_sets.get("name") 
+                    policy_name = application_sets.get("policyScope") + '_'
+                    app_set_name = full_name.replace(policy_name, "")
+                    have_default_set_name.append(app_set_name)
+                    total_current_app_set.append(app_set_name)
+
+                    for set_name in want_default_set_name:
+                        if set_name in application_sets.get("name"):
+                            self.log(f"No update required for: {set_name}")
+
+        self.log(f"Total Current Application Set: {total_current_app_set}")
+        self.log(f"Total Want Application Set: {total_want_app_set}")
+
+
+        # Compare sets
+        current_set = set(total_current_app_set)
+        want_set = set(total_want_app_set)
+
+        # Check if anything extra is in the 'want' set
+        extra_in_want = want_set - current_set
+
+        if extra_in_want:
+            self.status = "failed"
+            self.msg = "no extra application sets can be added to the application policy".format()
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
+
+            #fail the code
+        else:
+            self.log("Comparison passed. No extra items in want.")
+
+        # List of all want and have lists
+        want_lists = [
+            (want_business_relevant_set_name, have_business_relevant_set_name, final_business_relevant_set_name),
+            (want_business_irrelevant_set_name, have_business_irrelevant_set_name, final_business_irrelevant_set_name),
+            (want_default_set_name, have_default_set_name, final_default_set_name)
+        ]
+
+        # Compare and append missing elements to the final lists
+        for want_item, have_item, final_item in want_lists:
+            for w in want_item:
+                if w not in have_item:
+                    final_item.append(w)  # Add missing item from "want"
+            if not want_item:  # If the "want" list is empty, ensure "have" is added to final
+                final_item.extend([item for item in have_item if item not in final_item])
+
+        # Ensure the default list is empty if no relevant/default values are there
+        if not want_default_set_name:
+            final_default_set_name = []
+        if not want_business_relevant_set_name:
+            final_business_relevant_set_name = []
+        if not want_business_irrelevant_set_name:
+            final_business_irrelevant_set_name = []
+
+        # self.log the final lists
+        self.log(f"Final Business Relevant: {final_business_relevant_set_name}")
+        self.log(f"Final Business Irrelevant: {final_business_irrelevant_set_name}")
+        self.log(f"Final Default: {final_default_set_name}")
+
+        final_app_set_payload = []
+        relevance_levels = {
+            "final_business_relevant_set_name": "BUSINESS_RELEVANT",
+            "final_business_irrelevant_set_name": "BUSINESS_IRRELEVANT",
+            "final_default_set_name": "DEFAULT"
+        }
+
+        final_app_set_payload = []
+
+        for application_sets in current_application_policy:
+            for app_set in final_business_relevant_set_name + final_business_irrelevant_set_name + final_default_set_name:
+                if app_set in final_business_relevant_set_name:
+                    relevance_level = "BUSINESS_RELEVANT"
+                elif app_set in final_business_irrelevant_set_name:
+                    relevance_level = "BUSINESS_IRRELEVANT"
+                elif app_set in final_default_set_name:
+                    relevance_level = "DEFAULT"
+                
+                if relevance_level and app_set in application_sets.get("name"):
+                    print(app_set)
+                    app_set_payload = {
+                        "id": application_sets.get("id"),
+                        "name": f"{application_sets.get('policyScope')}_{app_set}",
+                        "deletePolicyStatus": application_sets.get("deletePolicyStatus"),
+                        "policyScope": application_sets.get('policyScope'),
+                        "priority": application_sets.get('priority'),
+                        "advancedPolicyScope": {
+                            "id": application_sets.get("advancedPolicyScope").get("id"),
+                            "name": application_sets.get("advancedPolicyScope").get("name"),
+                            "advancedPolicyScopeElement": [
+                                {
+                                    "id": application_sets.get("advancedPolicyScope").get("advancedPolicyScopeElement")[0].get("id"),
+                                    "groupId": application_sets.get("advancedPolicyScope").get("advancedPolicyScopeElement")[0].get("groupId"),
+                                    "ssid": []
+                                }
+                            ]
+                        },
+                        "exclusiveContract": {
+                            "id": application_sets.get("exclusiveContract").get("id"),
+                            "clause": [
+                                {
+                                    "id": application_sets.get("exclusiveContract").get("clause")[0].get("id"),
+                                    "type": application_sets.get("exclusiveContract").get("clause")[0].get("type"),
+                                    "relevanceLevel": relevance_level
+                                }
+                            ]
+                        },
+                        "producer": {
+                            "id": application_sets.get("producer").get("id"),
+                            "scalableGroup": [
+                                {
+                                    "idRef": application_sets.get("producer").get("scalableGroup")[0].get("idRef")
+                                }
+                            ]
+                        }
+                    }
+                    final_app_set_payload.append(app_set_payload)
+
+        self.log(json.dumps(final_app_set_payload, indent=4))
+
+
     def create_application_policy(self):
+        """
+        Create an application policy and trigger its deployment details based on the configuration provided in the playbook.
+
+        Parameters:
+            self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+
+        Returns:
+            self: The current instance of the class with updated 'result', 'status', and 'msg' attributes.
+
+        Description:
+            This function creates an application policy in the Catalyst Center by processing the configuration details 
+            provided in the playbook. It retrieves site information, identifies application queuing profiles, and 
+            categorizes application sets based on relevance levels (BUSINESS_RELEVANT, BUSINESS_IRRELEVANT, and DEFAULT). 
+            The application sets are mapped to their IDs, and a payload is generated for API submission. The function 
+            then sends a request to create the application policy and validates the response. 
+
+            In case of an error or failure in creation, appropriate error messages are logged, and the function updates 
+            the status and result attributes.
+        """
 
         new_application_policy_details = self.config.get("application_policy_details")
         application_policy_name = self.want.get("application_policy_details", {}).get("application_policy_name")
-        site_name = new_application_policy_details.get("site_name")
-        site_exists, site_id = self.get_site_id(site_name)
+        site_names = new_application_policy_details.get("site_name")
+        site_ids = []
+        for site_name in site_names:
+            site_exists, site_id = self.get_site_id(site_name)
+            site_ids.append(site_id)
         application_policy_details = self.have
         application_set_names = new_application_policy_details.get("clause")
         application_queuing_profile_name = new_application_policy_details.get("application_queuing_profile_name")
@@ -1962,9 +2311,7 @@ class ApplicationPolicy(DnacBase):
                         "name": f"{application_policy_name}",
                         "advancedPolicyScopeElement": [
                             {
-                                "groupId": [
-                                    site_id
-                                ],
+                                "groupId": site_ids,
                                 "ssid": []
                             }
                         ]
@@ -2054,6 +2401,20 @@ class ApplicationPolicy(DnacBase):
             self.check_return_status()
 
     def get_diff_application(self):
+        """
+        Retrieve and update differences between current and required application configurations.
+
+        Parameters:
+            self (object): An instance of the class for interacting with Cisco Catalyst Center.
+
+        Returns:
+            self: The updated instance with 'status', 'msg', and 'result' attributes.
+
+        Description:
+            Compares the existing application details ('have') with the desired configuration ('want') and updates
+            the application if discrepancies are found. Handles mandatory field validation, constructs the update 
+            payload, logs required actions, and sends an API request to apply changes.
+        """
 
         application_name = self.want.get("application_details", {}).get("application_name")
         application_set_name = self.want.get("application_details").get("application_set_name")
@@ -2134,14 +2495,14 @@ class ApplicationPolicy(DnacBase):
             self.log("update required for application set")
             update_required_keys.append("application_set")
 
-        # if not update_required_keys:
-        #     self.status = "success"
-        #     self.result['changed'] = False
-        #     self.msg = "application '{0}' does not need any update. ".format(application_name)
-        #     self.result['msg'] = self.msg
-        #     self.result['response'] = self.msg
-        #     self.log(self.msg, "INFO")
-        #     return self
+        if not update_required_keys:
+            self.status = "success"
+            self.result['changed'] = False
+            self.msg = "application '{0}' does not need any update. ".format(application_name)
+            self.result['msg'] = self.msg
+            self.result['response'] = self.msg
+            self.log(self.msg, "INFO")
+            return self
 
         #construct payload for Updation
         network_application_payload = {
@@ -2257,6 +2618,22 @@ class ApplicationPolicy(DnacBase):
             self.check_return_status()
 
     def create_application(self):
+        """
+        Create a new application in Cisco DNA Center.
+
+        Parameters:
+            self (object): An instance of the class for interacting with Cisco DNA Center.
+
+        Returns:
+            self: The updated instance with 'status', 'msg', and 'result' attributes.
+
+        Description:
+            This method creates a new application by comparing the desired configuration ('want') with the existing 
+            application details ('have'). It checks for missing mandatory fields, validates the application type, 
+            and constructs the payload for the application creation request. The method sends an API request to 
+            Cisco DNA Center to create the application and logs success or failure. If any errors are encountered, 
+            they are handled and returned with appropriate messages.
+        """
 
         new_application_set_details = self.want
         application_set_name = new_application_set_details.get('application_details', {}).get('application_set_name')
@@ -2766,6 +3143,22 @@ class ApplicationPolicy(DnacBase):
             self.delete_application_policy().check_return_status()
 
     def delete_application_policy(self):
+        """
+        Delete an existing application policy in Cisco DNA Center.
+
+        Parameters:
+            self (object): An instance of the class for interacting with Cisco DNA Center.
+
+        Returns:
+            self: The updated instance with 'status', 'msg', and 'result' attributes.
+
+        Description:
+            This method deletes an application policy from Cisco DNA Center by first checking if the policy exists. 
+            If the policy is not found, it logs a message and returns. If the policy exists, it retrieves the 
+            policy ID and sends a delete request to Cisco DNA Center via the API. The response is processed, 
+            and the method logs success or failure. If an error occurs, it is caught and handled appropriately.
+        """
+
         application_policy_details = self.config.get("application_policy_details")
         self.log(f"Queuing Profile Details: {application_policy_details}")
         application_policy_name = application_policy_details.get("application_policy_name")
