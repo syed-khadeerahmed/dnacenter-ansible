@@ -22,23 +22,36 @@
         dnac_task_poll_interval: 1
         state: merged
         config:
-          # - application_queuing_details:
-          #   - queuing_profile_name: "Asampleq5"
-          - application_policy_details:
-              application_policy_name: "sample_application_policy"
-              policy_status: "deployed"                                  
-              site_name: ["Global/Testing/test_cred"]
-              device_type: "wired"
-              # device:              
-              #   - device_ip: "204.192.6.200"
-              #     vlan_id: ""
-              application_queuing_profile_name: "Asampleq6"
-              clause: 
-                - clause_type: “BUSINESS_RELEVANCE"  
-                  relevance_details:                            
-                    - relevance: "BUSINESS_RELEVANT"                            
-                      application_set_name: ["file-sharing"]
-                    - relevance: "BUSINESS_IRRELEVANT"                            
-                      application_set_name: ["email"]
-                    - relevance: "DEFAULT"                            
-                      application_set_name: ["collaboration-apps"]
+          - application_queuing_details:
+              - profile_name: "Asampleq2"
+                new_profile_name: "Asampleq100"
+                profile_description: "sample 12234567876543wwwwwwwwwww"
+                bandwidth_settings:
+                  is_common_between_all_interface_speeds: true
+                  interface_speed: "ALL"
+                  bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "10"
+                      voip_telephony: "15"
+                      multimedia_streaming: "9"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "11"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+                dscp_settings:
+                  multimedia_conferencing: "20"
+                  ops_admin_mgmt: "23"
+                  transactional_data: "28"
+                  voip_telephony: "45"
+                  multimedia_streaming: "27"
+                  broadcast_video: "46"
+                  network_control: "48"
+                  best_effort: "0"
+                  signaling: "4"
+                  bulk_data: "10"
+                  scavenger: "2"
+                  real_time_interactive: "34"
