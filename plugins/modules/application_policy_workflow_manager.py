@@ -40,157 +40,157 @@ options:
         type: list
         elements: dict
         suboptions:
-          queuing_profile_name:
+          profile_name:
             description:
               - This represent a name for the queuing profile.
               - Required for queuing profile create, update and delete operations.
             type: str
-          queuing_profile_description:
+          profile_description:
             description: The description for queuing profile.
             type: str
-          clause:
-            description: Inside clause we will get information about the type in which the queuing profile will be created
-            type: list
-            elements: dict
+          # clause:
+          #   description: Inside clause we will get information about the type in which the queuing profile will be created.
+          #   type: list
+          #   elements: dict
+          #   suboptions:
+              # clause_type:
+              #   description: |
+              #     - The type field determines the method by which traffic prioritization is applied.
+              #     - Either through interface bandwidth allocation or by assigning Differentiated Services Code Point (DSCP) values or both.
+              #     Permissible values:
+              #     - "BANDWIDTH": This clause type is used to specify traffic management settings based on bandwidth allocation.
+              #       It defines how much bandwidth is allocated to different types of traffic within the network".
+              #     - "DSCP_CUSTOMIZATION" - This clause type deals with Differentiated Services Code Point (DSCP) customization.
+              #       DSCP is used for Quality of Service (QoS) to categorize and prioritize network traffic.
+              #   type: str
+          bandwidth_settings:
+            description: When the type is "bandwidth", the "bandwidth_settings" will include specific details related to bandwidth allocation
+            type: dict
             suboptions:
-              clause_type:
-                description: |
-                  - The type field determines the method by which traffic prioritization is applied
-                  - Either through interface bandwidth allocation or by assigning Differentiated Services Code Point (DSCP) values or both.
-                  Permissible values:
-                  - "BANDWIDTH": This clause type is used to specify traffic management settings based on bandwidth allocation.
-                    It defines how much bandwidth is allocated to different types of traffic within the network"
-                  - "DSCP_CUSTOMIZATION" - This clause type deals with Differentiated Services Code Point (DSCP) customization.
-                    DSCP is used for Quality of Service (QoS) to categorize and prioritize network traffic
-                type: str
-              bandwidth_settings:
-                description: When the type is "bandwidth", the "tc_bandwidth_settings" will include specific details related to bandwidth allocation
-                type: dict
-                suboptions:
-                  is_common_between_all_interface_speeds:
-                    description:
-                      - The field indicates that the bandwidth allocation settings defined in the configuration are
-                        uniform across all interface speeds or not.
-                    type: bool
-                  interface_speed_bandwidth_clauses:
-                    description:
-                      - Define the specific bandwidth allocation for different types of network traffic based on the interface speed.
-                      - This clause allows you to specify how bandwidth should be distributed across various traffic categories
-                    type: list
-                    elements: dict
-                    suboptions:
-                      interface_speed:
-                        description: |
-                          - The "interface_speed" refers to the specific data transfer rate (or bandwidth capacity) of a network interface.
-                          - It defines how much data the interface can handle within a given period, typically measured in bits per second (bps)
-                          - Permissible values:
-                            - "ALL": Refers to the total bandwidth applicable across all interface speeds, without specifying a particular speed.
-                            - "HUNDRED_GBPS": Represents a bandwidth of 100 gigabits per second (Gbps).
-                            - "TEN_GBPS": Represents a bandwidth of 10 gigabits per second (Gbps).
-                            - "ONE_GBPS": Represents a bandwidth of 1 gigabit per second (Gbps).
-                            - "HUNDRED_MBPS": Represents a bandwidth of 100 megabits per second (Mbps).
-                            - "TEN_MBPS": Represents a bandwidth of 10 megabits per second (Mbps).
-                            - "ONE_MBPS": Represents a bandwidth of 1 megabit per second (Mbps).
-                        type: str
-                      bandwidth_percentages:
-                        description:
-                          - The field specifies the percentage of total available bandwidth that should be allocated to different types of network traffic.
-                          - This allocation is used to prioritize specific traffic categories based on their importance or application requirements.
-                        type: dict
-                        suboptions:
-                          transactional_data:
-                            description: Refers to a category of network traffic that involves data transactions between systems.
-                            type: str
-                          best_effort:
-                            description:
-                              - Refers to a type of network traffic that does not require specific guarantees for quality or priority.
-                              - It is typically used for non-critical or general-purpose data transmission
-                            type: str
-                          voip_telephony:
-                            description:
-                              - Refers to network traffic for the voice and video calls transmitted over the internet rather
-                                than traditional telephone lines.
-                            type: str
-                          multimedia_streaming:
-                            description: Refers to network traffic for the transmission of audio and video content over the internet in real time
-                            type: str
-                          real_time_interactive:
-                            description: Refers to network traffic generated by applications that require low latency and immediate responsiveness.
-                            type: str
-                          multimedia_conferencing:
-                            description: Refers to network traffic that involve both audio and video communication.
-                            type: str
-                          signaling:
-                            description: Refers to network traffic that control messages and protocols used to manage communication sessions in a network.
-                            type: str
-                          scavenger:
-                            description:
-                              - Refers to low-priority network traffic that can be delayed or dropped in times of congestion
-                                without significant impact on application performance.
-                            type: str
-                          ops_admin_mgmt:
-                            description: Refers to network traffic associated with operations and administration management.
-                            type: str
-                          broadcast_video:
-                            description:
-                              - Refers to video content that is broadcasted or streamed to a large audience,
-                                typically in a one-to-many distribution model
-                            type: str
-                          network_control:
-                            description: Refers to traffic related to the management and operation of the network itself
-                            type: str
-                          bulk_data:
-                            description: Refers to large-volume data transfers that are typically non-time-sensitive and can tolerate delays or interruptions
-                            type: str
-              dscp_settings:
-                description: When the type is 'DSCP' the 'tc_dscp_settings' will include specific details related to dscp allocation
+              is_common_between_all_interface_speeds:
+                description:
+                  - The field indicates that the bandwidth allocation settings defined in the configuration are
+                    uniform across all interface speeds or not.
+                type: bool
+              interface_speed_bandwidth_clauses:
+                description:
+                  - Define the specific bandwidth allocation for different types of network traffic based on the interface speed.
+                  - This clause allows you to specify how bandwidth should be distributed across various traffic categories
                 type: list
                 elements: dict
                 suboptions:
-                  transactional_data:
-                    description: Refers to a category of network traffic that involves data transactions between systems.
+                  interface_speed:
+                    description: |
+                      - The "interface_speed" refers to the specific data transfer rate (or bandwidth capacity) of a network interface.
+                      - It defines how much data the interface can handle within a given period, typically measured in bits per second (bps)
+                      - Permissible values:
+                        - "ALL": Refers to the total bandwidth applicable across all interface speeds, without specifying a particular speed.
+                        - "HUNDRED_GBPS": Represents a bandwidth of 100 gigabits per second (Gbps).
+                        - "TEN_GBPS": Represents a bandwidth of 10 gigabits per second (Gbps).
+                        - "ONE_GBPS": Represents a bandwidth of 1 gigabit per second (Gbps).
+                        - "HUNDRED_MBPS": Represents a bandwidth of 100 megabits per second (Mbps).
+                        - "TEN_MBPS": Represents a bandwidth of 10 megabits per second (Mbps).
+                        - "ONE_MBPS": Represents a bandwidth of 1 megabit per second (Mbps).
                     type: str
-                  best_effort:
+                  bandwidth_percentages:
                     description:
-                      - Refers to a type of network traffic that does not require specific guarantees for quality or priority.
-                      - It is typically used for non-critical or general-purpose data transmission
-                    type: str
-                  voip_telephony:
-                    description:
-                      - Refers to network traffic for the voice and video calls transmitted over the internet or private networks
-                        rather than traditional telephone lines.
-                    type: str
-                  multimedia_streaming:
-                    description: Refers to network traffic for the transmission of audio and video content over the internet in real time
-                    type: str
-                  real_time_interactive:
-                    description: Refers to network traffic generated by applications that require low latency and immediate responsiveness.
-                    type: str
-                  multimedia_conferencing:
-                    description: Refers to network traffic that involve both audio and video communication.
-                    type: str
-                  signaling:
-                    description:
-                      - Refers to network traffic that control messages and protocols used to establish, manage,
-                        and terminate communication sessions in a network.
-                    type: str
-                  scavenger:
-                    description:
-                      - Refers to low-priority network traffic that can be delayed or dropped in times of congestion
-                        without significant impact on application performance.
-                    type: str
-                  ops_admin_mgmt:
-                    description: Refers to network traffic associated with operations and administration management.
-                    type: str
-                  broadcast_video:
-                    description: Refers to video content that is broadcasted or streamed to a large audience, typically in a one-to-many distribution model
-                    type: str
-                  network_control:
-                    description: Refers to traffic related to the management and operation of the network itself
-                    type: str
-                  bulk_data:
-                    description: Refers to large-volume data transfers that are typically non-time-sensitive and can tolerate delays or interruptions
-                    type: str
+                      - The field specifies the percentage of total available bandwidth that should be allocated to different types of network traffic.
+                      - This allocation is used to prioritize specific traffic categories based on their importance or application requirements.
+                    type: dict
+                    suboptions:
+                      transactional_data:
+                        description: Refers to a category of network traffic that involves data transactions between systems.
+                        type: str
+                      best_effort:
+                        description:
+                          - Refers to a type of network traffic that does not require specific guarantees for quality or priority.
+                          - It is typically used for non-critical or general-purpose data transmission.
+                        type: str
+                      voip_telephony:
+                        description:
+                          - Refers to network traffic for the voice and video calls transmitted over the internet rather
+                            than traditional telephone lines.
+                        type: str
+                      multimedia_streaming:
+                        description: Refers to network traffic for the transmission of audio and video content over the internet in real time.
+                        type: str
+                      real_time_interactive:
+                        description: Refers to network traffic generated by applications that require low latency and immediate responsiveness.
+                        type: str
+                      multimedia_conferencing:
+                        description: Refers to network traffic that involve both audio and video communication.
+                        type: str
+                      signaling:
+                        description: Refers to network traffic that control messages and protocols used to manage communication sessions in a network.
+                        type: str
+                      scavenger:
+                        description:
+                          - Refers to low-priority network traffic that can be delayed or dropped in times of congestion
+                            without significant impact on application performance.
+                        type: str
+                      ops_admin_mgmt:
+                        description: Refers to network traffic associated with operations and administration management.
+                        type: str
+                      broadcast_video:
+                        description:
+                          - Refers to video content that is broadcasted or streamed to a large audience,
+                            typically in a one-to-many distribution model.
+                        type: str
+                      network_control:
+                        description: Refers to traffic related to the management and operation of the network itself.
+                        type: str
+                      bulk_data:
+                        description: Refers to large-volume data transfers that are typically non-time-sensitive and can tolerate delays or interruptions
+                        type: str
+          dscp_settings:
+            description: When the type is 'DSCP' the 'dscp_settings' will include specific details related to dscp allocation.
+            type: list
+            elements: dict
+            suboptions:
+              transactional_data:
+                description: Refers to a category of network traffic that involves data transactions between systems.
+                type: str
+              best_effort:
+                description:
+                  - Refers to a type of network traffic that does not require specific guarantees for quality or priority.
+                  - It is typically used for non-critical or general-purpose data transmission.
+                type: str
+              voip_telephony:
+                description:
+                  - Refers to network traffic for the voice and video calls transmitted over the internet or private networks
+                    rather than traditional telephone lines.
+                type: str
+              multimedia_streaming:
+                description: Refers to network traffic for the transmission of audio and video content over the internet in real time.
+                type: str
+              real_time_interactive:
+                description: Refers to network traffic generated by applications that require low latency and immediate responsiveness.
+                type: str
+              multimedia_conferencing:
+                description: Refers to network traffic that involve both audio and video communication.
+                type: str
+              signaling:
+                description:
+                  - Refers to network traffic that control messages and protocols used to establish, manage,
+                    and terminate communication sessions in a network.
+                type: str
+              scavenger:
+                description:
+                  - Refers to low-priority network traffic that can be delayed or dropped in times of congestion
+                    without significant impact on application performance.
+                type: str
+              ops_admin_mgmt:
+                description: Refers to network traffic associated with operations and administration management.
+                type: str
+              broadcast_video:
+                description: Refers to video content that is broadcasted or streamed to a large audience, typically in a one-to-many distribution model
+                type: str
+              network_control:
+                description: Refers to traffic related to the management and operation of the network itself.
+                type: str
+              bulk_data:
+                description: Refers to large-volume data transfers that are typically non-time-sensitive and can tolerate delays or interruptions.
+                type: str
       application_set_details:
         description:
           - An Application Set is a logical grouping of network applications that share common policies and configuration settings.
@@ -199,10 +199,10 @@ options:
         type: list
         elements: dict
         suboptions:
-          application_set_name:
+          name:
             description:
-              - This field represent a name for the application set.
-              - Required for application set create and delete operations.
+              - This field represents name for the application set.
+              - Required for application set delete operations.
             type: str
       application_details:
         description:
@@ -212,71 +212,111 @@ options:
         type: list
         elements: dict
         suboptions:
-          application_name:
+          name:
             description:
               - This field represent a name for the application.
               - Required for application create, update and delete operations.
             type: str
-          network_applications:
+          description:
             description:
-              - Network applications are identified based on their behavior, traffic type, and protocols they use.
-              - A Network Application is a service that utilizes network resources to provide functionality, such as
-                communication, data transfer, or network management.
+              - This field represent a short description for the application.
+            type: str
+          helpString:
+            description:
+              - This field helps the purpose for what the application is created.
+            type: str
+          type:
+            description: |
+              - The type field in a Network Application refers to the way the application is identified or categorized within the network.
+              - Permissible values:
+              - _servername: Specifies a custom application is based on the server name for identifying the application.
+              - _url: Specifies a custom application is based on a URL for identifying the application.
+              - _server-ip: Specifies a custom application is based on the server IP address for identifying the application.
+            type: str
+          server_name:
+            description:
+              - If the type mentioned is servername then a name for the server has to be mentioned.
+            type: str
+          dscp:
+            description:
+              - If the type mentioned is serverip then a value for dscp or network_identity details has to be mentioned to creaate an application.
+              - The value for dscp should range between 0 - 63. 
+            type: str
+          network_identity:
+            description:
+              - If the type mentioned is server-ip then a value for dscp or network_identity details has to be mentioned to creaate an application.
             type: list
-            elements: dict
+            elements :dict
             suboptions:
-              application_type:
-                description: |
-                  - The type field in a Network Application refers to the way the application is identified or categorized within the network.
-                  - Permissible values:
-                  - _servername: Specifies a custom application based on the server name for identifying the application.
-                  - _url: Specifies a custom application based on a URL for identifying the application.
-                  - _server-ip: Specifies a custom application based on the server IP address for identifying the application.
+              protocol:
+                description:
+                  - This field represent The network protocol used by the application.
+                type: str
+              port:
+                description:
+                  - This field represent the port number for the application to communicate on.
+                type: str
+              ip_subnet:
+                description:
+                  - This field represent list of IP addresses or subnets associated with the application.
                 type: list
                 elements: str
-              server_name:
+              lower_port:
                 description:
-                  - If the type mentioned is servername then a name for the server has to be mentioned
+                  - This field represent the lower range of ports for network communication.
                 type: str
-              dscp:
+              upper_port:
                 description:
-                  - If the type mentioned is serverip then a value of dscp has to be mentioned
-                type: str
-              app_protocol:
-                description: |
-                  If the type mentioned is serverip then the protocol used has to be mentioned
-                  Permissible values:
-                    - 'TCP': Specifies the Transmission Control Protocol, used for reliable, connection-oriented communication.
-                    - 'UDP': Specifies the User Datagram Protocol, used for connectionless, faster communication without guaranteed delivery.
-                    - 'TCP/UDP': Indicates both TCP and UDP protocols are used, allowing flexibility in communication.
-                    - 'IP': Refers to the Internet Protocol, used for addressing and routing packets in a network.
-                type: str
-              url:
-                description:
-                  - If the type mentioned is url then url has to be mentioned
-                type: str
-              traffic_class:
-                description: |
-                  - Traffic classes help enforce network policies by determining how to prioritize different types of data, ensuring that critical
-                    applications receive the necessary bandwidth while less critical traffic can be deprioritized or handled with lower resources.
-                  - Permissible values:
-                    - "BROADCAST_VIDEO": Video traffic broadcasted to multiple recipients.
-                    - "BULK_DATA": Large data transfers like file uploads or backups.
-                    - "MULTIMEDIA_CONFERENCING": Audio and video traffic for conferencing.
-                    - "MULTIMEDIA_STREAMING": Streaming video or audio content.
-                    - "NETWORK_CONTROL": Traffic for managing and controlling network infrastructure.
-                    - "OPS_ADMIN_MGMT": Traffic for network operational and administrative tasks.
-                    - "REAL_TIME_INTERACTIVE": Low-latency traffic for real-time interactive applications.
-                    - "SIGNALING": Control traffic for setting up and managing sessions (e.g., VoIP).
-                    - "TRANSACTIONAL_DATA": Data related to transactions, like financial or retail operations.
-                    - "VOIP_TELEPHONY": Voice traffic over IP networks.
-                    - "BEST_EFFORT": Non-critical traffic delivered on a best-effort basis.
-                    - "SCAVENGER": Low-priority traffic, often background tasks.
-                type: str
-              category_id:
-                description:
-                  - If the type mentioned is url then url has to be mentioned
-                type: str
+                  - This field represent the upper range of ports for network communication.
+                type: str   
+          app_protocol:
+            description: |
+              - If the type mentioned is url or serverip then the protocol used by the application has to be mentioned to creaate an application.
+              - If the type is url then the app_protocol should be tcp.
+              - Permissible values:
+                - 'TCP': Specifies the Transmission Control Protocol, used for reliable, connection-oriented communication.
+                - 'UDP': Specifies the User Datagram Protocol, used for connectionless, faster communication without guaranteed delivery.
+                - 'TCP/UDP': Indicates both TCP and UDP protocols are used, allowing flexibility in communication.
+                - 'IP': Refers to the Internet Protocol, used for addressing and routing packets in a network.
+            type: str
+          url:
+            description:
+              - If the type mentioned is url then url has to be mentioned to creaate an application.
+            type: str
+          traffic_class:
+            description: |
+              - Traffic classes help enforce network policies by determining how to prioritize different types of data, ensuring that critical
+                applications receive the necessary bandwidth while less critical traffic can be deprioritized or handled with lower resources.
+              - Permissible values:
+                - "BROADCAST_VIDEO": Video traffic broadcasted to multiple recipients.
+                - "BULK_DATA": Large data transfers like file uploads or backups.
+                - "MULTIMEDIA_CONFERENCING": Audio and video traffic for conferencing.
+                - "MULTIMEDIA_STREAMING": Streaming video or audio content.
+                - "NETWORK_CONTROL": Traffic for managing and controlling network infrastructure.
+                - "OPS_ADMIN_MGMT": Traffic for network operational and administrative tasks.
+                - "REAL_TIME_INTERACTIVE": Low-latency traffic for real-time interactive applications.
+                - "SIGNALING": Control traffic for setting up and managing sessions (e.g., VoIP).
+                - "TRANSACTIONAL_DATA": Data related to transactions, like financial or retail operations.
+                - "VOIP_TELEPHONY": Voice traffic over IP networks.
+                - "BEST_EFFORT": Non-critical traffic delivered on a best-effort basis.
+                - "SCAVENGER": Low-priority traffic, often background tasks.
+            type: str
+          # category_id:
+          #   description:
+          #     - Category Id has to be mentioned to creaate an application.
+          #   type: str
+          ignore_conflict:
+            description:
+              - Flag indicating whether conflicts should be ignored.
+            type: str
+          rank:
+            description:
+              - The rank or priority of the application.
+            type: str
+          engine_id:
+            description:
+              - Identifier for the engine that manages the application.
+            type: str
           application_set_name:
             description: This represents under which appliction set we are going to create the application
             type: str
@@ -285,11 +325,11 @@ options:
         type: list
         elements: dict
         suboptions:
-          application_policy_name:
+          name:
             description:
               - This field represent a name for the application policy.
             type: str
-          delete_policy_details:
+          policy_details:
             description: |
               - Indicates the current status of the application policy. It helps track whether the policy is active, deleted, or restored.
               - Permissible values:
@@ -297,20 +337,20 @@ options:
                 - "DELETED": The policy has been removed and is no longer active.
                 - "RESTORED": The policy has been reactivated after being deleted.
             type: str
-          priority:
-            description: |
-              - The priority attribute defines the importance of the application policy
-              - Permissible values:
-                - 4095: This priority value is used when the producer refers to an application scalable group, indicating the highest priority.
-                - 100: This is the default priority value, typically used for non-scalable group applications or when no special priority is needed.
-            type: str
+          # priority:
+          #   description: |
+          #     - The priority attribute defines the importance of the application policy
+          #     - Permissible values:
+          #       - 4095: This priority value is used when the producer refers to an application scalable group, indicating the highest priority.
+          #       - 100: This is the default priority value, typically used for non-scalable group applications or when no special priority is needed.
+          #   type: str
           site_name:
             description:
               -  It typically represents the specific site or area within the network where the policy should be enforced.
             type: str
           device_type:
             description:
-              -  It typically represents whether the device is wired or wireless
+              -  It typically represents whether the device is wired or wireless.
             type: list
             elements: dict
             suboptions:
@@ -319,10 +359,10 @@ options:
                   - If device type is wireless, specify the device ip.
                   - Indicates is the IP address assigned to the device, used for network communication.
                 type: str
-              vlan_id:
+              wlan_id:
                 description:
-                  - If device type is wireless, specify the vlan id.
-                  - The VLAN (Virtual Local Area Network) ID associated with the device, used to segment network traffic.
+                  - If device type is wireless, specify the wlan id.
+                  - The wlan ID associated with the device, used to segment network traffic.
                 type: str
           application_queuing_profile_name:
             description:
@@ -344,37 +384,24 @@ options:
                     - "APPLICATION_POLICY_KNOBS": Refers to configurable settings that manage the application's network behavior,
                     such as traffic prioritization and resource allocation.
                 type: str
-              relevance_level:
+              relevance_details:
                 description: |
-                  - Indicates how relevant the application is to business operations.
-                  - Permissible values:
-                    - "BUSINESS_RELEVANT": The application is critical for business functions.
-                    - "BUSINESS_IRRELEVANT": The application is not essential for business operations.
-                    - "DEFAULT": A default setting when no specific relevance is assigned.
-                type: str
-          #   device_removal_behaviour:
-          #     description:
-          #     type: str
-          #   host_tracking_enabled:
-          #     description:
-          #     type: boolean
-          # producer:
-          #   description:
-          #   type: list
-          #   elements: dict
-          #   suboptions:
-            #   application_set_name:
-            #     description:
-            #     type: list
-          # consumer:
-          #   description:
-          #   type: list
-          #   elements: dict
-          #   suboptions:
-            #   application_set_name:
-            #     description:
-            #     type: list
-
+                  - Indicates details about how relevant the application is to business operations.
+                type: list
+                elements: dict
+                suboptions:
+                  relevance:
+                    description: |
+                      - Indicates whether the set is relevant, irrelevant or default to the application policy
+                      - Permissible values:
+                        - "BUSINESS_RELEVANT": The application is critical for business functions.
+                        - "BUSINESS_IRRELEVANT": The application is not essential for business operations.
+                        - "DEFAULT": A default setting when no specific relevance is assigned.
+                    type: str
+                  application_set_name:
+                    description: |
+                      - Include all the application sets for which the application policy has to be created
+                    type: str
 requirements:
 - dnacentersdk >= 2.9.3
 - python >= 3.9.19
@@ -414,15 +441,15 @@ EXAMPLES = r"""
 ---
 #Playbook 1 - application queuing profile - type both ("bandwidth", "dscp")
 
-- name: Application Queueing Profile Creation in Cisco Catalyst Center
+- name: Application Queuing Profile Creation in Cisco Catalyst Center
   hosts: localhost
   connection: local
   gather_facts: no
   vars_files:
-    - "credentials.yml"
+    - "credentials.yml"  
 
   tasks:
-    - name: Create a application Queueing Profile in Cisco Catalyst Center
+    - name: Create a application Queuing Profile in Cisco Catalyst Center
       cisco.dnac.application_policy_workflow_manager:
         dnac_host: "{{ dnac_host }}"
         dnac_username: "{{ dnac_username }}"
@@ -438,14 +465,13 @@ EXAMPLES = r"""
         dnac_task_poll_interval: 1
         state: merged
         config:
-          application_queuing_details:
-            - queuing_profile_name: "str"
-              queuing_policy_description: "str"
-              type: ["bandwidth", "dscp"]
-              bandwidth_settings:
-                is_common_between_all_interface_speeds: true
-                interface_speed: "ALL"
-                bandwidth_percentages:
+          - application_queuing_details:
+              - profile_name: "Asampleq9"
+                profile_description: "sample 12234567876543q"
+                bandwidth_settings:
+                  is_common_between_all_interface_speeds: true
+                  interface_speed: "ALL"
+                  bandwidth_percentages:
                     transactional_data: "5"
                     best_effort: "10"
                     voip_telephony: "15"
@@ -459,12 +485,12 @@ EXAMPLES = r"""
                     network_control: "3"
                     bulk_data: "5"
                 dscp_settings:
-                  multimedia_conferencing: "16"
-                  ops_admin_mgmt: "20"
+                  multimedia_conferencing: "20"
+                  ops_admin_mgmt: "23"
                   transactional_data: "28"
-                  voip_telephony: "46"
-                  multimedia_streaming: "26"
-                  broadcast_video: "40"
+                  voip_telephony: "45"
+                  multimedia_streaming: "27"
+                  broadcast_video: "46"
                   network_control: "48"
                   best_effort: "0"
                   signaling: "4"
@@ -472,7 +498,7 @@ EXAMPLES = r"""
                   scavenger: "2"
                   real_time_interactive: "34"
 
-#Playbook 2 - application queuing profile - type bandwidth
+#Playbook type 2 - for is_common_between_all_interface_speeds: true
 
 - name: Application Queueing Profile Creation in Cisco Catalyst Center
   hosts: localhost
@@ -498,14 +524,311 @@ EXAMPLES = r"""
         dnac_task_poll_interval: 1
         state: merged
         config:
-        - application_queuing_details:
-            - queuing_profile_name: "newprofile1"
-              queuing_policy_description: "sample desc"
-              type: ["bandwidth"]
+          - application_queuing_details:
+            - profile_name: "sample4"
+              profile_description: "sample1"
               bandwidth_settings:
                 is_common_between_all_interface_speeds: true
                 interface_speed: "ALL"
                 bandwidth_percentages:
+                  transactional_data: "5"
+                  best_effort: "10"
+                  voip_telephony: "15"
+                  multimedia_streaming: "10"
+                  real_time_interactive: "20"
+                  multimedia_conferencing: "10"
+                  signaling: "10"
+                  scavenger: "5"
+                  ops_admin_mgmt: "5"
+                  broadcast_video: "2"
+                  network_control: "3"
+                  bulk_data: "5"
+
+# Playbook-3 for different interface speeds
+
+- name: Application Queueing Profile Creation in Cisco Catalyst Center
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - "credentials.yml"
+
+  tasks:
+    - name: Create a application Queueing Profile in Cisco Catalyst Center
+      cisco.dnac.application_policy_workflow_manager:
+        dnac_host: "{{ dnac_host }}"
+        dnac_username: "{{ dnac_username }}"
+        dnac_password: "{{ dnac_password }}"
+        dnac_verify: "{{ dnac_verify }}"
+        dnac_port: "{{ dnac_port }}"
+        dnac_version: "{{ dnac_version }}"
+        dnac_debug: "{{ dnac_debug }}"
+        dnac_log: True
+        dnac_log_level: DEBUG
+        config_verify: True
+        dnac_api_task_timeout: 1000
+        dnac_task_poll_interval: 1
+        state: merged
+        config:
+          - application_queuing_details:
+            - profile_name: "newprofile20"
+              profile_description: "sample desc"
+              bandwidth_settings:
+                is_common_between_all_interface_speeds: false
+                interface_speed_settings:
+                  - interface_speed: "HUNDRED_GBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "10"
+                      voip_telephony: "20"
+                      multimedia_streaming: "5"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "10"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+                  - interface_speed: "TEN_GBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "5"
+                      voip_telephony: "25"
+                      multimedia_streaming: "5"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "5"
+                      signaling: "6"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "15"
+                  - interface_speed: "ONE_GBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "10"
+                      voip_telephony: "15"
+                      multimedia_streaming: "10"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "10"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+                  - interface_speed: "HUNDRED_MBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "10"
+                      voip_telephony: "5"
+                      multimedia_streaming: "15"
+                      real_time_interactive: "25"
+                      multimedia_conferencing: "10"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+                  - interface_speed: "TEN_MBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "10"
+                      voip_telephony: "15"
+                      multimedia_streaming: "10"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "10"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+                  - interface_speed: "ONE_MBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "5"
+                      voip_telephony: "25"
+                      multimedia_streaming: "10"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "5"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+
+# Playbook-4 for some interface speeds having common bandwidth percentage
+
+- name: Application Queueing Profile Creation in Cisco Catalyst Center
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - "credentials.yml"
+
+  tasks:
+    - name: Create a application Queueing Profile in Cisco Catalyst Center
+      cisco.dnac.application_policy_workflow_manager:
+        dnac_host: "{{ dnac_host }}"
+        dnac_username: "{{ dnac_username }}"
+        dnac_password: "{{ dnac_password }}"
+        dnac_verify: "{{ dnac_verify }}"
+        dnac_port: "{{ dnac_port }}"
+        dnac_version: "{{ dnac_version }}"
+        dnac_debug: "{{ dnac_debug }}"
+        dnac_log: True
+        dnac_log_level: DEBUG
+        config_verify: True
+        dnac_api_task_timeout: 1000
+        dnac_task_poll_interval: 1
+        state: merged
+        config:
+          - application_queuing_details:
+            - profile_name: "newprofile21"
+              profile_description: "sample desc"
+              bandwidth_settings:
+                is_common_between_all_interface_speeds: false
+                interface_speed_settings:
+                  - interface_speed: "HUNDRED_GBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "10"
+                      voip_telephony: "20"
+                      multimedia_streaming: "5"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "10"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+                  - interface_speed: "TEN_GBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "5"
+                      voip_telephony: "25"
+                      multimedia_streaming: "5"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "5"
+                      signaling: "6"
+                      scavenger: "5"
+                      ops_admin_mgmt: "4"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "15"
+                  - interface_speed: "HUNDRED_MBPS"
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "10"
+                      voip_telephony: "5"
+                      multimedia_streaming: "15"
+                      real_time_interactive: "25"
+                      multimedia_conferencing: "10"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+                  - interface_speed: TEN_MBPS, ONE_MBPS, ONE_GBPS
+                    bandwidth_percentages:
+                      transactional_data: "5"
+                      best_effort: "10"
+                      voip_telephony: "15"
+                      multimedia_streaming: "10"
+                      real_time_interactive: "20"
+                      multimedia_conferencing: "10"
+                      signaling: "10"
+                      scavenger: "5"
+                      ops_admin_mgmt: "5"
+                      broadcast_video: "2"
+                      network_control: "3"
+                      bulk_data: "5"
+
+          
+# Playbook 5 - application queuing profile - type dscp
+
+- name: Application Queuing Profile Creation in Cisco Catalyst Center
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - "credentials.yml"  
+
+  tasks:
+    - name: Create a application Queuing Profile in Cisco Catalyst Center
+      cisco.dnac.application_policy_workflow_manager:
+        dnac_host: "{{ dnac_host }}"
+        dnac_username: "{{ dnac_username }}"
+        dnac_password: "{{ dnac_password }}"
+        dnac_verify: "{{ dnac_verify }}"
+        dnac_port: "{{ dnac_port }}"
+        dnac_version: "{{ dnac_version }}"
+        dnac_debug: "{{ dnac_debug }}"
+        dnac_log: True
+        dnac_log_level: DEBUG
+        config_verify: True
+        dnac_api_task_timeout: 1000
+        dnac_task_poll_interval: 1
+        state: merged
+        config:
+          - application_queuing_details:
+              - profile_name: "Asampleq9"
+                profile_description: "sample 12234567876543q"
+                dscp_settings:
+                  multimedia_conferencing: "20"
+                  ops_admin_mgmt: "23"
+                  transactional_data: "28"
+                  voip_telephony: "45"
+                  multimedia_streaming: "27"
+                  broadcast_video: "46"
+                  network_control: "48"
+                  best_effort: "0"
+                  signaling: "4"
+                  bulk_data: "10"
+                  scavenger: "2"
+                  real_time_interactive: "34"
+
+# Playbook 6 – update application queuing profile 
+
+- name: Application Queuing Profile update in Cisco Catalyst Center
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - "credentials.yml"  
+
+  tasks:
+    - name: update application Queuing Profile in Cisco Catalyst Center
+      cisco.dnac.application_policy_workflow_manager:
+        dnac_host: "{{ dnac_host }}"
+        dnac_username: "{{ dnac_username }}"
+        dnac_password: "{{ dnac_password }}"
+        dnac_verify: "{{ dnac_verify }}"
+        dnac_port: "{{ dnac_port }}"
+        dnac_version: "{{ dnac_version }}"
+        dnac_debug: "{{ dnac_debug }}"
+        dnac_log: True
+        dnac_log_level: DEBUG
+        config_verify: True
+        dnac_api_task_timeout: 1000
+        dnac_task_poll_interval: 1
+        state: merged
+        config:
+          - application_queuing_details:
+              - profile_name: "Asampleq9"
+		            new_profile_name: "Asampleq99"
+                profile_description: "sample 12234567876543q"
+		            new_profile_description: "sample"
+                bandwidth_settings:
+                  is_common_between_all_interface_speeds: true
+                  interface_speed: "ALL"
+                  bandwidth_percentages:
                     transactional_data: "5"
                     best_effort: "10"
                     voip_telephony: "15"
@@ -518,44 +841,13 @@ EXAMPLES = r"""
                     broadcast_video: "2"
                     network_control: "3"
                     bulk_data: "5"
-
-#Playbook 3 - application queuing profile - type dscp
-
-- name: Application Queueing Profile Creation in Cisco Catalyst Center
-  hosts: localhost
-  connection: local
-  gather_facts: no
-  vars_files:
-    - "credentials.yml"
-
-  tasks:
-    - name: Create a application Queueing Profile in Cisco Catalyst Center
-      cisco.dnac.application_policy_workflow_manager:
-        dnac_host: "{{ dnac_host }}"
-        dnac_username: "{{ dnac_username }}"
-        dnac_password: "{{ dnac_password }}"
-        dnac_verify: "{{ dnac_verify }}"
-        dnac_port: "{{ dnac_port }}"
-        dnac_version: "{{ dnac_version }}"
-        dnac_debug: "{{ dnac_debug }}"
-        dnac_log: True
-        dnac_log_level: DEBUG
-        config_verify: True
-        dnac_api_task_timeout: 1000
-        dnac_task_poll_interval: 1
-        state: merged
-        config:
-          application_queuing_details:
-            - queuing_profile_name: "str"
-              queuing_policy_description: "str"
-                type: ["dscp"]
                 dscp_settings:
-                  multimedia_conferencing: "16"
-                  ops_admin_mgmt: "20"
+                  multimedia_conferencing: "20"
+                  ops_admin_mgmt: "23"
                   transactional_data: "28"
-                  voip_telephony: "46"
-                  multimedia_streaming: "26"
-                  broadcast_video: "40"
+                  voip_telephony: "45"
+                  multimedia_streaming: "27"
+                  broadcast_video: "46"
                   network_control: "48"
                   best_effort: "0"
                   signaling: "4"
@@ -563,8 +855,7 @@ EXAMPLES = r"""
                   scavenger: "2"
                   real_time_interactive: "34"
 
-
-#Playbook 4 - delete application queuing profile
+# Playbook 7 - delete application queuing profile
 
 - name: Delete application queuing profile from Cisco Catalyst Center
   hosts: localhost
@@ -589,38 +880,13 @@ EXAMPLES = r"""
         dnac_task_poll_interval: 1
         state: deleted
         config:
-          application_queuing_details:
-            - queuing_profile_name: "str"
+          - application_queuing_details:
+            - profile_name: "sample_queuing_profile"
 
-#Playbook 5 - create application set
 
-- name: Application Set Creation in Cisco Catalyst Center
-  hosts: localhost
-  connection: local
-  vars_files:
-    - "credentials.yml"
-
-  tasks:
-    - name: Create application set on Cisco Catalyst Center
-      cisco.dnac.application_policy_workflow_manager:
-        dnac_host: "{{ dnac_host }}"
-        dnac_username: "{{ dnac_username }}"
-        dnac_password: "{{ dnac_password }}"
-        dnac_verify: "{{ dnac_verify }}"
-        dnac_port: "{{ dnac_port }}"
-        dnac_version: "{{ dnac_version }}"
-        dnac_debug: "{{ dnac_debug }}"
-        dnac_log: true
-        dnac_log_level: DEBUG
-        config_verify: true
-        dnac_api_task_timeout: 1000
-        dnac_task_poll_interval: 1
-        state: merged
-        config:
-          application_set_details:
-            - application_set_name: "str"
-
-#Playbook 6 - delete application set
+Application Set Ansible Playbook:
+            
+# Playbook 8 - delete application set
 
 - name: Application Set deletion from Cisco Catalyst Center
   hosts: localhost
@@ -645,44 +911,12 @@ EXAMPLES = r"""
         dnac_task_poll_interval: 1
         state: deleted
         config:
-          application_set_details:
-            - application_set_name: "str"
+          - application_set_details:
+            - name: "sample_application_set"
 
-#Playbook 7 - create application - type server_name
+Application Ansible Playbook:
 
-- name: Create application on Cisco Catalyst Center
-  hosts: localhost
-  connection: local
-  vars_files:
-    - "credentials.yml"
-
-  tasks:
-    - name: Create application on Cisco Catalyst Center
-      cisco.dnac.application_policy_workflow_manager:
-        dnac_host: "{{ dnac_host }}"
-        dnac_username: "{{ dnac_username }}"
-        dnac_password: "{{ dnac_password }}"
-        dnac_verify: "{{ dnac_verify }}"
-        dnac_port: "{{ dnac_port }}"
-        dnac_version: "{{ dnac_version }}"
-        dnac_debug: "{{ dnac_debug }}"
-        dnac_log: true
-        dnac_log_level: DEBUG
-        config_verify: true
-        dnac_api_task_timeout: 1000
-        dnac_task_poll_interval: 1
-        state: merged
-        config:
-          application_details:
-            - application_name: "str"
-              network_applications:
-                - application_type: [server_name]
-                  server_name: "str"
-                  traffic_class: "str"
-                  category_id: "01440e2c-7cbb-48a9-aa14-df3af28b4582"
-              application_set_name: "str"
-
-#Playbook 8 - create application - type server_ip
+# Playbook 9 - create application - type server_name
 
 - name: Create application on Cisco Catalyst Center
   hosts: localhost
@@ -707,18 +941,19 @@ EXAMPLES = r"""
         dnac_task_poll_interval: 1
         state: merged
         config:
-          application_details:
-            - application_name: "str"
-              network_applications:
-                - application_type: [server_ip]
-                  dscp: "str"
-                  network_identifier
-                  app_protocol: "str"
-                  traffic_class: "str"
-                  category_id: "01440e2c-7cbb-48a9-aa14-df3af28b4582"
-              application_set_name: "str"
+          - application_details:
+            - name: "sample"       
+              description: "sample"  
+	  	      helpstring: "sample"      
+              type: "server_name"       
+              server_name: "www.sampleserverapp.com"    
+              traffic_class: "BROADCAST_VIDEO" 
+              ignore_conflict: true 
+              rank: "1"
+              engineId: "100"
+              application_set_name: "authentication_services"
 
-#Playbook 9 - create application - type url
+# Playbook 10 - create application - type server_ip
 
 - name: Create application on Cisco Catalyst Center
   hosts: localhost
@@ -743,16 +978,64 @@ EXAMPLES = r"""
         dnac_task_poll_interval: 1
         state: merged
         config:
-          application_details:
-            - application_name: "str"
-              network_applications:
-                - application_type: [url]
-                  url: "str"
-                  traffic_class: "str"
-                  category_id: "01440e2c-7cbb-48a9-aa14-df3af28b4582"
-              application_set_name: "str"
+          - application_details:
+              - name: "app30"
+                helpstring: "sample"
+                description: "sample"
+                type: "server_ip"
+                app_protocol: "UDP"
+                network_identity_setting:
+                  protocol: "UDP"
+                  port: "2000"
+                  ip_subnet: ["1.1.1.1","2.2.2.2","3.3.3.3"]
+                  lower_port: "10"
+                  upper_port: "100"
+                dscp: "2"
+                traffic_class: "BROADCAST_VIDEO"
+                ignore_conflict: true
+                rank: "23"
+                engine_id: "4"
+                application_set_name: "sampleapplset"
 
-#Playbook 10 - delete application
+# Playbook 11 - create application - type url
+
+- name: Create application on Cisco Catalyst Center
+  hosts: localhost
+  connection: local
+  vars_files:
+    - "credentials.yml"
+
+  tasks:
+    - name: Create application on Cisco Catalyst Center
+      cisco.dnac.application_policy_workflow_manager:
+        dnac_host: "{{ dnac_host }}"
+        dnac_username: "{{ dnac_username }}"
+        dnac_password: "{{ dnac_password }}"
+        dnac_verify: "{{ dnac_verify }}"
+        dnac_port: "{{ dnac_port }}"
+        dnac_version: "{{ dnac_version }}"
+        dnac_debug: "{{ dnac_debug }}"
+        dnac_log: true
+        dnac_log_level: DEBUG
+        config_verify: true
+        dnac_api_task_timeout: 1000
+        dnac_task_poll_interval: 1
+        state: merged
+        config:
+          - application_details:
+            - name: "app8"
+              helpstring: "sample"
+              description: "sample"
+              type: "url"
+              app_protocol: "TCP"
+              url: "www.sample.com"
+              traffic_class: "BROADCAST_VIDEO"
+              ignore_conflict: true
+              rank: "23"
+              engine_id: "4"
+              application_set_name: "sampleapplset"
+
+# Playbook 12 - delete application
 
 - name: Delete application from Cisco Catalyst Center
   hosts: localhost
@@ -777,17 +1060,19 @@ EXAMPLES = r"""
         dnac_task_poll_interval: 1
         state: deleted
         config:
-          application_details:
-            - application_name: "str"
+          - application_details:
+              - name: "sample_application"
 
-#Playbook 11 - create application policy
+Application Policy Ansible Playbook:
+
+# Playbook 13 - create application policy - wireless
 
 - name: Application Policy Creation in Cisco Catalyst Center
   hosts: localhost
   connection: local
   gather_facts: no
   vars_files:
-    - "credentials.yml"
+    - "credentials.yml"  
 
   tasks:
     - name: Create a application Policy in Cisco Catalyst Center
@@ -806,26 +1091,68 @@ EXAMPLES = r"""
         dnac_task_poll_interval: 1
         state: merged
         config:
-          application_policy_details:
-            - application_policy_name: "str"
-              delete_policy_status: "str"
-              priority: "str"
-              site_name: "str"
-              device_type: "str"
-              device_ip: "str"
-              vlan_id: "str"
-              application_queuing_profile_name: "str"
-              clause:
-                - type: "str"
-                  relevance_level: "str"
-                  device_removal_behaviour: "str"
-                  host_tracking_enabled: "boolean"
-              producer:
-                - application_set_name: "list"
-              consumer:
-                - application_set_name: "list"
+          - application_policy_details:
+              name: "sample_application_policy"
+              policy_status: "deployed"                                  
+              site_name: "global/Chennai/FLOOR1"       
+              device_type: "wireless"
+              device:              
+                - device_ip: "204.1.2.3"
+                  wlan_id: "18"
+              application_queuing_profile_name: "sample_queuing_profile"      
+              clause: 
+                - clause_type: “BUSINESS_RELEVANCE"  
+                  relevance_details:                            
+                    - relevance: "BUSINESS_RELEVANT"                            
+                      application_set_name: ["sample_application_set", "sample_application_set"]
+                    - relevance: "BUSINESS_IRRELEVANT"                            
+                      application_set_name: ["sample_application_set", "sample_application_set"]
+                    - relevance: "DEFAULT"                            
+                      application_set_name: ["sample_application_set", "sample_application_set"]
 
-#Playbook 12 - delete application policy
+# Playbook 14 - create application policy - wired
+
+- name: Application Policy Creation in Cisco Catalyst Center
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - "credentials.yml"  
+
+  tasks:
+    - name: Create a application Policy in Cisco Catalyst Center
+      cisco.dnac.application_policy_workflow_manager:
+        dnac_host: "{{ dnac_host }}"
+        dnac_username: "{{ dnac_username }}"
+        dnac_password: "{{ dnac_password }}"
+        dnac_verify: "{{ dnac_verify }}"
+        dnac_port: "{{ dnac_port }}"
+        dnac_version: "{{ dnac_version }}"
+        dnac_debug: "{{ dnac_debug }}"
+        dnac_log: True
+        dnac_log_level: DEBUG
+        config_verify: True
+        dnac_api_task_timeout: 1000
+        dnac_task_poll_interval: 1
+        state: merged
+        config:
+            - application_policy_details:
+                name: "sample_application_policy"
+                policy_status: "deployed"                                  
+                site_name: "global/Chennai/FLOOR1"       
+                device_type: "wireless"
+                application_queuing_profile_name: "sample_queuing_profile"      
+                clause: 
+                - clause_type: “BUSINESS_RELEVANCE"  
+                    relevance_details:                            
+                    - relevance: "BUSINESS_RELEVANT"                            
+                        application_set_name: ["sample_application_set", "sample_application_set"]
+                    - relevance: "BUSINESS_IRRELEVANT"                            
+                        application_set_name: ["sample_application_set", "sample_application_set"]
+                    - relevance: "DEFAULT"                            
+                        application_set_name: ["sample_application_set", "sample_application_set"]
+
+#  Playbook 15 - delete application policy
 
 - name: Application Policy Deletion from Cisco Catalyst Center
   hosts: localhost
@@ -850,8 +1177,9 @@ EXAMPLES = r"""
       dnac_task_poll_interval: 1
       state: deleted
       config:
-        application_policy_details:
-          - policy_name: "str"
+        - application_policy_details:
+          - name: "sample_application_policy"
+
 """
 
 RETURN = r"""
@@ -1455,20 +1783,20 @@ class ApplicationPolicy(DnacBase):
             self.log(self.msg, "ERROR")
             return self
   
-        application_details = config_data.get('application_details', [])
-        if not isinstance(application_details, list):
+        application_details = config_data.get('application_details', {})
+        if not isinstance(application_details, dict):
             self.status = "failed"
-            self.msg = "'application_details' should be a list, found: {0}".format(type(application_details))
+            self.msg = "'application_details' should be a dict, found: {0}".format(type(application_details))
             self.log(self.msg, "ERROR")
             return self
 
-        # application_policy_details = config_data.get('application_policy_details', [])
-        # self.log(application_policy_details)
-        # if not isinstance(application_policy_details, dict):
-        #     self.status = "failed"
-        #     self.msg = "'application_policy_details' should be a dict, found: {0}".format(type(application_policy_details))
-        #     self.log(self.msg, "ERROR")
-        #     return self
+        application_policy_details = config_data.get('application_policy_details', {})
+        self.log(application_policy_details)
+        if not isinstance(application_policy_details, dict):
+            self.status = "failed"
+            self.msg = "'application_policy_details' should be a dict, found: {0}".format(type(application_policy_details))
+            self.log(self.msg, "ERROR")
+            return self
 
         # Validate each item in the application_queuing_details list
         for item in application_queuing_details:
@@ -1552,7 +1880,7 @@ class ApplicationPolicy(DnacBase):
 
             current_queuing_profile = response.get("response")
             queuing_profile_exists = True
-            self.log("got the details for queuing_profile_exists: {0} and  current_queuing_profile: {1}".format(queuing_profile_exists, current_queuing_profile))
+            self.log("got the details for queuing_profile_exists: {0} and current_queuing_profile: {1}".format(queuing_profile_exists, current_queuing_profile))
             return queuing_profile_exists, current_queuing_profile
 
         except Exception as e:
@@ -1603,7 +1931,7 @@ class ApplicationPolicy(DnacBase):
 
             current_application_set = response.get("response")
             application_set_exists = True
-            self.log("got the details for queuing_profile_exists: {0} and  current_application_set: {1}".format(application_set_exists, current_application_set))
+            self.log("got the details for queuing_profile_exists: {0} and current_application_set: {1}".format(application_set_exists, current_application_set))
             return application_set_exists, current_application_set
 
         except Exception as e:
@@ -1635,7 +1963,6 @@ class ApplicationPolicy(DnacBase):
 
         application_set_id = ''
         try:
-            
             response = self.dnac._exec(
                 family="application_policy",
                 function='get_application_sets',
@@ -1704,7 +2031,7 @@ class ApplicationPolicy(DnacBase):
 
             current_application = response.get("response")
             application_exists = True
-            self.log("got the details for application_exists: {0} and  current_application_set: {1}".format(application_exists, current_application))
+            self.log("got the details for application_exists: {0} and current_application_set: {1}".format(application_exists, current_application))
             return application_exists, current_application
 
         except Exception as e:
@@ -1802,7 +2129,7 @@ class ApplicationPolicy(DnacBase):
 
             current_application_policy = response.get("response")
             application_policy_exists = True
-            self.log("got the details for queuing_profile_exists: {0} and  current_application_policy: {1}".format(application_policy_exists, current_application_policy))
+            self.log("got the details for queuing_profile_exists: {0} and current_application_policy: {1}".format(application_policy_exists, current_application_policy))
             return application_policy_exists, current_application_policy
 
         except Exception as e:
@@ -1826,7 +2153,6 @@ class ApplicationPolicy(DnacBase):
         """
         have = {}
         if self.want.get("application_queuing_details"):
-            self.log("inside application_queuing_details")
             application_queuing_details = self.want.get("application_queuing_details")
             for detail in application_queuing_details:
                 if detail.get("profile_name"):
@@ -1845,7 +2171,7 @@ class ApplicationPolicy(DnacBase):
 
         if self.want.get("application_policy_details"):
             application_policy_details = self.want.get("application_policy_details")
-            application_policy_name = self.want.get("application_policy_details", {}).get("application_policy_name")
+            application_policy_name = self.want.get("application_policy_details", {}).get("name")
             self.log(application_policy_name)
 
             if not application_policy_name:
@@ -1863,20 +2189,37 @@ class ApplicationPolicy(DnacBase):
                 have["current_queuing_profile"] = current_queuing_profile
                 have["queuing_profile_exists"] = queuing_profile_exists
 
-            if application_policy_details.get("application_policy_name"):
-                application_policy_name = application_policy_details.get("application_policy_name")
-                self.log(application_policy_name)
+                if not queuing_profile_exists:
+                    self.status = "failed"
+                    self.msg = (
+                        "The application queuing profile does not exist - {0} ".format(queuing_profile_name)
+                    )
+                    self.log(self.msg, "ERROR")
+                    self.result['response'] = self.msg
+                    self.check_return_status()
+
+            if application_policy_details.get("name"):
+                application_policy_name = application_policy_details.get("name")
                 application_policy_exists, current_application_policy = self.get_application_policy_details(application_policy_name)
                 have["current_application_policy"] = current_application_policy
                 have["application_policy_exists"] = application_policy_exists
 
         if self.want.get("application_details"):
-            self.log("inside application")
             application_details = self.want.get("application_details")
             self.log(application_details)
+            application_name = application_details.get("name")
 
-            if application_details.get("application_name"):
-                application_name = application_details.get("application_name")
+            if not application_name:
+                self.status = "failed"
+                self.msg = (
+                    "The following parameter(s): 'name' could not be found  and are mandatory to create application ."
+                )
+                self.log(self.msg, "ERROR")
+                self.result['response'] = self.msg
+                self.check_return_status()
+
+            if application_details.get("name"):
+                application_name = application_details.get("name")
                 application_exists, current_application = self.get_application_details(application_name)
                 have["current_application"] = current_application
                 have["application_exists"] = application_exists
@@ -1921,6 +2264,116 @@ class ApplicationPolicy(DnacBase):
         if config.get("application_policy_details"):
             self.get_diff_application_policy().check_return_status()
         
+        return self
+
+    def is_update_required_for_application_policy(self):
+        application_policy_details = self.have
+
+        # If application policy does not exist, create it and return
+        if application_policy_details.get("application_policy_exists") == False:
+            self.create_application_policy()
+            return self
+
+        req_application_policy_details = self.config.get("application_policy_details")
+        application_queuing_profile_name = req_application_policy_details.get("application_queuing_profile_name")
+        site_names = req_application_policy_details.get("site_name")
+        site_ids = [self.get_site_id(site_name)[1] for site_name in site_names]
+        current_application_policy = application_policy_details.get("current_application_policy")
+
+        self.log(req_application_policy_details)
+
+        # Flags to check if updates are required
+        is_update_required_for_queuing_profile = any(
+            application_queuing_profile_name not in contract.get("name")
+            for contract in current_application_policy if contract.get('contract')
+        )
+        is_update_required_for_site = any(
+            set(site_ids) != set(application_policy.get("advancedPolicyScope").get("advancedPolicyScopeElement")[0].get("groupId"))
+            for application_policy in current_application_policy
+        )
+
+        # Logging the update status
+        if is_update_required_for_queuing_profile:
+            self.log("update required for queuing profile")
+        else:
+            self.log("no update required for queuing profile")
+
+        if is_update_required_for_site:
+            self.log("update required for site")
+        else:
+            self.log("no update required for site")
+
+        other_check_names = ["application_queuing_profile", "site_name"]
+        no_update_require = []
+        if not is_update_required_for_queuing_profile:
+            no_update_require.append("application_queuing_profile")
+        if not is_update_required_for_site:
+            no_update_require.append("site_name")
+
+        update_not_required = True
+        for check in other_check_names:
+            if check not in no_update_require:
+                update_not_required = False
+                break
+        
+        # Final check: If no update is required for both queuing profile and site name
+        if all(check in no_update_require for check in ["application_queuing_profile", "site_name"]):
+            self.log("no update required for application policy")
+            return False
+
+        # Prepare application set names based on relevance
+        want_business_relevant_set_name, want_business_irrelevant_set_name, want_default_set_name = [], [], []
+        have_business_relevant_set_name, have_business_irrelevant_set_name, have_default_set_name = [], [], []
+
+        application_set_names = req_application_policy_details.get("clause")
+        for item in application_set_names:
+            for relevance in item['relevance_details']:
+                if relevance['relevance'] == 'BUSINESS_RELEVANT':
+                    want_business_relevant_set_name.extend(relevance['application_set_name'])
+                elif relevance['relevance'] == 'BUSINESS_IRRELEVANT':
+                    want_business_irrelevant_set_name.extend(relevance['application_set_name'])
+                elif relevance['relevance'] == 'DEFAULT':
+                    want_default_set_name.extend(relevance['application_set_name'])
+
+        # Process current application set names from existing policy
+        for application_sets in current_application_policy:
+            clause = application_sets.get("exclusiveContract", {}).get("clause")
+            if clause and clause[0].get("relevanceLevel"):
+                current_relevance_type = clause[0].get("relevanceLevel")
+                app_set_name = application_sets.get("name").replace(application_sets.get("policyScope") + '_', "")
+
+                if current_relevance_type == "BUSINESS_RELEVANT":
+                    have_business_relevant_set_name.append(app_set_name)
+                elif current_relevance_type == "BUSINESS_IRRELEVANT":
+                    have_business_irrelevant_set_name.append(app_set_name)
+                elif current_relevance_type == "DEFAULT":
+                    have_default_set_name.append(app_set_name)
+
+        # Compare and append missing items
+        final_business_relevant_set_name, final_business_irrelevant_set_name, final_default_set_name = [], [], []
+        for want_item, have_item, final_item in [
+            (want_business_relevant_set_name, have_business_relevant_set_name, final_business_relevant_set_name),
+            (want_business_irrelevant_set_name, have_business_irrelevant_set_name, final_business_irrelevant_set_name),
+            (want_default_set_name, have_default_set_name, final_default_set_name)
+        ]:
+            final_item.extend(item for item in want_item if item not in have_item)
+
+        # Ensure the default list is empty if no relevant/default values are there
+        if not want_default_set_name:
+            final_default_set_name = []
+        if not want_business_relevant_set_name:
+            final_business_relevant_set_name = []
+        if not want_business_irrelevant_set_name:
+            final_business_irrelevant_set_name = []
+
+        if update_not_required :
+            if not any([final_business_relevant_set_name, final_business_irrelevant_set_name, final_default_set_name]):
+                self.log("no update required for application policy")
+                return False
+
+        return True
+
+
     def get_diff_application_policy(self):
 
         application_policy_details = self.have
@@ -1930,7 +2383,7 @@ class ApplicationPolicy(DnacBase):
             return self
 
         req_application_policy_details = self.config.get("application_policy_details")
-        application_policy_name = self.want.get("application_policy_details", {}).get("application_policy_name")
+        application_policy_name = self.want.get("application_policy_details", {}).get("name")
         site_names = req_application_policy_details.get("site_name")
         site_ids = []
         for site_name in site_names:
@@ -1974,7 +2427,7 @@ class ApplicationPolicy(DnacBase):
 
             payload = {
                     "id": current_application_policy_queuing_id,
-                    "name": f"{application_policy_name}_{application_queuing_profile_name}",
+                    "name": "{}_{}".format(application_policy_name, application_queuing_profile_name),
                     "deletePolicyStatus": current_application_policy[0].get("deletePolicyStatus"),
                     "policyScope": current_application_policy[0].get("policyScope"),
                     "priority": current_application_policy[0].get("priority"),
@@ -2033,10 +2486,9 @@ class ApplicationPolicy(DnacBase):
                     want_default_set_name.extend(relevance['application_set_name'])
                     total_want_app_set.extend(relevance['application_set_name'])
 
-        self.log(f"Wanted Business Irrelevant Set: {want_business_irrelevant_set_name}")
-        self.log(f"Wanted Business Relevant Set: {want_business_relevant_set_name}")
-        self.log(f"Wanted Default Set: {want_default_set_name}")
-
+        self.log("Wanted Business Irrelevant Set: {}".format(want_business_irrelevant_set_name))
+        self.log("Wanted Business Relevant Set: {}".format(want_business_relevant_set_name))
+        self.log("Wanted Default Set: {}".format(want_default_set_name))
 
         # Populate current application set names
         for application_sets in current_application_policy:
@@ -2054,8 +2506,7 @@ class ApplicationPolicy(DnacBase):
 
                     for set_name in want_business_relevant_set_name:
                         if set_name in application_sets.get("name"):
-                            self.log(f"No update required for: {set_name}")
-
+                            self.log("No update required for: {}".format(set_name))
 
                 # Process Business Irrelevant
                 elif current_relevance_type == "BUSINESS_IRRELEVANT":
@@ -2067,7 +2518,7 @@ class ApplicationPolicy(DnacBase):
 
                     for set_name in want_business_irrelevant_set_name:
                         if set_name in application_sets.get("name"):
-                            self.log(f"No update required for: {set_name}")
+                            self.log("No update required for: {}".format(set_name))
 
                 # Process Default
                 elif current_relevance_type == "DEFAULT":
@@ -2079,10 +2530,10 @@ class ApplicationPolicy(DnacBase):
 
                     for set_name in want_default_set_name:
                         if set_name in application_sets.get("name"):
-                            self.log(f"No update required for: {set_name}")
+                            self.log("No update required for: {}".format(set_name))
 
-        self.log(f"Total Current Application Set: {total_current_app_set}")
-        self.log(f"Total Want Application Set: {total_want_app_set}")
+        self.log("Total Current Application Set: {}".format(total_current_app_set))
+        self.log("Total Want Application Set: {}".format(total_want_app_set))
 
 
         # Compare sets
@@ -2127,13 +2578,13 @@ class ApplicationPolicy(DnacBase):
             final_business_irrelevant_set_name = []
 
         # self.log the final lists
-        self.log(f"have Business Relevant: {have_business_relevant_set_name}")
-        self.log(f"have Business Irrelevant: {have_business_irrelevant_set_name}")
-        self.log(f"have Default: {have_default_set_name}")
+        self.log("have Business Relevant: {}".format(have_business_relevant_set_name))
+        self.log("have Business Irrelevant: {}".format(have_business_irrelevant_set_name))
+        self.log("have Default: {}".format(have_default_set_name))
 
-        self.log(f"Final Business Relevant: {final_business_relevant_set_name}")
-        self.log(f"Final Business Irrelevant: {final_business_irrelevant_set_name}")
-        self.log(f"Final Default: {final_default_set_name}")
+        self.log("Final Business Relevant: {}".format(final_business_relevant_set_name))
+        self.log("Final Business Irrelevant: {}".format(final_business_irrelevant_set_name))
+        self.log("Final Default: {}".format(final_default_set_name))
 
         # Compute the differences
         final_want_business_relevant = []
@@ -2159,18 +2610,18 @@ class ApplicationPolicy(DnacBase):
             item not in final_default_set_name:
                 final_want_default.append(item)
 
-
         # Log the results
-        self.log(f"Final want Business Relevant (Diff): {final_want_business_relevant}")
-        self.log(f"Final want Business Irrelevant (Diff): {final_want_business_irrelevant}")
-        self.log(f"Final want Default (Diff): {final_want_default}")
-
+        self.log("Final want Business Relevant (Diff): {}".format(final_want_business_relevant))
+        self.log("Final want Business Irrelevant (Diff): {}".format(final_want_business_irrelevant))
+        self.log("Final want Default (Diff): {}".format(final_want_default))
+        self.application_policy_updated = self.is_update_required_for_application_policy()
+        self.log(self.application_policy_updated)
         if update_not_required :
             if not (final_business_irrelevant_set_name or final_business_relevant_set_name or final_default_set_name):
                 self.log("no update required for application policy")
                 self.status = "success"
                 self.result['changed'] = False
-                self.msg = "application '{0}' does not need any update. ".format(application_policy_name)
+                self.msg = "application policy '{0}' does not need any update. ".format(application_policy_name)
                 self.result['msg'] = self.msg
                 self.result['response'] = self.msg
                 self.log(self.msg, "INFO")
@@ -2190,7 +2641,7 @@ class ApplicationPolicy(DnacBase):
                     self.log(app_set)
                     app_set_payload = {
                         "id": application_sets.get("id"),
-                        "name": f"{application_sets.get('policyScope')}_{app_set}",
+                        "name": "{}_{}".format(application_sets.get('policyScope'), app_set),
                         "deletePolicyStatus": application_sets.get("deletePolicyStatus"),
                         "policyScope": application_sets.get('policyScope'),
                         "priority": application_sets.get('priority'),
@@ -2241,7 +2692,7 @@ class ApplicationPolicy(DnacBase):
                         self.log(app_set)
                         app_set_payload = {
                             "id": application_sets.get("id"),
-                            "name": f"{application_sets.get('policyScope')}_{app_set}",
+                            "name": "{}_{}".format(application_sets.get('policyScope'), app_set),
                             "deletePolicyStatus": application_sets.get("deletePolicyStatus"),
                             "policyScope": application_sets.get('policyScope'),
                             "priority": application_sets.get('priority'),
@@ -2286,7 +2737,7 @@ class ApplicationPolicy(DnacBase):
                 params= {'updateList': final_app_set_payload,}
                 )
 
-            self.log(f"Received API response from 'application_policy_intent' for Update: {response}", "DEBUG")
+            self.log("Received API response from 'application_policy_intent' for Update: {}".format(response), "DEBUG")
             self.check_tasks_response_status(response, "application_policy_intent")
 
             if self.status not in ["failed", "exited"]:
@@ -2335,7 +2786,7 @@ class ApplicationPolicy(DnacBase):
         """
 
         new_application_policy_details = self.config.get("application_policy_details")
-        application_policy_name = self.want.get("application_policy_details", {}).get("application_policy_name")
+        application_policy_name = self.want.get("application_policy_details", {}).get("name")
         site_names = new_application_policy_details.get("site_name")
         site_ids = []
         for site_name in site_names:
@@ -2346,9 +2797,6 @@ class ApplicationPolicy(DnacBase):
         application_queuing_profile_name = new_application_policy_details.get("application_queuing_profile_name")
         queuing_profile_id = application_policy_details.get('current_queuing_profile', [])[0].get('id', None)
 
-        self.log(application_queuing_profile_name)
-        self.log(queuing_profile_id)
-        self.log(new_application_policy_details)
         # Initialize empty lists for each relevance
         business_relevant_set_name, business_relevant_set_id = [], []
         business_irrelevant_set_name, business_irrelevant_set_id = [], []
@@ -2370,7 +2818,7 @@ class ApplicationPolicy(DnacBase):
             if app_set_id:
                 business_relevant_set_id.append({"name": app_set_name, "id": app_set_id})
             else:
-                self.log(f"No app set found for {app_set_name}")
+                self.log("No app set found for {}".format(app_set_name))
 
         # Get application set IDs for business_irrelevant
         for app_set_name in business_irrelevant_set_name:
@@ -2378,7 +2826,7 @@ class ApplicationPolicy(DnacBase):
             if app_set_id:
                 business_irrelevant_set_id.append({"name": app_set_name, "id": app_set_id})
             else:
-                self.log(f"No app set found for {app_set_name}")
+                self.log("No app set found for {}".format(app_set_name))
 
         # Get application set IDs for default
         for app_set_name in default_set_name:
@@ -2386,12 +2834,12 @@ class ApplicationPolicy(DnacBase):
             if app_set_id:
                 default_set_id.append({"name": app_set_name, "id": app_set_id})
             else:
-                self.log(f"No app set found for {app_set_name}")
+                self.log("No app set found for {}".format(app_set_name))
 
         # Log the final lists
-        self.log(f"Business Relevant Set IDs: {business_relevant_set_id}")
-        self.log(f"Business Irrelevant Set IDs: {business_irrelevant_set_id}")
-        self.log(f"Default Set IDs: {default_set_id}")
+        self.log("Business Relevant Set IDs: {}".format(business_relevant_set_id))
+        self.log("Business Irrelevant Set IDs: {}".format(business_irrelevant_set_id))
+        self.log("Default Set IDs: {}".format(default_set_id))
 
         # Determine the deletePolicyStatus
         policy_status = new_application_policy_details.get("policy_status")
@@ -2412,12 +2860,12 @@ class ApplicationPolicy(DnacBase):
         payload = []
         # for queuing profile
         payload.append({
-                    "name": f"{application_policy_name}_{application_queuing_profile_name}",
+                    "name": "{}_{}".format(application_policy_name, application_queuing_profile_name),
                     "deletePolicyStatus": delete_policy_status,
-                    "policyScope": f"{application_policy_name}",
+                    "policyScope": "{}".format(application_policy_name),
                     "priority": "100",
                     "advancedPolicyScope": {
-                        "name": f"{application_policy_name}",
+                        "name": "{}".format(application_policy_name),
                         "advancedPolicyScopeElement": [
                             {
                                 "groupId": site_ids,
@@ -2426,7 +2874,7 @@ class ApplicationPolicy(DnacBase):
                         ]
                     },
                     "contract": {
-                        "idRef": queuing_profile_id
+                        "idRef":  queuing_profile_id
                     }
                 },
         )
@@ -2443,12 +2891,12 @@ class ApplicationPolicy(DnacBase):
                 
                 # Append the policy details to the payload
                 payload.append({
-                    "name": f"{application_policy_name}_{app_set_name}",
+                    "name": "{}_{}".format(application_policy_name, app_set_name),
                     "deletePolicyStatus": delete_policy_status,
-                    "policyScope": f"{application_policy_name}",
+                    "policyScope": "{}".format(application_policy_name),
                     "priority": "100",
                     "advancedPolicyScope": {
-                        "name": f"{application_policy_name}",
+                        "name": "{}".format(application_policy_name),
                         "advancedPolicyScopeElement": [
                             {
                                 "groupId": [site_id],
@@ -2483,7 +2931,7 @@ class ApplicationPolicy(DnacBase):
                 params= {'createList': payload,}
                 )
 
-            self.log(f"Received API response from 'application_policy_intent' for creation: {response}", "DEBUG")
+            self.log("Received API response from 'application_policy_intent' for creation: {}".format(response), "DEBUG")
             self.check_tasks_response_status(response, "application_policy_intent")
 
             if self.status not in ["failed", "exited"]:
@@ -2509,6 +2957,53 @@ class ApplicationPolicy(DnacBase):
             self.log(self.msg, "ERROR")
             self.check_return_status()
 
+    def is_update_required_for_application(self):
+        """
+        Determine if an update is required for the application based on differences between
+        required and current application details.
+
+        Returns:
+            bool: True if an update is required, False otherwise.
+        """
+
+        required_application_details = self.want.get("application_details")
+        current_application_details = self.have.get("current_application")[0]
+        application_set_id = None
+
+        current_application_set = self.have.get("current_application_set")
+        if current_application_set and isinstance(current_application_set, list) and len(current_application_set) > 0:
+            application_set_id = current_application_set[0].get("id")
+
+        # Define the mappings for comparison
+        fields_to_check = {
+            "description": "longDescription",
+            "helpstring": "helpString",
+            "traffic_class": "trafficClass",
+            "server_name": "serverName"
+        }
+
+        # Check if updates are required
+        for required_key, current_key in fields_to_check.items():
+            required_value = required_application_details.get(required_key)
+            current_value = current_application_details.get("networkApplications")[0].get(current_key)
+
+            if current_value is None and required_value is not None:
+                self.log("Update required for {} as current value is None.".format(required_key))
+                return True
+
+            if required_value != current_value:
+                self.log("Update required for {}".format(required_key))
+                return True
+
+        # Check for application_set_id
+        if application_set_id != current_application_details.get("parentScalableGroup").get("idRef") and application_set_id is not None:
+            self.log("Update required for application_set")
+            return True
+
+        self.log("No updates required.")
+        return False
+
+
     def get_diff_application(self):
         """
         Retrieve and update differences between current and required application configurations.
@@ -2525,8 +3020,9 @@ class ApplicationPolicy(DnacBase):
             payload, logs required actions, and sends an API request to apply changes.
         """
 
-        application_name = self.want.get("application_details", {}).get("application_name")
+        application_name = self.want.get("application_details", {}).get("name")
         application_set_name = self.want.get("application_details").get("application_set_name")
+
         if application_name is None:
             self.status = "failed"
             self.msg = "mandatory field 'application_name' is missing"
@@ -2540,7 +3036,7 @@ class ApplicationPolicy(DnacBase):
         if application_details.get("application_set_exists") == False:
             self.status = "success"
             self.result['changed'] = False
-            self.msg = " the application set '{0}' is not avalable in the Cisco catalyst center".format(application_set_name)
+            self.msg = " the application set '{0}' is not available in the Cisco catalyst center".format(application_set_name)
             self.result['msg'] = self.msg
             self.result['response'] = self.msg
             self.log(self.msg, "INFO")
@@ -2560,7 +3056,7 @@ class ApplicationPolicy(DnacBase):
 
         application_name = current_application_details.get("name")
         self.log(current_application_details)
-        if required_application_details.get("application_name") != current_application_details.get("name"):
+        if required_application_details.get("name") != current_application_details.get("name"):
             self.log("application name cant be updated")
 
         # Define the mappings for comparison
@@ -2581,16 +3077,16 @@ class ApplicationPolicy(DnacBase):
 
             if current_value is None:
                 if required_value is not None:
-                    self.log(f"Update required for {required_key} as current value is None.")
+                    self.log("Update required for {} as current value is None.".format(required_key))
                     update_required_keys.append(required_key)
                 else:
-                    self.log(f"Skipping {required_key} as both values are None.")
+                    self.log("Skipping {} as both values are None.".format(required_key))
                 continue
 
             if required_value == current_value:
-                self.log(f"Update not required for {required_key}")
+                self.log("Update not required for {}".format(required_key))
             else:
-                self.log(f"Update required for {required_key}")
+                self.log("Update required for {}".format(required_key))
                 update_required_keys.append(required_key)
 
         # Check for application_set_id
@@ -2603,6 +3099,8 @@ class ApplicationPolicy(DnacBase):
         else:
             self.log("update required for application set")
             update_required_keys.append("application_set")
+
+        self.application_updated = self.is_update_required_for_application()
 
         if not update_required_keys:
             self.status = "success"
@@ -2688,9 +3186,7 @@ class ApplicationPolicy(DnacBase):
             }
         ]
 
-
-
-        self.log(f"Payload for update application: {json.dumps(param, indent=4)}")
+        self.log("Payload for update application: {}".format(json.dumps(param, indent=4)))
 
         try:
             response = self.dnac._exec(
@@ -2700,7 +3196,7 @@ class ApplicationPolicy(DnacBase):
                 params= {"payload": param}
                 )
 
-            self.log(f"Received API response from 'edit_applications': {response}", "DEBUG")
+            self.log("Received API response from 'edit_applications': {}".format(response), "DEBUG")
             self.check_tasks_response_status(response, "edit_applications")
 
             if self.status not in ["failed", "exited"]:
@@ -2748,7 +3244,7 @@ class ApplicationPolicy(DnacBase):
         application_set_name = new_application_set_details.get('application_details', {}).get('application_set_name')
         application_set_id = self.get_application_set_id(application_set_name)
         application_details = self.want.get("application_details")
-        application_name = application_details.get("application_name")
+        application_name = application_details.get("name")
         application_traffic_class = application_details.get("traffic_class")
         application_type = application_details.get("type")
         application_details_set = self.have
@@ -2767,11 +3263,10 @@ class ApplicationPolicy(DnacBase):
 
         if missing_fields:
             self.status = "failed"
-            self.msg = f"As we need to create a new application - mandatory field(s) missing: {', '.join(missing_fields)}"
+            self.msg = "As we need to create a new application - mandatory field(s) missing: {}".format(', '.join(missing_fields))
             self.result['response'] = self.msg
             self.log(self.msg, "ERROR")
             self.check_return_status()
-
 
         self.log(application_set_id)
         get_application_list = self.get_application_details_v1()
@@ -2790,7 +3285,7 @@ class ApplicationPolicy(DnacBase):
 
         if application_details.get("type") not in ["server_name", "url", "server_ip"]:
             self.status = "failed"
-            self.msg = f"Unsupported application type: '{application_type}'. Supported values are: {', '.join(supported_types)}."
+            self.msg = "Unsupported application type: '{}'. Supported values are: {}".format(application_type, ', '.join(supported_types))
             self.result['response'] = self.msg
             self.log(self.msg, "ERROR")
             self.check_return_status()
@@ -2897,7 +3392,7 @@ class ApplicationPolicy(DnacBase):
 
         # Prepare the rest of the payload
         param = {
-            "name": application_details.get("application_name"),
+            "name": application_details.get("name"),
             "parentScalableGroup": {
                 "idRef": application_set_id
             },
@@ -2918,7 +3413,7 @@ class ApplicationPolicy(DnacBase):
                 params = {"payload": [param]}
                 )
 
-            self.log(f"Received API response from 'create_applications': {response}", "DEBUG")
+            self.log("Received API response from 'create_applications': {}".format(response), "DEBUG")
             self.check_tasks_response_status(response, "create_applications")
 
             if self.status not in ["failed", "exited"]:
@@ -2967,7 +3462,7 @@ class ApplicationPolicy(DnacBase):
         if application_set_details.get("application_set_exists") == True:
             self.status = "success"
             self.result['changed'] = False
-            self.msg = "application set already exist and hence cant be updated"
+            self.msg = "application set already exist and hence cannot be updated"
             self.result['msg'] = self.msg
             self.result['response'] = self.msg
             self.log(self.msg, "INFO")
@@ -3001,8 +3496,8 @@ class ApplicationPolicy(DnacBase):
                 op_modifies= True,
                 params = {"payload": [param]}
             )
-            self.log(f"Received API response from 'create_application_set': {response}", "DEBUG")
-            self.check_tasks_response_status(response, "create_application_policy_queuing_profile")
+            self.log("Received API response from 'create_application_set': {}".format(response), "DEBUG")
+            self.check_tasks_response_status(response, "create_application_set")
 
             if self.status not in ["failed", "exited"]:
                 self.log("application set '{0}' created successfully.".format(application_set_name), "INFO")
@@ -3041,196 +3536,197 @@ class ApplicationPolicy(DnacBase):
             self.create_queuing_profile()
             return self
 
-        # queuing_profile = queuing_profile_details["current_queuing_profile"][0]
-        # queuing_profile_id = queuing_profile_details["current_queuing_profile"][0]["id"]
-        # input_details = required_queuing_profile_details["application_queuing_details"][0]
-        # input_bandwidth_settings = input_details["bandwidth_settings"]["bandwidth_percentages"]
-        # input_dscp_settings = input_details["dscp_settings"]
-
         required_details = required_queuing_profile_details['application_queuing_details'][0]
-        want_bandwidth_settings = {
-            key.upper(): value for key, value in required_details['bandwidth_settings']['bandwidth_percentages'].items()
-        }
-
-        want_dscp_settings = {key.upper(): value.upper() if isinstance(value, str) else value
-                            for key, value in required_details['dscp_settings'].items()}
-
-
-        # Current queuing profile bandwidth and DSCP settings
-        have_bandwidth_settings = {
-            tc['trafficClass']: tc['bandwidthPercentage']
-            for tc in queuing_profile['current_queuing_profile'][0]['clause'][0]['interfaceSpeedBandwidthClauses'][0]['tcBandwidthSettings']
-        }
-
-        have_dscp_settings = {
-            tc['trafficClass']: tc['dscp']
-            for tc in queuing_profile['current_queuing_profile'][0]['clause'][1]['tcDscpSettings']
-        }
-
-        # Output the extracted data
-        self.log("want Bandwidth Settings:")
-        self.log(want_bandwidth_settings)
-
-        self.log("\nhave Bandwidth Settings:")
-        self.log(have_bandwidth_settings)
-
-        self.log("\nwant DSCP Settings:")
-        self.log(want_dscp_settings)
-
-        self.log("\nhave DSCP Settings:")
-        self.log(have_dscp_settings)
-
-        # Initialize final dictionary
-        final_want_bandwidth_dict = {}
-
-        for traffic_class, want_value in want_bandwidth_settings.items():
-            # Convert want_value to int for comparison
-            want_value = int(want_value)
-
-            if traffic_class in have_bandwidth_settings:
-                have_value = have_bandwidth_settings[traffic_class]
-                # Compare values
-                if want_value == have_value:
-                    final_want_bandwidth_dict[traffic_class] = have_value
-                else:
-                    final_want_bandwidth_dict[traffic_class] = want_value
-            else:
-                # If the traffic class is only in want
-                final_want_bandwidth_dict[traffic_class] = want_value
-
-        self.log("Final Want bandwidth Dict:")
-        self.log(final_want_bandwidth_dict)
-
-        final_want_dscp_dict = {}
-        for traffic_class, want_value in want_dscp_settings.items():
-            # Convert want_value to int for comparison
-            want_value = int(want_value)
-
-            if traffic_class in have_dscp_settings:
-                have_value = have_dscp_settings[traffic_class]
-                # Compare values
-                if want_value == have_value:
-                    final_want_dscp_dict[traffic_class] = have_value
-                else:
-                    final_want_dscp_dict[traffic_class] = want_value
-            else:
-                # If the traffic class is only in want
-                final_want_dscp_dict[traffic_class] = want_value
-
-        # Final result
-        self.log("Final Want dscp Dict:")
-        self.log(final_want_dscp_dict)
-
-        id_bandwidth_mapping = {}
-        id_dscp_mapping = {}
-
-        # Navigate through the queuing profile structure
+        self.log(required_details)
         current_profiles = queuing_profile.get('current_queuing_profile', [])
-
-        for profile in current_profiles:
-            for clause in profile.get('clause', []):
-                if clause.get('type') == 'BANDWIDTH':
-                    for interface_clause in clause.get('interfaceSpeedBandwidthClauses', []):
-                        for bandwidth_setting in interface_clause.get('tcBandwidthSettings', []):
-                            traffic_class = bandwidth_setting.get('trafficClass')
-                            instance_id = bandwidth_setting.get('instanceId')
-                            if traffic_class and instance_id:
-                                id_bandwidth_mapping[traffic_class] = instance_id
-                elif clause.get('type') == 'DSCP_CUSTOMIZATION':
-                    for dscp_setting in clause.get('tcDscpSettings', []):
-                        dscp = dscp_setting.get('dscp')
-                        traffic_class = dscp_setting.get('trafficClass')
-                        instance_id = dscp_setting.get('instanceId')
-                        if dscp and traffic_class and instance_id:
-                            id_dscp_mapping[traffic_class] =  instance_id
-
-        update_required = False
-
-        # Checking Bandwidth settings
-        for key, value in final_want_bandwidth_dict.items():
-            if key in have_bandwidth_settings:
-                if have_bandwidth_settings[key] != value:
-                    update_required = True
-            else:
-                update_required = True
-
-        # Checking DSCP settings
-        for key, value in final_want_dscp_dict.items():
-            if key in have_dscp_settings:
-                if int(have_dscp_settings[key]) != value:
-                    update_required = True
-            else:
-                update_required = True
-
-        if not update_required:
-            self.log("No updates required. Both dictionaries match.")
-        else:
-            self.log("Update required.")
-
-        instance_ids = {}
-        for clause in queuing_profile['current_queuing_profile'][0]['clause']:
-            if clause['type'] == 'BANDWIDTH':
-                instance_ids['bandwidth'] = clause['instanceId']
-            elif clause['type'] == 'DSCP_CUSTOMIZATION':
-                instance_ids['dscp'] = clause['instanceId']
-
-        interface_speed_clause = queuing_profile['current_queuing_profile'][0]['clause'][0]['interfaceSpeedBandwidthClauses'][0]
-        if interface_speed_clause['interfaceSpeed'] == 'ALL':
-            interface_speed_all_instance_id = interface_speed_clause['instanceId']
-        
-        if 'new_profile_name' in required_details:
-            profile_name = required_details['new_profile_name']
-        else:
-            profile_name = queuing_profile['current_queuing_profile'][0].get("name")
-
-        if 'profile_description' in required_details:
-            profile_desc = required_details['profile_description']
-        else:
-            profile_desc = queuing_profile['current_queuing_profile'][0].get("description")
-        
-        # Construct the payload
-        payload = [
-            {
-                "id": queuing_profile['current_queuing_profile'][0].get("id"),
-                "name": profile_name,
-                "description": profile_desc,
-                "clause": [
-                    {
-                        "instanceId": instance_ids.get('bandwidth'),
-                        "type": "BANDWIDTH",
-                        "isCommonBetweenAllInterfaceSpeeds": True,
-                        "interfaceSpeedBandwidthClauses": [
-                            {
-                                "instanceId": interface_speed_all_instance_id,
-                                "interfaceSpeed": "ALL",
-                                "tcBandwidthSettings": [
-                                    {
-                                        "instanceId": id_bandwidth_mapping[traffic_class],
-                                        "trafficClass": traffic_class,
-                                        "bandwidthPercentage": final_want_bandwidth_dict[traffic_class]
-                                    }
-                                    for traffic_class in final_want_bandwidth_dict
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "instanceId": instance_ids.get('dscp'),
-                        "type": "DSCP_CUSTOMIZATION",
-                        "tcDscpSettings": [
-                            {
-                                "instanceId": id_dscp_mapping[traffic_class],
-                                "trafficClass": traffic_class,
-                                "dscp": final_want_dscp_dict[traffic_class]
-                            }
-                            for traffic_class in final_want_dscp_dict
-                        ]
-                    }
-                ]
+        self.log(current_profiles)
+        is_common = required_details['bandwidth_settings']['is_common_between_all_interface_speeds']
+    
+        if is_common:
+            want_bandwidth_settings = {
+                key.upper(): value for key, value in required_details['bandwidth_settings']['bandwidth_percentages'].items()
             }
-        ]
 
-        self.log(json.dumps(payload, indent=2))
+            want_dscp_settings = {key.upper(): value.upper() if isinstance(value, str) else value
+                                for key, value in required_details['dscp_settings'].items()}
+
+
+            # Current queuing profile bandwidth and DSCP settings
+            have_bandwidth_settings = {
+                tc['trafficClass']: tc['bandwidthPercentage']
+                for tc in queuing_profile['current_queuing_profile'][0]['clause'][0]['interfaceSpeedBandwidthClauses'][0]['tcBandwidthSettings']
+            }
+
+            have_dscp_settings = {
+                tc['trafficClass']: tc['dscp']
+                for tc in queuing_profile['current_queuing_profile'][0]['clause'][1]['tcDscpSettings']
+            }
+
+            # Output the extracted data
+            self.log("want Bandwidth Settings:")
+            self.log(want_bandwidth_settings)
+
+            self.log("\nhave Bandwidth Settings:")
+            self.log(have_bandwidth_settings)
+
+            self.log("\nwant DSCP Settings:")
+            self.log(want_dscp_settings)
+
+            self.log("\nhave DSCP Settings:")
+            self.log(have_dscp_settings)
+
+            # Initialize final dictionary
+            final_want_bandwidth_dict = {}
+
+            for traffic_class, want_value in want_bandwidth_settings.items():
+                # Convert want_value to int for comparison
+                want_value = int(want_value)
+
+                if traffic_class in have_bandwidth_settings:
+                    have_value = have_bandwidth_settings[traffic_class]
+                    # Compare values
+                    if want_value == have_value:
+                        final_want_bandwidth_dict[traffic_class] = have_value
+                    else:
+                        final_want_bandwidth_dict[traffic_class] = want_value
+                else:
+                    # If the traffic class is only in want
+                    final_want_bandwidth_dict[traffic_class] = want_value
+
+            self.log("Final Want bandwidth Dict:")
+            self.log(final_want_bandwidth_dict)
+
+            final_want_dscp_dict = {}
+            for traffic_class, want_value in want_dscp_settings.items():
+                # Convert want_value to int for comparison
+                want_value = int(want_value)
+
+                if traffic_class in have_dscp_settings:
+                    have_value = have_dscp_settings[traffic_class]
+                    # Compare values
+                    if want_value == have_value:
+                        final_want_dscp_dict[traffic_class] = have_value
+                    else:
+                        final_want_dscp_dict[traffic_class] = want_value
+                else:
+                    # If the traffic class is only in want
+                    final_want_dscp_dict[traffic_class] = want_value
+
+            # Final result
+            self.log("Final Want dscp Dict:")
+            self.log(final_want_dscp_dict)
+
+            id_bandwidth_mapping = {}
+            id_dscp_mapping = {}
+
+            # Navigate through the queuing profile structure
+            current_profiles = queuing_profile.get('current_queuing_profile', [])
+            self.log(current_profiles)
+            for profile in current_profiles:
+                for clause in profile.get('clause', []):
+                    if clause.get('type') == 'BANDWIDTH':
+                        for interface_clause in clause.get('interfaceSpeedBandwidthClauses', []):
+                            for bandwidth_setting in interface_clause.get('tcBandwidthSettings', []):
+                                traffic_class = bandwidth_setting.get('trafficClass')
+                                instance_id = bandwidth_setting.get('instanceId')
+                                if traffic_class and instance_id:
+                                    id_bandwidth_mapping[traffic_class] = instance_id
+                    elif clause.get('type') == 'DSCP_CUSTOMIZATION':
+                        for dscp_setting in clause.get('tcDscpSettings', []):
+                            dscp = dscp_setting.get('dscp')
+                            traffic_class = dscp_setting.get('trafficClass')
+                            instance_id = dscp_setting.get('instanceId')
+                            if dscp and traffic_class and instance_id:
+                                id_dscp_mapping[traffic_class] =  instance_id
+
+            update_required = False
+
+            # Checking Bandwidth settings
+            for key, value in final_want_bandwidth_dict.items():
+                if key in have_bandwidth_settings:
+                    if have_bandwidth_settings[key] != value:
+                        update_required = True
+                else:
+                    update_required = True
+
+            # Checking DSCP settings
+            for key, value in final_want_dscp_dict.items():
+                if key in have_dscp_settings:
+                    if int(have_dscp_settings[key]) != value:
+                        update_required = True
+                else:
+                    update_required = True
+
+            if not update_required:
+                self.log("No updates required. Both dictionaries match.")
+                # we have to end the code
+            else:
+                self.log("Update required.")
+
+            instance_ids = {}
+            for clause in queuing_profile['current_queuing_profile'][0]['clause']:
+                if clause['type'] == 'BANDWIDTH':
+                    instance_ids['bandwidth'] = clause['instanceId']
+                elif clause['type'] == 'DSCP_CUSTOMIZATION':
+                    instance_ids['dscp'] = clause['instanceId']
+
+            interface_speed_clause = queuing_profile['current_queuing_profile'][0]['clause'][0]['interfaceSpeedBandwidthClauses'][0]
+            if interface_speed_clause['interfaceSpeed'] == 'ALL':
+                interface_speed_all_instance_id = interface_speed_clause['instanceId']
+            
+            if 'new_profile_name' in required_details:
+                profile_name = required_details['new_profile_name']
+            else:
+                profile_name = queuing_profile['current_queuing_profile'][0].get("name")
+
+            if 'profile_description' in required_details:
+                profile_desc = required_details['profile_description']
+            else:
+                profile_desc = queuing_profile['current_queuing_profile'][0].get("description")
+            
+            # Construct the payload
+            payload = [
+                {
+                    "id": queuing_profile['current_queuing_profile'][0].get("id"),
+                    "name": profile_name,
+                    "description": profile_desc,
+                    "clause": [
+                        {
+                            "instanceId": instance_ids.get('bandwidth'),
+                            "type": "BANDWIDTH",
+                            "isCommonBetweenAllInterfaceSpeeds": True,
+                            "interfaceSpeedBandwidthClauses": [
+                                {
+                                    "instanceId": interface_speed_all_instance_id,
+                                    "interfaceSpeed": "ALL",
+                                    "tcBandwidthSettings": [
+                                        {
+                                            "instanceId": id_bandwidth_mapping[traffic_class],
+                                            "trafficClass": traffic_class,
+                                            "bandwidthPercentage": final_want_bandwidth_dict[traffic_class]
+                                        }
+                                        for traffic_class in final_want_bandwidth_dict
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "instanceId": instance_ids.get('dscp'),
+                            "type": "DSCP_CUSTOMIZATION",
+                            "tcDscpSettings": [
+                                {
+                                    "instanceId": id_dscp_mapping[traffic_class],
+                                    "trafficClass": traffic_class,
+                                    "dscp": final_want_dscp_dict[traffic_class]
+                                }
+                                for traffic_class in final_want_dscp_dict
+                            ]
+                        }
+                    ]
+                }
+            ]
+
+            self.log(json.dumps(payload, indent=2))
 
         try:
             response = self.dnac._exec(
@@ -3240,8 +3736,8 @@ class ApplicationPolicy(DnacBase):
                 params = {"payload": payload}
                 )
 
-            self.log(f"Received API response from 'application_policy_intent' for creation: {response}", "DEBUG")
-            self.check_tasks_response_status(response, "application_policy_intent")
+            self.log("Received API response from 'update_application_policy_queuing_profile' for update: {}".format(response), "DEBUG")
+            self.check_tasks_response_status(response, "update_application_policy_queuing_profile")
 
             if self.status not in ["failed", "exited"]:
                 self.log("application policy queuing profile '{0}' updated successfully.".format(profile_name), "INFO")
@@ -3283,7 +3779,7 @@ class ApplicationPolicy(DnacBase):
         """
 
         new_queuing_profile_details = self.config.get("application_queuing_details", [])[0]
-        self.log(f"Queuing Profile Details: {new_queuing_profile_details}")
+        self.log("Queuing Profile Details: {}".format(new_queuing_profile_details))
 
         # Check for mandatory fields
         mandatory_fields = ["profile_name"]
@@ -3304,8 +3800,7 @@ class ApplicationPolicy(DnacBase):
                     total_percentage = sum(int(value) for value in interface['bandwidth_percentages'].values())
 
                     if total_percentage != 100:
-                        msg = (f"Validation ERROR at interface speed: {interface['interface_speed']} "
-                            f"(Total: {total_percentage}%) Should be total 100%")
+                        msg = "Validation ERROR at interface speed: {} (Total: {}%) Should be total 100%".format(interface['interface_speed'], total_percentage)
                         self.status = "failed"
                         self.msg = msg
                         self.log(msg, "ERROR")
@@ -3360,7 +3855,7 @@ class ApplicationPolicy(DnacBase):
             self.log("As we are passing different traffic class bandwidth percentage for six different interface speeds")
             param = {
                 "name": new_queuing_profile_details['profile_name'],
-                "description": new_queuing_profile_details['policy_description'],
+                "description": new_queuing_profile_details['profile_description'], 
                 "clause": [
                     {
                         "isCommonBetweenAllInterfaceSpeeds": new_queuing_profile_details['bandwidth_settings']['is_common_between_all_interface_speeds'],
@@ -3401,7 +3896,7 @@ class ApplicationPolicy(DnacBase):
                 }
                 param['clause'].append(dscp_clause)
 
-        self.log(f"Payload for Queuing Profile: {json.dumps(param, indent=4)}")
+        self.log("Payload for Queuing Profile: {}".format(json.dumps(param, indent=4)))
 
         try:
             response = self.dnac._exec(
@@ -3411,7 +3906,7 @@ class ApplicationPolicy(DnacBase):
                 params = {"payload": [param]}
             )
 
-            self.log(f"Received API response from 'create_application_policy_queuing_profile': {response}", "DEBUG")
+            self.log("Received API response from 'create_application_policy_queuing_profile': {}".format(response), "DEBUG")
             self.check_tasks_response_status(response, "create_application_policy_queuing_profile")
 
             if self.status not in ["failed", "exited"]:
@@ -3426,7 +3921,7 @@ class ApplicationPolicy(DnacBase):
                 fail_reason = self.msg
                 self.status = "failed"
                 self.msg = (
-                    "failed to create application queing profile reason - {0}").format(fail_reason)
+                    "failed to create application queuing profile reason - {0}").format(fail_reason)
                 self.log(self.msg, "ERROR")
                 self.result['response'] = self.msg
                 self.check_return_status()
@@ -3467,6 +3962,8 @@ class ApplicationPolicy(DnacBase):
         if config.get("application_policy_details"):
             self.delete_application_policy().check_return_status()
 
+        return self
+    
     def delete_application_policy(self):
         """
         Delete an existing application policy in Cisco DNA Center.
@@ -3485,8 +3982,8 @@ class ApplicationPolicy(DnacBase):
         """
 
         application_policy_details = self.config.get("application_policy_details")
-        self.log(f"Queuing Profile Details: {application_policy_details}")
-        application_policy_name = application_policy_details.get("application_policy_name")
+        self.log("Queuing Profile Details: {}".format(application_policy_details))
+        application_policy_name = application_policy_details.get("name")
         application_policy_details = self.have
 
 
@@ -3515,7 +4012,7 @@ class ApplicationPolicy(DnacBase):
                 params= {'deleteList': ids_list,}
                 )
 
-            self.log(f"Received API response from 'application_policy_intent' for deletion: {response}", "DEBUG")
+            self.log("Received API response from 'application_policy_intent' for deletion: {}".format(response), "DEBUG")
             self.check_tasks_response_status(response, "application_policy_intent")
 
             if self.status not in ["failed", "exited"]:
@@ -3558,7 +4055,7 @@ class ApplicationPolicy(DnacBase):
         """
 
         application_queuing_profile_details = self.config.get("application_queuing_details", [])[0]
-        self.log(f"Queuing Profile Details: {application_queuing_profile_details}")
+        self.log("Queuing Profile Details: {}".format(application_queuing_profile_details))
         application_queuing_profile_name = application_queuing_profile_details.get("profile_name")
         application_queuing_profile_details = self.have
         self.log(application_queuing_profile_details)
@@ -3583,8 +4080,8 @@ class ApplicationPolicy(DnacBase):
                 params= {'id': queuing_profile_id,}
                 )
 
-            self.log(f"Received API response from 'create_application_set': {response}", "DEBUG")
-            self.check_tasks_response_status(response, "create_application_policy_queuing_profile")
+            self.log("Received API response from 'delete_application_policy_queuing_profile': {}".format(response), "DEBUG")
+            self.check_tasks_response_status(response, "delete_application_policy_queuing_profile")
 
             if self.status not in ["failed", "exited"]:
                 self.log("application policy queuing profile '{0}' deleted successfully.".format(application_queuing_profile_name), "INFO")
@@ -3626,7 +4123,7 @@ class ApplicationPolicy(DnacBase):
         """
 
         application_set_detail = self.config.get("application_set_details", [])[0]
-        self.log(f"Queuing Profile Details: {application_set_details}")
+        self.log("Queuing Profile Details: {}".format(application_set_details))
         application_set_name = application_set_details.get("application_set_name")
         application_set_details = self.have
 
@@ -3650,8 +4147,8 @@ class ApplicationPolicy(DnacBase):
                 params= {'id': application_set_id, }
                 )
 
-            self.log(f"Received API response from 'create_application_set': {response}", "DEBUG")
-            self.check_tasks_response_status(response, "create_application_policy_queuing_profile")
+            self.log("Received API response from 'delete_application_set': {}".format(response), "DEBUG")
+            self.check_tasks_response_status(response, "delete_application_set")
 
             if self.status not in ["failed", "exited"]:
                 self.log("application set '{0}' deleted successfully.".format(application_set_name), "INFO")
@@ -3693,8 +4190,8 @@ class ApplicationPolicy(DnacBase):
         """
 
         application_details = self.config.get("application_details", [])
-        self.log(f"application Details: {application_details}")
-        application_name = application_details.get("application_name")
+        self.log("application Details: {}".format(application_details))
+        application_name = application_details.get("name")
         application_deatils = self.have
 
         if application_deatils.get("application_exists") == False:
@@ -3718,7 +4215,7 @@ class ApplicationPolicy(DnacBase):
                 params = {'id': application_id,}
                 )
             self.log("inner")
-            self.log(f"Received API response from 'delete_application': {response}", "DEBUG")
+            self.log("Received API response from 'delete_application': {}".format(response), "DEBUG")
             self.check_tasks_response_status(response, "delete_application")
 
             if self.status not in ["failed", "exited"]:
@@ -3744,6 +4241,173 @@ class ApplicationPolicy(DnacBase):
             self.log(self.msg, "ERROR")
             self.check_return_status()
 
+    def verify_diff_merged(self, config):
+        """
+        Verify the merged status(Addition/Updation) of Devices in Cisco Catalyst Center.
+        Parameters:
+            - self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+            - config (dict): The configuration details to be verified.
+        Return:
+            - self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+        Description:
+            This method checks the merged status of a configuration in Cisco Catalyst Center by retrieving the current state
+            (have) and desired state (want) of the configuration, logs the states, and validates whether the specified
+            site exists in the Catalyst Center configuration.
+
+            The function performs the following verifications:
+            - Checks for devices added to Cisco Catalyst Center and logs the status.
+            - Verifies updated device roles and logs the status.
+            - Verifies updated interface details and logs the status.
+            - Verifies updated device credentials and logs the status.
+            - Verifies the creation of a global User Defined Field (UDF) and logs the status.
+            - Verifies the provisioning of wired devices and logs the status.
+        """
+        self.log("verify starts here verify diff merged")
+
+        if self.want.get("application_queuing_details"):
+            self.get_have()
+            self.log("Current State (have): {0}".format(str(self.have)), "INFO")
+            self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
+
+            # Code to validate ccc config for merged state
+            application_queuing_profile_exist = self.have.get("queuing_profile_exists")
+            application_queuing_profile_name = self.want.get("application_queuing_details", [])[0].get("profile_name")
+
+            if application_queuing_profile_exist:
+                self.status = "success"
+                self.msg = "The requested application queuing profile {0} is present in the Cisco Catalyst Center and its creation has been verified.".format(application_queuing_profile_name)
+                self.log(self.msg, "INFO")
+            else:
+                self.log("The playbook input for application queuing profile {0} does not align with the Cisco Catalyst Center, indicating that the \
+                         merge task may not have executed successfully.".format(application_queuing_profile_name), "INFO")
+
+        if self.want.get("application_details"):
+            self.get_have()
+            self.log("Current State (have): {0}".format(str(self.have)), "INFO")
+            self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
+
+            # Code to validate ccc config for merged state
+            application_exists = self.have.get("application_exists")
+            application_name = self.want.get("application_details").get("name")
+
+            if application_exists:
+                self.status = "success"
+                self.msg = "The requested application {0} is present in the Cisco Catalyst Center and its creation has been verified.".format(application_name)
+                self.log(self.msg, "INFO")
+            else:
+                self.log("The playbook input for application {0} does not align with the Cisco Catalyst Center, indicating that the \
+                         merge task may not have executed successfully.".format(application_name), "INFO")
+
+            is_application_available = self.have.get("application_exists")
+
+            if is_application_available:
+                application_updated = self.is_update_required_for_application()
+        
+                if application_updated or self.application_updated:
+                    self.log("The update for application {0} has been successfully verified.".format(application_name), "INFO")
+                    self.status = "success"
+
+        if self.want.get("application_policy_details"):
+            self.get_have()
+            self.log("Current State (have): {0}".format(str(self.have)), "INFO")
+            self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
+
+            # Code to validate ccc config for merged state
+            application_policy_exist = self.have.get("application_policy_exists")
+            application_policy_name = self.want.get("application_policy_details").get("name")
+
+            if application_policy_exist:
+                self.status = "success"
+                self.msg = "The requested application policy {0} is present in the Cisco Catalyst Center and its creation has been verified.".format(application_policy_name)
+                self.log(self.msg, "INFO")
+            else:
+                self.log("The playbook input for application policy {0} does not align with the Cisco Catalyst Center, indicating that the \
+                         merge task may not have executed successfully.".format(application_policy_name), "INFO")
+
+            is_application_policy_available = self.have.get("application_policy_exists")
+
+            if is_application_policy_available:
+                application_policy_updated = self.is_update_required_for_application_policy()
+                if application_policy_updated or self.application_policy_updated:
+                    self.log("The update for application policy {0} has been successfully verified.".format(application_policy_name), "INFO")
+                    self.status = "success"
+        return self
+
+    def verify_diff_deleted(self, config):
+        """
+        Verify the merged status(Addition/Updation) of Devices in Cisco Catalyst Center.
+        Parameters:
+            - self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+            - config (dict): The configuration details to be verified.
+        Return:
+            - self (object): An instance of a class used for interacting with Cisco Catalyst Center.
+        Description:
+            This method checks the merged status of a configuration in Cisco Catalyst Center by retrieving the current state
+            (have) and desired state (want) of the configuration, logs the states, and validates whether the specified
+            site exists in the Catalyst Center configuration.
+
+            The function performs the following verifications:
+            - Checks for devices added to Cisco Catalyst Center and logs the status.
+            - Verifies updated device roles and logs the status.
+            - Verifies updated interface details and logs the status.
+            - Verifies updated device credentials and logs the status.
+            - Verifies the creation of a global User Defined Field (UDF) and logs the status.
+            - Verifies the provisioning of wired devices and logs the status.
+        """
+        self.log("verify starts here verify diff deleted")
+
+        if self.want.get("application_queuing_details"):
+            self.get_have()
+            self.log("Current State (have): {0}".format(str(self.have)), "INFO")
+            self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
+
+            # Code to validate ccc config for merged state
+            application_queuing_profile_exist = self.have.get("queuing_profile_exists")
+            application_queuing_profile_name = self.want.get("application_queuing_details", [])[0].get("profile_name")
+
+            if not application_queuing_profile_exist:
+                self.status = "success"
+                self.msg = "The requested application queuing profile {0} is not present in the Cisco Catalyst Center and its deletion has been verified.".format(application_queuing_profile_name)
+                self.log(self.msg, "INFO")
+            else:
+                self.log("The playbook input for application queuing profile {0} does not align with the Cisco Catalyst Center, indicating that the \
+                         merge task may not have executed successfully.".format(application_queuing_profile_name), "INFO")
+
+        if self.want.get("application_details"):
+            self.get_have()
+            self.log("Current State (have): {0}".format(str(self.have)), "INFO")
+            self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
+
+            # Code to validate ccc config for merged state
+            application_exists = self.have.get("application_exists")
+            application_name = self.want.get("application_details").get("name")
+
+            if not application_exists:
+                self.status = "success"
+                self.msg = "The requested application {0} is not present in the Cisco Catalyst Center and its deletion has been verified.".format(application_name)
+                self.log(self.msg, "INFO")
+            else:
+                self.log("The playbook input for application {0} does not align with the Cisco Catalyst Center, indicating that the \
+                         merge task may not have executed successfully.".format(application_name), "INFO")
+
+        if self.want.get("application_policy_details"):
+            self.get_have()
+            self.log("Current State (have): {0}".format(str(self.have)), "INFO")
+            self.log("Desired State (want): {0}".format(str(self.want)), "INFO")
+
+            # Code to validate ccc config for merged state
+            application_policy_exist = self.have.get("application_policy_exists")
+            application_policy_name = self.want.get("application_policy_details").get("name")
+
+            if not application_policy_exist:
+                self.status = "success"
+                self.msg = "The requested application policy {0} is not present in the Cisco Catalyst Center and its deletion has been verified.".format(application_policy_name)
+                self.log(self.msg, "INFO")
+            else:
+                self.log("The playbook input for application policy {0} does not align with the Cisco Catalyst Center, indicating that the \
+                         merge task may not have executed successfully.".format(application_policy_name), "INFO")
+
+        return self
 
 def main():
     """ main entry point for module execution
@@ -3785,9 +4449,9 @@ def main():
         ccc_application.reset_values()
         ccc_application.get_want(config).check_return_status()
         ccc_application.get_have().check_return_status()
-        ccc_application.get_diff_state_apply[state](config)#.check_return_status()
-        # if config_verify:
-        #     ccc_application.verify_diff_state_apply[state](config).check_return_status()
+        ccc_application.get_diff_state_apply[state](config).check_return_status()
+        if config_verify:
+            ccc_application.verify_diff_state_apply[state](config).check_return_status()
 
     module.exit_json(**ccc_application.result)
 
