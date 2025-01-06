@@ -2763,6 +2763,40 @@ class ApplicationPolicy(DnacBase):
             self.log(self.msg, "ERROR")
             self.check_return_status()
 
+    def get_ssid_from_wc(self, device_id, wlan_id):
+        try:
+            response = self.dnac._exec(
+                family="wireless",
+                function='get_ssid_details_for_specific_wireless_controller',
+                op_modifies= True,
+                params= {'network_device_id': device_id,}
+                )
+
+            self.log("Received API response from 'get_ssid_details_for_specific_wireless_controller' : {0}".format(response), "DEBUG")
+            # Initialize the variable to store the SSID name
+            ssid_name = None
+
+            # Iterate through the list of dictionaries inside the 'response' key
+            for item in response.get("response"):
+                if item['wlanId'] == int(wlan_id):
+                    # Assign the corresponding SSID name to the variable
+                    ssid_name = item['ssidName']
+                    break  # Exit the loop as we found the match
+
+            # Print the result
+            if ssid_name:
+                self.log(f"The SSID name for WLAN ID {wlan_id} is: {ssid_name}")
+            else:
+                self.log(f"No SSID name found for WLAN ID {wlan_id}.")
+
+            return ssid_name
+
+        except Exception as e:
+            self.status = "failed"
+            self.msg = "{0}".format(e)
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
 
     def create_application_policy(self):
         """
@@ -2787,6 +2821,10 @@ class ApplicationPolicy(DnacBase):
 
         new_application_policy_details = self.config.get("application_policy_details")
         application_policy_name = self.want.get("application_policy_details", {}).get("name")
+        device_type = self.want.get("application_policy_details", {}).get("device_type")
+        device_ip = self.want.get("application_policy_details", {}).get("device").get("device_ip")
+        Wlan_id = self.want.get("application_policy_details", {}).get("device").get("Wlan_id")
+
         site_names = new_application_policy_details.get("site_name")
         site_ids = []
         for site_name in site_names:
@@ -2797,6 +2835,15 @@ class ApplicationPolicy(DnacBase):
         application_queuing_profile_name = new_application_policy_details.get("application_queuing_profile_name")
         queuing_profile_id = application_policy_details.get('current_queuing_profile', [])[0].get('id', None)
 
+        if device_type == "wireless":
+            wc_device_id = self.get_device_ids_from_device_ips([device_ip])
+            ssid = self.get_ssid_from_wc(wc_device_id.get(device_ip), Wlan_id)
+            self.log(ssid)
+            if ssid:  
+                ssid = [ssid] 
+        else:
+            ssid = []
+        self.log(ssid)
         # Initialize empty lists for each relevance
         business_relevant_set_name, business_relevant_set_id = [], []
         business_irrelevant_set_name, business_irrelevant_set_id = [], []
@@ -2869,7 +2916,7 @@ class ApplicationPolicy(DnacBase):
                         "advancedPolicyScopeElement": [
                             {
                                 "groupId": site_ids,
-                                "ssid": []
+                                "ssid": ssid
                             }
                         ]
                     },
@@ -2899,8 +2946,8 @@ class ApplicationPolicy(DnacBase):
                         "name": "{}".format(application_policy_name),
                         "advancedPolicyScopeElement": [
                             {
-                                "groupId": [site_id],
-                                "ssid": []
+                                "groupId": site_ids,
+                                "ssid": ssid
                             }
                         ]
                     },
@@ -3542,6 +3589,11 @@ class ApplicationPolicy(DnacBase):
         self.log(current_profiles)
         is_common = required_details['bandwidth_settings']['is_common_between_all_interface_speeds']
     
+        if 'new_profile_name' in required_details:
+            profile_name = required_details['new_profile_name']
+        else:
+            profile_name = queuing_profile['current_queuing_profile'][0].get("name")
+
         if is_common:
             want_bandwidth_settings = {
                 key.upper(): value for key, value in required_details['bandwidth_settings']['bandwidth_percentages'].items()
@@ -3550,17 +3602,23 @@ class ApplicationPolicy(DnacBase):
             want_dscp_settings = {key.upper(): value.upper() if isinstance(value, str) else value
                                 for key, value in required_details['dscp_settings'].items()}
 
-
+            self.log(queuing_profile)
             # Current queuing profile bandwidth and DSCP settings
-            have_bandwidth_settings = {
-                tc['trafficClass']: tc['bandwidthPercentage']
-                for tc in queuing_profile['current_queuing_profile'][0]['clause'][0]['interfaceSpeedBandwidthClauses'][0]['tcBandwidthSettings']
-            }
+            have_bandwidth_settings = {}
+            have_dscp_settings = {}
 
-            have_dscp_settings = {
-                tc['trafficClass']: tc['dscp']
-                for tc in queuing_profile['current_queuing_profile'][0]['clause'][1]['tcDscpSettings']
-            }
+            # Loop through each clause to gather bandwidth and DSCP settings
+            for clause in queuing_profile.get('current_queuing_profile', [])[0].get('clause', []):
+                # If the clause has 'interfaceSpeedBandwidthClauses' field
+                if 'interfaceSpeedBandwidthClauses' in clause:
+                    for interface_speed_clause in clause['interfaceSpeedBandwidthClauses']:
+                        for tc in interface_speed_clause.get('tcBandwidthSettings', []):
+                            have_bandwidth_settings[tc['trafficClass']] = tc['bandwidthPercentage']
+
+                # If the clause has 'tcDscpSettings' field
+                if 'tcDscpSettings' in clause:
+                    for tc in clause.get('tcDscpSettings', []):
+                        have_dscp_settings[tc['trafficClass']] = tc['dscp']
 
             # Output the extracted data
             self.log("want Bandwidth Settings:")
@@ -3593,6 +3651,7 @@ class ApplicationPolicy(DnacBase):
                     # If the traffic class is only in want
                     final_want_bandwidth_dict[traffic_class] = want_value
 
+            self.log(have_bandwidth_settings)
             self.log("Final Want bandwidth Dict:")
             self.log(final_want_bandwidth_dict)
 
@@ -3658,8 +3717,13 @@ class ApplicationPolicy(DnacBase):
                     update_required = True
 
             if not update_required:
-                self.log("No updates required. Both dictionaries match.")
-                # we have to end the code
+                self.status = "success"
+                self.result['changed'] = False
+                self.msg = "application queuing profile '{0}' does not need any update".format(profile_name)
+                self.result['msg'] = self.msg
+                self.result['response'] = self.msg
+                self.log(self.msg, "INFO")
+                return self
             else:
                 self.log("Update required.")
 
@@ -3669,15 +3733,11 @@ class ApplicationPolicy(DnacBase):
                     instance_ids['bandwidth'] = clause['instanceId']
                 elif clause['type'] == 'DSCP_CUSTOMIZATION':
                     instance_ids['dscp'] = clause['instanceId']
+            self.log(queuing_profile)
+            interface_speed_clause = queuing_profile['current_queuing_profile'][0].get('clause')[0].get('interfaceSpeedBandwidthClauses')[0]
 
-            interface_speed_clause = queuing_profile['current_queuing_profile'][0]['clause'][0]['interfaceSpeedBandwidthClauses'][0]
             if interface_speed_clause['interfaceSpeed'] == 'ALL':
                 interface_speed_all_instance_id = interface_speed_clause['instanceId']
-            
-            if 'new_profile_name' in required_details:
-                profile_name = required_details['new_profile_name']
-            else:
-                profile_name = queuing_profile['current_queuing_profile'][0].get("name")
 
             if 'profile_description' in required_details:
                 profile_desc = required_details['profile_description']
@@ -3727,6 +3787,308 @@ class ApplicationPolicy(DnacBase):
             ]
 
             self.log(json.dumps(payload, indent=2))
+
+        else:
+
+            want_bandwidth_settings_100_GBPS = None
+            want_bandwidth_settings_10_GBPS = None
+            want_bandwidth_settings_1_GBPS = None
+            want_bandwidth_settings_100_MBPS = None
+            want_bandwidth_settings_10_MBPS = None
+            want_bandwidth_settings_1_MBPS = None
+
+            for setting in required_details['bandwidth_settings']['interface_speed_settings']:
+                if "HUNDRED_GBPS" in setting['interface_speed']:
+                    want_bandwidth_settings_100_GBPS = setting.get("bandwidth_percentages")
+                if "HUNDRED_MBPS" in setting['interface_speed']:
+                    want_bandwidth_settings_100_MBPS = setting.get("bandwidth_percentages")
+                if "TEN_GBPS" in setting['interface_speed']:
+                    want_bandwidth_settings_10_GBPS = setting.get("bandwidth_percentages")
+                if "TEN_MBPS" in setting['interface_speed']:
+                    want_bandwidth_settings_10_MBPS = setting.get("bandwidth_percentages")
+                if "ONE_GBPS" in setting['interface_speed']:
+                    want_bandwidth_settings_1_GBPS = setting.get("bandwidth_percentages")
+                if "ONE_MBPS" in setting['interface_speed']:
+                    want_bandwidth_settings_1_MBPS = setting.get("bandwidth_percentages")
+
+
+            have_bandwidth_settings_100_GBPS, have_bandwidth_settings_100_MBPS, have_bandwidth_settings_10_GBPS = {}, {}, {}
+            have_bandwidth_settings_10_MBPS, have_bandwidth_settings_1_GBPS, have_bandwidth_settings_1_MBPS = {}, {}, {}
+
+            instance_id_bandwidth_settings_100_GBPS, instance_id_bandwidth_settings_100_MBPS, instance_id_bandwidth_settings_10_GBPS = {}, {}, {}
+            instance_id_bandwidth_settings_10_MBPS, instance_id_bandwidth_settings_1_GBPS, instance_id_bandwidth_settings_1_MBPS = {}, {}, {}
+
+
+            for profile in current_profiles:
+                for clause in profile.get('clause', []):
+                    for interface_speed_bandwidth_clause in clause.get('interfaceSpeedBandwidthClauses', []):
+                        if interface_speed_bandwidth_clause.get("interfaceSpeed") == "HUNDRED_GBPS":
+                            for setting in interface_speed_bandwidth_clause['tcBandwidthSettings']:
+                                traffic_class = setting['trafficClass'].upper().replace(' ', '_')  # Normalize to uppercase
+                                bandwidth_percentage = str(setting['bandwidthPercentage'])  # Convert to string
+                                instance_id = (setting['instanceId']) 
+                                have_bandwidth_settings_100_GBPS[traffic_class] = bandwidth_percentage
+                                instance_id_bandwidth_settings_100_GBPS[traffic_class] = instance_id
+
+                        if interface_speed_bandwidth_clause.get("interfaceSpeed") == "HUNDRED_MBPS":
+                            for setting in interface_speed_bandwidth_clause['tcBandwidthSettings']:
+                                traffic_class = setting['trafficClass'].upper().replace(' ', '_')  # Normalize to uppercase
+                                bandwidth_percentage = str(setting['bandwidthPercentage'])  # Convert to string
+                                instance_id = (setting['instanceId']) 
+                                have_bandwidth_settings_100_MBPS[traffic_class] = bandwidth_percentage
+                                instance_id_bandwidth_settings_100_MBPS[traffic_class] = instance_id
+
+                        if interface_speed_bandwidth_clause.get("interfaceSpeed") == "TEN_GBPS":
+                            for setting in interface_speed_bandwidth_clause['tcBandwidthSettings']:
+                                traffic_class = setting['trafficClass'].upper().replace(' ', '_')  # Normalize to uppercase
+                                bandwidth_percentage = str(setting['bandwidthPercentage'])  # Convert to string
+                                instance_id = (setting['instanceId']) 
+                                have_bandwidth_settings_10_GBPS[traffic_class] = bandwidth_percentage
+                                instance_id_bandwidth_settings_10_GBPS[traffic_class] = instance_id
+
+                        if interface_speed_bandwidth_clause.get("interfaceSpeed") == "TEN_MBPS":
+                            for setting in interface_speed_bandwidth_clause['tcBandwidthSettings']:
+                                traffic_class = setting['trafficClass'].upper().replace(' ', '_')  # Normalize to uppercase
+                                bandwidth_percentage = str(setting['bandwidthPercentage'])  # Convert to string
+                                instance_id = (setting['instanceId']) 
+                                have_bandwidth_settings_10_MBPS[traffic_class] = bandwidth_percentage
+                                instance_id_bandwidth_settings_10_MBPS[traffic_class] = instance_id
+
+                        if interface_speed_bandwidth_clause.get("interfaceSpeed") == "ONE_GBPS":
+                            for setting in interface_speed_bandwidth_clause['tcBandwidthSettings']:
+                                traffic_class = setting['trafficClass'].upper().replace(' ', '_')  # Normalize to uppercase
+                                bandwidth_percentage = str(setting['bandwidthPercentage'])  # Convert to string
+                                instance_id = (setting['instanceId']) 
+                                have_bandwidth_settings_1_GBPS[traffic_class] = bandwidth_percentage
+                                instance_id_bandwidth_settings_1_GBPS[traffic_class] = instance_id
+                        if interface_speed_bandwidth_clause.get("interfaceSpeed") == "ONE_MBPS":
+                            for setting in interface_speed_bandwidth_clause['tcBandwidthSettings']:
+                                traffic_class = setting['trafficClass'].upper().replace(' ', '_')  # Normalize to uppercase
+                                bandwidth_percentage = str(setting['bandwidthPercentage'])  # Convert to string
+                                instance_id = (setting['instanceId']) 
+                                have_bandwidth_settings_1_MBPS[traffic_class] = bandwidth_percentage
+                                instance_id_bandwidth_settings_1_MBPS[traffic_class] = instance_id
+
+
+            # Normalizing traffic classes to uppercase for comparison
+            final_want_bandwidth_settings_100_GBPS = {}
+            final_want_bandwidth_settings_100_MBPS = {}
+            final_want_bandwidth_settings_10_GBPS = {}
+            final_want_bandwidth_settings_10_MBPS = {}
+            final_want_bandwidth_settings_1_GBPS = {}
+            final_want_bandwidth_settings_1_MBPS = {}
+
+            for speed, want_bandwidth_settings, have_bandwidth_settings, final_want_bandwidth_settings in [
+                ("100_GBPS", want_bandwidth_settings_100_GBPS, have_bandwidth_settings_100_GBPS, final_want_bandwidth_settings_100_GBPS),
+                ("100_MBPS", want_bandwidth_settings_100_MBPS, have_bandwidth_settings_100_MBPS, final_want_bandwidth_settings_100_MBPS),
+                ("10_GBPS", want_bandwidth_settings_10_GBPS, have_bandwidth_settings_10_GBPS, final_want_bandwidth_settings_10_GBPS),
+                ("10_MBPS", want_bandwidth_settings_10_MBPS, have_bandwidth_settings_10_MBPS, final_want_bandwidth_settings_10_MBPS),
+                ("1_GBPS", want_bandwidth_settings_1_GBPS, have_bandwidth_settings_1_GBPS, final_want_bandwidth_settings_1_GBPS),
+                ("1_MBPS", want_bandwidth_settings_1_MBPS, have_bandwidth_settings_1_MBPS, final_want_bandwidth_settings_1_MBPS)
+            ]:
+                # Compare and merge `want_bandwidth_settings` and `have_bandwidth_settings`
+                for key, value in want_bandwidth_settings.items():
+                    normalized_key = key.upper().replace(' ', '_')  # Normalize key to uppercase with underscores
+                    if normalized_key in have_bandwidth_settings:
+                        if have_bandwidth_settings[normalized_key] != value:
+                            final_want_bandwidth_settings[normalized_key] = value
+                        else:
+                            final_want_bandwidth_settings[normalized_key] = have_bandwidth_settings[normalized_key]
+                    else:
+                        final_want_bandwidth_settings[normalized_key] = value
+
+                # Now check for entries in `have_bandwidth_settings` not in `want_bandwidth_settings`
+                for key, value in have_bandwidth_settings.items():
+                    if key not in final_want_bandwidth_settings:
+                        final_want_bandwidth_settings[key] = value
+
+            normalized_have = {k.upper(): v for k, v in have_bandwidth_settings.items()}
+            normalized_want = {k.upper(): v for k, v in want_bandwidth_settings.items()}
+
+            # Compare the normalized dictionaries
+            bandwidth_update_required = True
+            if normalized_have == normalized_want:
+                bandwidth_update_required = False
+                self.log("No update required, settings are identical.")
+            else:
+                self.log("Update required, settings are different.")
+
+            self.log(want_bandwidth_settings)
+            self.log(have_bandwidth_settings)
+            instance_id_bandwidth_settings = {
+                "HUNDRED_GBPS": {key: instance_id_bandwidth_settings_100_GBPS.get(key, None) for key in final_want_bandwidth_settings_100_GBPS},
+                "HUNDRED_MBPS": {key: instance_id_bandwidth_settings_100_MBPS.get(key, None) for key in final_want_bandwidth_settings_100_MBPS},
+                "TEN_GBPS": {key: instance_id_bandwidth_settings_10_GBPS.get(key, None) for key in final_want_bandwidth_settings_10_GBPS},
+                "TEN_MBPS": {key: instance_id_bandwidth_settings_10_MBPS.get(key, None) for key in final_want_bandwidth_settings_10_MBPS},
+                "ONE_GBPS": {key: instance_id_bandwidth_settings_1_GBPS.get(key, None) for key in final_want_bandwidth_settings_1_GBPS},
+                "ONE_MBPS": {key: instance_id_bandwidth_settings_1_MBPS.get(key, None) for key in final_want_bandwidth_settings_1_MBPS}
+            }
+
+            final_bandwidth_settings = {
+                "HUNDRED_GBPS": final_want_bandwidth_settings_100_GBPS,
+                "HUNDRED_MBPS": final_want_bandwidth_settings_100_MBPS,
+                "TEN_GBPS": final_want_bandwidth_settings_10_GBPS,
+                "TEN_MBPS": final_want_bandwidth_settings_10_MBPS,
+                "ONE_GBPS": final_want_bandwidth_settings_1_GBPS,
+                "ONE_MBPS": final_want_bandwidth_settings_1_MBPS
+            }
+
+            want_dscp_settings = {
+                key.upper(): value.upper() if isinstance(value, str) else value
+                for key, value in required_details.get('dscp_settings', {}).items()
+            }
+
+
+            # Current DSCP settings from the current profiles
+            have_dscp_settings = {
+                tc['trafficClass']: tc['dscp']
+                for profile in current_profiles
+                for clause in profile.get('clause', [])
+                if 'tcDscpSettings' in clause
+                for tc in clause['tcDscpSettings']
+            }
+
+            # Initialize final dictionary for DSCP
+            final_want_dscp_dict = {}
+            self.log(want_dscp_settings)
+            # Compare and update DSCP settings
+            for traffic_class, want_value in want_dscp_settings.items():
+                # Convert want_value to int for comparison
+                want_value = int(want_value)
+                self.log(want_value)
+                if traffic_class in have_dscp_settings:
+                    have_value = have_dscp_settings[traffic_class]
+                    # Compare values
+                    if want_value == have_value:
+                        final_want_dscp_dict[traffic_class] = have_value
+                    else:
+                        final_want_dscp_dict[traffic_class] = want_value
+                else:
+                    # If the traffic class is only in want
+                    final_want_dscp_dict[traffic_class] = want_value
+                    
+            if not  want_dscp_settings:
+                final_want_dscp_dict = have_dscp_settings
+
+
+            # Initialize mapping for DSCP instance IDs
+            id_dscp_mapping = {}
+
+            # Map DSCP instance IDs from current profiles
+            for profile in current_profiles:
+                for clause in profile.get('clause', []):
+                    if clause.get('type') == 'DSCP_CUSTOMIZATION':
+                        for dscp_setting in clause.get('tcDscpSettings', []):
+                            dscp = dscp_setting.get('dscp')
+                            traffic_class = dscp_setting.get('trafficClass')
+                            instance_id = dscp_setting.get('instanceId')
+                            if dscp and traffic_class and instance_id:
+                                id_dscp_mapping[traffic_class] = instance_id
+
+            dscp_update_required = False
+
+            # Checking DSCP settings
+            for key, value in final_want_dscp_dict.items():
+                if key in have_dscp_settings:
+                    if int(have_dscp_settings[key]) != value:
+                        dscp_update_required = True
+                else:
+                    dscp_update_required = True
+
+            if not dscp_update_required and not bandwidth_update_required:
+                self.status = "success"
+                self.result['changed'] = False
+                self.msg = "application queuing profile '{0}' does not need any update".format(profile_name)
+                self.result['msg'] = self.msg
+                self.result['response'] = self.msg
+                self.log(self.msg, "INFO")
+                return self
+
+            # Construct the payload for DSCP customization
+            instance_ids = {}
+            for profile in current_profiles:
+                for clause in profile.get('clause', []):
+                    if 'type' in clause and clause['type'] == 'DSCP_CUSTOMIZATION':
+                        instance_ids['dscp'] = clause.get('instanceId')
+                    if 'interfaceSpeedBandwidthClauses' in clause and clause['interfaceSpeedBandwidthClauses']:
+                        instance_ids['bandwidth'] = clause.get('instanceId')
+
+            speed_to_instance_id = {}
+
+            # Loop through the current_profiles to extract the instanceId for each speed
+            for profile in current_profiles:
+                for clause in profile.get('clause', []):
+                    if 'interfaceSpeedBandwidthClauses' in clause:
+                        for speed_bandwidth_clause in clause['interfaceSpeedBandwidthClauses']:
+                            speed = speed_bandwidth_clause.get('interfaceSpeed')
+                            instance_id = speed_bandwidth_clause.get('instanceId')
+                            
+                            # Store the instanceId in the dictionary with interfaceSpeed as the key
+                            if speed and instance_id:
+                                speed_to_instance_id[speed] = instance_id
+
+            param = {
+                "id": current_profiles[0].get("id"),
+                "name": current_profiles[0].get("name"),
+                "description": current_profiles[0].get("description"),
+                "clause": []
+            }
+
+            # Loop through the speeds and bandwidth settings to create the clauses dynamically
+            for profile in current_profiles:
+                for clause in profile.get('clause', []):
+                    if 'interfaceSpeedBandwidthClauses' in clause and clause['interfaceSpeedBandwidthClauses']:
+                        
+                        params = { 
+                            "instanceId": instance_ids.get("bandwidth"),
+                            "type": "BANDWIDTH",
+                            "isCommonBetweenAllInterfaceSpeeds": False,
+                            "interfaceSpeedBandwidthClauses": []
+                        }
+                        param["clause"].append(params)
+
+                        # Loop through the speeds and bandwidth settings for this profile
+                        for speed, bandwidth_settings in instance_id_bandwidth_settings.items():
+                            clause = {
+                                "instanceId": speed_to_instance_id.get(speed) ,
+                                "interfaceSpeed": speed,
+                                "tcBandwidthSettings": []
+                            }
+
+                            for traffic_class, instance_id in bandwidth_settings.items():
+                                clause["tcBandwidthSettings"].append({
+                                    "trafficClass": traffic_class,
+                                    "instanceId": instance_id,
+                                    "bandwidthPercentage": final_bandwidth_settings[speed].get(traffic_class, 0)
+                                })
+
+                            # Append the clause to the interfaceSpeedBandwidthClauses
+                            params["interfaceSpeedBandwidthClauses"].append(clause)
+
+                    if 'tcDscpSettings' in clause and clause['tcDscpSettings']:
+                        dscp_clause = {
+                            "instanceId": instance_ids.get("dscp"),
+                            "type": "DSCP_CUSTOMIZATION",
+                            "tcDscpSettings": []
+                        }
+
+                        for traffic_class, dscp_value in final_want_dscp_dict.items():
+                            dscp_clause["tcDscpSettings"].append({
+                                "instanceId": id_dscp_mapping[traffic_class],
+                                "trafficClass": traffic_class,
+                                "dscp": dscp_value
+                            })
+
+                        # Add DSCP clause to the payload
+                        param["clause"].append(dscp_clause)
+
+                    # Add the generated param to the payload
+                    payload = [param]
+
+
+            # Print the result as a JSON string
+            self.log(json.dumps(payload, indent=2))
+
 
         try:
             response = self.dnac._exec(
@@ -3811,7 +4173,7 @@ class ApplicationPolicy(DnacBase):
         if new_queuing_profile_details.get('bandwidth_settings', {}).get('is_common_between_all_interface_speeds') == True or new_queuing_profile_details.get('type') == ['dscp']:
           param = {
               "name": new_queuing_profile_details.get('profile_name', ''),
-              "description": new_queuing_profile_details.get('policy_description', ''),
+              "description": new_queuing_profile_details.get('profile_description', ''),
               "clause": []
           }
 
