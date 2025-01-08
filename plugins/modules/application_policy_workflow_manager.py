@@ -42,7 +42,7 @@ options:
         suboptions:
           profile_name:
             description:
-              - This represent a name for the queuing profile.
+              - This represents a name for the queuing profile.
               - Required for queuing profile create, update and delete operations.
             type: str
           profile_description:
@@ -64,7 +64,7 @@ options:
               #       DSCP is used for Quality of Service (QoS) to categorize and prioritize network traffic.
               #   type: str
           bandwidth_settings:
-            description: When the type is "bandwidth", the "bandwidth_settings" will include specific details related to bandwidth allocation
+            description: The "bandwidth_settings" will include specific details related to bandwidth allocation
             type: dict
             suboptions:
               is_common_between_all_interface_speeds:
@@ -140,10 +140,10 @@ options:
                         description: Refers to traffic related to the management and operation of the network itself.
                         type: str
                       bulk_data:
-                        description: Refers to large-volume data transfers that are typically non-time-sensitive and can tolerate delays or interruptions
+                        description: Refers to large-volume data transfers that are typically non-time-sensitive and can tolerate delays or interruptions.
                         type: str
           dscp_settings:
-            description: When the type is 'DSCP' the 'dscp_settings' will include specific details related to dscp allocation.
+            description: The 'dscp_settings' will include specific details related to dscp allocation.
             type: list
             elements: dict
             suboptions:
@@ -183,7 +183,7 @@ options:
                 description: Refers to network traffic associated with operations and administration management.
                 type: str
               broadcast_video:
-                description: Refers to video content that is broadcasted or streamed to a large audience, typically in a one-to-many distribution model
+                description: Refers to video content that is broadcasted or streamed to a large audience, typically in a one-to-many distribution model.
                 type: str
               network_control:
                 description: Refers to traffic related to the management and operation of the network itself.
@@ -239,12 +239,12 @@ options:
             type: str
           dscp:
             description:
-              - If the type mentioned is serverip then a value for dscp or network_identity details has to be mentioned to creaate an application.
+              - If the type mentioned is serverip then a value for dscp or network_identity details has to be mentioned to create an application.
               - The value for dscp should range between 0 - 63. 
             type: str
           network_identity:
             description:
-              - If the type mentioned is server-ip then a value for dscp or network_identity details has to be mentioned to creaate an application.
+              - If the type mentioned is server-ip then a value for dscp or network_identity details has to be mentioned to create an application.
             type: list
             elements :dict
             suboptions:
@@ -271,7 +271,7 @@ options:
                 type: str   
           app_protocol:
             description: |
-              - If the type mentioned is url or serverip then the protocol used by the application has to be mentioned to creaate an application.
+              - If the type mentioned is url or serverip then the protocol used by the application has to be mentioned to create an application.
               - If the type is url then the app_protocol should be tcp.
               - Permissible values:
                 - 'TCP': Specifies the Transmission Control Protocol, used for reliable, connection-oriented communication.
@@ -2157,6 +2157,14 @@ class ApplicationPolicy(DnacBase):
             for detail in application_queuing_details:
                 if detail.get("profile_name"):
                     application_queuing_name = detail.get("profile_name")
+                    if not application_queuing_name:
+                        self.status = "failed"
+                        self.msg = (
+                            "The following parameter(s): 'profile_name' could not be found  and are mandatory to create or update application queuinig profile ."
+                        )
+                        self.log(self.msg, "ERROR")
+                        self.result['response'] = self.msg
+                        self.check_return_status()
                     queuing_profile_exists, current_queuing_profile = self.get_queuing_profile_details(application_queuing_name)
                     have["current_queuing_profile"] = current_queuing_profile
                     have["queuing_profile_exists"] = queuing_profile_exists
@@ -2172,12 +2180,11 @@ class ApplicationPolicy(DnacBase):
         if self.want.get("application_policy_details"):
             application_policy_details = self.want.get("application_policy_details")
             application_policy_name = self.want.get("application_policy_details", {}).get("name")
-            self.log(application_policy_name)
 
             if not application_policy_name:
                 self.status = "failed"
                 self.msg = (
-                    "The following parameter(s): 'name' could not be found  and are mandatory to create application policy ."
+                    "The following parameter(s): 'name' could not be found  and are mandatory to create or update application policy ."
                 )
                 self.log(self.msg, "ERROR")
                 self.result['response'] = self.msg
@@ -2212,7 +2219,7 @@ class ApplicationPolicy(DnacBase):
             if not application_name:
                 self.status = "failed"
                 self.msg = (
-                    "The following parameter(s): 'name' could not be found  and are mandatory to create application ."
+                    "The following parameter(s): 'name' could not be found  and are mandatory to create or update application ."
                 )
                 self.log(self.msg, "ERROR")
                 self.result['response'] = self.msg
@@ -2377,13 +2384,35 @@ class ApplicationPolicy(DnacBase):
     def get_diff_application_policy(self):
 
         application_policy_details = self.have
+        application_policy_name = self.want.get("application_policy_details", {}).get("name")
+        current_application_policy_details = self.config.get("application_policy_details")
+
+        site_names = current_application_policy_details.get("site_name")
+        application_queuing_profile_name = current_application_policy_details.get("application_queuing_profile_name")
+        clause = current_application_policy_details.get("clause")
+
+        missing_fields = []
+
+        if not site_names:
+            missing_fields.append("site_name")
+        if not application_queuing_profile_name:
+            missing_fields.append("application_queuing_profile_name")
+        if not clause:
+            missing_fields.append("clause")
+
+        # Raise error if any field is missing
+        if missing_fields:
+            self.status = "failed"
+            self.msg = "Application policy operation failed. The following mandatory parameters are missing or empty: {}.".format(", ".join(missing_fields))
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
 
         if application_policy_details.get("application_policy_exists") == False:
             self.create_application_policy()
             return self
 
         req_application_policy_details = self.config.get("application_policy_details")
-        application_policy_name = self.want.get("application_policy_details", {}).get("name")
         site_names = req_application_policy_details.get("site_name")
         site_ids = []
         for site_name in site_names:
@@ -2785,9 +2814,9 @@ class ApplicationPolicy(DnacBase):
 
             # Print the result
             if ssid_name:
-                self.log(f"The SSID name for WLAN ID {wlan_id} is: {ssid_name}")
+                self.log("The SSID name for WLAN ID {} is: {}".format(wlan_id, ssid_name))
             else:
-                self.log(f"No SSID name found for WLAN ID {wlan_id}.")
+                self.log("No SSID name found for WLAN ID {}.".format(wlan_id))
 
             return ssid_name
 
@@ -2824,8 +2853,28 @@ class ApplicationPolicy(DnacBase):
         device_type = self.want.get("application_policy_details", {}).get("device_type")
         device_ip = self.want.get("application_policy_details", {}).get("device").get("device_ip")
         Wlan_id = self.want.get("application_policy_details", {}).get("device").get("Wlan_id")
-
         site_names = new_application_policy_details.get("site_name")
+        application_queuing_profile_name = new_application_policy_details.get("application_queuing_profile_name")
+        clause = new_application_policy_details.get("clause")
+
+        missing_fields = []
+
+        if not site_names:
+            missing_fields.append("site_name")
+        if not application_queuing_profile_name:
+            missing_fields.append("application_queuing_profile_name")
+        if not clause:
+            missing_fields.append("clause")
+
+        # Raise error if any field is missing
+        if missing_fields:
+            self.status = "failed"
+            self.msg = "Application policy operation failed. The following mandatory parameters are missing or empty: {}.".format(", ".join(missing_fields))
+            self.result['response'] = self.msg
+            self.log(self.msg, "ERROR")
+            self.check_return_status()
+
+
         site_ids = []
         for site_name in site_names:
             site_exists, site_id = self.get_site_id(site_name)
@@ -3587,21 +3636,35 @@ class ApplicationPolicy(DnacBase):
         self.log(required_details)
         current_profiles = queuing_profile.get('current_queuing_profile', [])
         self.log(current_profiles)
-        is_common = required_details['bandwidth_settings']['is_common_between_all_interface_speeds']
+        if required_details.get('bandwidth_settings', {}):
+            is_common = required_details.get('bandwidth_settings', {}).get('is_common_between_all_interface_speeds')
+
+        for item in current_profiles:
+            for clause in item.get('clause', []):
+                self.log(clause)
+                if clause.get('isCommonBetweenAllInterfaceSpeeds') == True:
+                    is_common = True
+                else:
+                    is_common = False
     
         if 'new_profile_name' in required_details:
             profile_name = required_details['new_profile_name']
         else:
             profile_name = queuing_profile['current_queuing_profile'][0].get("name")
-
+        self.log(is_common)
         if is_common:
-            want_bandwidth_settings = {
-                key.upper(): value for key, value in required_details['bandwidth_settings']['bandwidth_percentages'].items()
-            }
+            if required_details.get('bandwidth_settings', {}):
+                want_bandwidth_settings = {
+                    key.upper(): value for key, value in required_details['bandwidth_settings']['bandwidth_percentages'].items()
+                }
+            else:
+                want_bandwidth_settings = {}
 
-            want_dscp_settings = {key.upper(): value.upper() if isinstance(value, str) else value
-                                for key, value in required_details['dscp_settings'].items()}
-
+            if required_details.get('dscp_settings', {}):
+                want_dscp_settings = {key.upper(): value.upper() if isinstance(value, str) else value
+                                    for key, value in required_details['dscp_settings'].items()}
+            else:
+                want_dscp_settings = {}
             self.log(queuing_profile)
             # Current queuing profile bandwidth and DSCP settings
             have_bandwidth_settings = {}
@@ -3620,36 +3683,26 @@ class ApplicationPolicy(DnacBase):
                     for tc in clause.get('tcDscpSettings', []):
                         have_dscp_settings[tc['trafficClass']] = tc['dscp']
 
-            # Output the extracted data
-            self.log("want Bandwidth Settings:")
-            self.log(want_bandwidth_settings)
-
-            self.log("\nhave Bandwidth Settings:")
-            self.log(have_bandwidth_settings)
-
-            self.log("\nwant DSCP Settings:")
-            self.log(want_dscp_settings)
-
-            self.log("\nhave DSCP Settings:")
-            self.log(have_dscp_settings)
-
             # Initialize final dictionary
             final_want_bandwidth_dict = {}
-
+            self.log(want_bandwidth_settings)
+            self.log(have_bandwidth_settings)
             for traffic_class, want_value in want_bandwidth_settings.items():
                 # Convert want_value to int for comparison
                 want_value = int(want_value)
 
                 if traffic_class in have_bandwidth_settings:
                     have_value = have_bandwidth_settings[traffic_class]
-                    # Compare values
-                    if want_value == have_value:
-                        final_want_bandwidth_dict[traffic_class] = have_value
-                    else:
-                        final_want_bandwidth_dict[traffic_class] = want_value
+                    # Use the value from want if it exists, otherwise use the one from have
+                    final_want_bandwidth_dict[traffic_class] = want_value
                 else:
                     # If the traffic class is only in want
                     final_want_bandwidth_dict[traffic_class] = want_value
+
+            # Add the remaining values from have_bandwidth_settings that are not in want_bandwidth_settings
+            for traffic_class, have_value in have_bandwidth_settings.items():
+                if traffic_class not in final_want_bandwidth_dict:
+                    final_want_bandwidth_dict[traffic_class] = have_value
 
             self.log(have_bandwidth_settings)
             self.log("Final Want bandwidth Dict:")
@@ -3662,14 +3715,16 @@ class ApplicationPolicy(DnacBase):
 
                 if traffic_class in have_dscp_settings:
                     have_value = have_dscp_settings[traffic_class]
-                    # Compare values
-                    if want_value == have_value:
-                        final_want_dscp_dict[traffic_class] = have_value
-                    else:
-                        final_want_dscp_dict[traffic_class] = want_value
+                    # Use the value from want if it exists, otherwise use the one from have
+                    final_want_dscp_dict[traffic_class] = want_value
                 else:
                     # If the traffic class is only in want
                     final_want_dscp_dict[traffic_class] = want_value
+
+            # Add the remaining values from have_dscp_settings that are not in want_dscp_settings
+            for traffic_class, have_value in have_dscp_settings.items():
+                if traffic_class not in final_want_dscp_dict:
+                    final_want_dscp_dict[traffic_class] = have_value
 
             # Final result
             self.log("Final Want dscp Dict:")
@@ -3716,6 +3771,13 @@ class ApplicationPolicy(DnacBase):
                 else:
                     update_required = True
 
+            if 'new_profile_name' in required_details:
+                profile_name = required_details['new_profile_name']
+                update_required = True
+            else:
+                profile_name = queuing_profile['current_queuing_profile'][0].get("name")
+
+
             if not update_required:
                 self.status = "success"
                 self.result['changed'] = False
@@ -3734,7 +3796,19 @@ class ApplicationPolicy(DnacBase):
                 elif clause['type'] == 'DSCP_CUSTOMIZATION':
                     instance_ids['dscp'] = clause['instanceId']
             self.log(queuing_profile)
-            interface_speed_clause = queuing_profile['current_queuing_profile'][0].get('clause')[0].get('interfaceSpeedBandwidthClauses')[0]
+            current_queuing_profile = queuing_profile.get('current_queuing_profile')
+            if current_queuing_profile and len(current_queuing_profile) > 0:
+                clause = current_queuing_profile[0].get('clause')
+                if clause and len(clause) > 0:
+                    interface_speed_bandwidth_clauses = clause[0].get('interfaceSpeedBandwidthClauses')
+                    if interface_speed_bandwidth_clauses and len(interface_speed_bandwidth_clauses) > 0:
+                        interface_speed_clause = interface_speed_bandwidth_clauses[0]
+                    else:
+                        self.log("interfaceSpeedBandwidthClauses is None or empty")
+                else:
+                    self.log("clause is None or empty")
+            else:
+                self.log("current_queuing_profile is None or empty")
 
             if interface_speed_clause['interfaceSpeed'] == 'ALL':
                 interface_speed_all_instance_id = interface_speed_clause['instanceId']
@@ -3743,7 +3817,8 @@ class ApplicationPolicy(DnacBase):
                 profile_desc = required_details['profile_description']
             else:
                 profile_desc = queuing_profile['current_queuing_profile'][0].get("description")
-            
+            self.log(final_want_bandwidth_dict)
+            self.log(final_want_dscp_dict)
             # Construct the payload
             payload = [
                 {
@@ -3789,7 +3864,6 @@ class ApplicationPolicy(DnacBase):
             self.log(json.dumps(payload, indent=2))
 
         else:
-
             want_bandwidth_settings_100_GBPS = None
             want_bandwidth_settings_10_GBPS = None
             want_bandwidth_settings_1_GBPS = None
@@ -3797,19 +3871,20 @@ class ApplicationPolicy(DnacBase):
             want_bandwidth_settings_10_MBPS = None
             want_bandwidth_settings_1_MBPS = None
 
-            for setting in required_details['bandwidth_settings']['interface_speed_settings']:
-                if "HUNDRED_GBPS" in setting['interface_speed']:
-                    want_bandwidth_settings_100_GBPS = setting.get("bandwidth_percentages")
-                if "HUNDRED_MBPS" in setting['interface_speed']:
-                    want_bandwidth_settings_100_MBPS = setting.get("bandwidth_percentages")
-                if "TEN_GBPS" in setting['interface_speed']:
-                    want_bandwidth_settings_10_GBPS = setting.get("bandwidth_percentages")
-                if "TEN_MBPS" in setting['interface_speed']:
-                    want_bandwidth_settings_10_MBPS = setting.get("bandwidth_percentages")
-                if "ONE_GBPS" in setting['interface_speed']:
-                    want_bandwidth_settings_1_GBPS = setting.get("bandwidth_percentages")
-                if "ONE_MBPS" in setting['interface_speed']:
-                    want_bandwidth_settings_1_MBPS = setting.get("bandwidth_percentages")
+            if required_details.get('bandwidth_settings', {}):
+                for setting in required_details['bandwidth_settings']['interface_speed_settings']:
+                    if "HUNDRED_GBPS" in setting['interface_speed']:
+                        want_bandwidth_settings_100_GBPS = setting.get("bandwidth_percentages")
+                    if "HUNDRED_MBPS" in setting['interface_speed']:
+                        want_bandwidth_settings_100_MBPS = setting.get("bandwidth_percentages")
+                    if "TEN_GBPS" in setting['interface_speed']:
+                        want_bandwidth_settings_10_GBPS = setting.get("bandwidth_percentages")
+                    if "TEN_MBPS" in setting['interface_speed']:
+                        want_bandwidth_settings_10_MBPS = setting.get("bandwidth_percentages")
+                    if "ONE_GBPS" in setting['interface_speed']:
+                        want_bandwidth_settings_1_GBPS = setting.get("bandwidth_percentages")
+                    if "ONE_MBPS" in setting['interface_speed']:
+                        want_bandwidth_settings_1_MBPS = setting.get("bandwidth_percentages")
 
 
             have_bandwidth_settings_100_GBPS, have_bandwidth_settings_100_MBPS, have_bandwidth_settings_10_GBPS = {}, {}, {}
@@ -3887,6 +3962,8 @@ class ApplicationPolicy(DnacBase):
                 ("1_MBPS", want_bandwidth_settings_1_MBPS, have_bandwidth_settings_1_MBPS, final_want_bandwidth_settings_1_MBPS)
             ]:
                 # Compare and merge `want_bandwidth_settings` and `have_bandwidth_settings`
+                want_bandwidth_settings = want_bandwidth_settings or {}
+                have_bandwidth_settings = have_bandwidth_settings or {}
                 for key, value in want_bandwidth_settings.items():
                     normalized_key = key.upper().replace(' ', '_')  # Normalize key to uppercase with underscores
                     if normalized_key in have_bandwidth_settings:
@@ -3904,14 +3981,6 @@ class ApplicationPolicy(DnacBase):
 
             normalized_have = {k.upper(): v for k, v in have_bandwidth_settings.items()}
             normalized_want = {k.upper(): v for k, v in want_bandwidth_settings.items()}
-
-            # Compare the normalized dictionaries
-            bandwidth_update_required = True
-            if normalized_have == normalized_want:
-                bandwidth_update_required = False
-                self.log("No update required, settings are identical.")
-            else:
-                self.log("Update required, settings are different.")
 
             self.log(want_bandwidth_settings)
             self.log(have_bandwidth_settings)
@@ -3987,14 +4056,35 @@ class ApplicationPolicy(DnacBase):
 
             dscp_update_required = False
 
-            # Checking DSCP settings
-            for key, value in final_want_dscp_dict.items():
-                if key in have_dscp_settings:
-                    if int(have_dscp_settings[key]) != value:
-                        dscp_update_required = True
-                else:
-                    dscp_update_required = True
 
+            if final_want_dscp_dict != have_dscp_settings:
+                dscp_update_required = True
+            else:
+                dscp_update_required = False
+
+            bandwidth_update_required = False
+
+            for speed, final_bandwidth in final_bandwidth_settings.items():
+                if speed == 'HUNDRED_GBPS':
+                    have_bandwidth = have_bandwidth_settings_100_GBPS
+                elif speed == 'HUNDRED_MBPS':
+                    have_bandwidth = have_bandwidth_settings_100_MBPS
+                elif speed == 'TEN_GBPS':
+                    have_bandwidth = have_bandwidth_settings_10_GBPS
+                elif speed == 'TEN_MBPS':
+                    have_bandwidth = have_bandwidth_settings_10_MBPS
+                elif speed == 'ONE_GBPS':
+                    have_bandwidth = have_bandwidth_settings_1_GBPS
+                elif speed == 'ONE_MBPS':
+                    have_bandwidth = have_bandwidth_settings_1_MBPS
+                
+                for traffic_class, final_value in final_bandwidth.items():
+                    have_value = have_bandwidth.get(traffic_class, None)
+                    if have_value != final_value:
+                        bandwidth_update_required = True
+
+            self.log(dscp_update_required)
+            self.log(bandwidth_update_required)
             if not dscp_update_required and not bandwidth_update_required:
                 self.status = "success"
                 self.result['changed'] = False
