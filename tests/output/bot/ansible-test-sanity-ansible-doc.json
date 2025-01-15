@@ -1,0 +1,10 @@
+{
+    "docs": "https://docs.ansible.com/ansible-core/2.15/dev_guide/testing/sanity/ansible-doc.html", 
+    "results": [
+        {
+            "message": "The test `ansible-test sanity --test ansible-doc` [[explain](https://docs.ansible.com/ansible-core/2.15/dev_guide/testing/sanity/ansible-doc.html)] failed with the error:", 
+            "output": "Command \"ansible-doc -t module cisco.dnac.application_policy_workflow_manager\" returned exit status 1.\n>>> Standard Error\nERROR! module cisco.dnac.application_policy_workflow_manager missing documentation (or could not parse documentation): cisco.dnac.application_policy_workflow_manager did not contain a DOCUMENTATION attribute (/Users/syedkahm/ansible/dnac/work/collections/ansible_collections/cisco/dnac/plugins/modules/application_policy_workflow_manager.py). Unable to parse documentation in python file '/Users/syedkahm/ansible/dnac/work/collections/ansible_collections/cisco/dnac/plugins/modules/application_policy_workflow_manager.py': while scanning a simple key\n  in \"<unicode string>\", line 233, column 13\ncould not find expected ':'\n  in \"<unicode string>\", line 234, column 13. while scanning a simple key\n  in \"<unicode string>\", line 233, column 13\ncould not find expected ':'\n  in \"<unicode string>\", line 234, column 13"
+        }
+    ], 
+    "verified": false
+}

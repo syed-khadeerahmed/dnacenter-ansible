@@ -1,0 +1,10 @@
+{
+    "docs": "https://docs.ansible.com/ansible-core/2.15/dev_guide/testing/sanity/validate-modules.html", 
+    "results": [
+        {
+            "message": "The test `ansible-test sanity --test validate-modules` [[explain](https://docs.ansible.com/ansible-core/2.15/dev_guide/testing/sanity/validate-modules.html)] failed with 2 errors:", 
+            "output": "plugins/modules/application_policy_workflow_manager.py:0:0: doc-elements-mismatch: Argument 'config' in argument_spec specifies elements as dict,but elements is not documented\nplugins/modules/application_policy_workflow_manager.py:0:0: doc-type-does-not-match-spec: Argument 'config' in argument_spec defines type as 'list' but documentation defines type as 'dict'"
+        }
+    ], 
+    "verified": false
+}

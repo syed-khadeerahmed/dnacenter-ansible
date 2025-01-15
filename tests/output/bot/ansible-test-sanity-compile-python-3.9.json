@@ -1,0 +1,10 @@
+{
+    "docs": "https://docs.ansible.com/ansible-core/2.15/dev_guide/testing/sanity/compile.html", 
+    "results": [
+        {
+            "message": "The test `ansible-test sanity --test compile --python 3.9` [[explain](https://docs.ansible.com/ansible-core/2.15/dev_guide/testing/sanity/compile.html)] failed with 1 error:", 
+            "output": "plugins/modules/application_policy_workflow_manager.py:3369:13: IndentationError: network_application_payload[\"url\"] = required_application_details.get(\"url\")"
+        }
+    ], 
+    "verified": false
+}
