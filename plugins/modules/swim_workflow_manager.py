@@ -1345,7 +1345,7 @@ class Swim(DnacBase):
                         site_info[item['nameHierarchy']] = item['id']
                     else:
                         self.log(
-                            "Missing 'nameHierarchy' or 'id' in site item: {0}".format(str(item)),
+                            "Missing 'nameHierarchy' or 'id' in Site item: {0}".format(str(item)),
                             "WARNING"
                         )
             self.log("Site information retrieved: {0}".format(str(site_info)), "DEBUG")
