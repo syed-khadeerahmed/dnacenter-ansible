@@ -31552,5 +31552,521 @@
             }
         ],
         "version":"1.0"
-    }
+    },
+
+	"playbook_aaa_radius_attribute": [
+	{
+		"feature_template_config": [
+		{
+			"aaa_radius_attribute": [
+			{
+				"called_station_id": "AP_ETHMAC_ONLY",
+				"design_name": "sample_design",
+				"unlocked_attributes": [
+				"calledStationId"
+				]
+			}
+			]
+		}
+		]
+	}
+	],
+	"Get_AAA_RADIUS_ATTRIBUTES_CONFIGURATION": {
+	"response": [
+		{
+		"type": "AAA_RADIUS_ATTRIBUTES_CONFIGURATION",
+		"count": 1,
+		"instances": [
+			{
+			"designName": "Default AAA_Radius_Attributes_Configuration",
+			"id": "8864fe4d-b305-4fd2-b8f9-2d9bc54b6347",
+			"systemTemplate": true
+			}
+		]
+		}
+	],
+	"version": "1.0"
+	},
+	"Create_AAA_Radius_Attribute": {
+	"response": {
+		"taskId": "019a0599-07b7-7f20-a2e2-cffc4eccb372",
+		"url": "/api/v1/task/019a0599-07b7-7f20-a2e2-cffc4eccb372"
+	},
+	"version": "1.0"
+	},
+	"task_019a0599-07b7-7f20-a2e2-cffc4eccb372": {
+	"response": {
+		"endTime": 1761030506427,
+		"status": "SUCCESS",
+		"startTime": 1761030506423,
+		"resultLocation": "/dna/intent/api/v1/tasks/019a0599-07b7-7f20-a2e2-cffc4eccb372/detail",
+		"id": "019a0599-07b7-7f20-a2e2-cffc4eccb372"
+	},
+	"version": "1.0"
+	},
+	"playbook_aaa_radius_attribute_update": [
+	{
+		"feature_template_config": [
+		{
+			"aaa_radius_attribute": [
+			{
+				"called_station_id": "AP_MACADDRESS",
+				"design_name": "sample_design",
+				"unlocked_attributes": [
+				"calledStationId"
+				]
+			}
+			]
+		}
+		]
+	}
+	],
+	"Get_AAA_RADIUS_ATTRIBUTES_CONFIGURATION_update": {
+	"response": [
+		{
+		"type": "AAA_RADIUS_ATTRIBUTES_CONFIGURATION",
+		"count": 2,
+		"instances": [
+			{
+			"designName": "Default AAA_Radius_Attributes_Configuration",
+			"id": "8864fe4d-b305-4fd2-b8f9-2d9bc54b6347",
+			"systemTemplate": true
+			},
+			{
+			"designName": "sample_design",
+			"id": "9181cf41-1563-4532-9897-76d99779cc18",
+			"systemTemplate": false
+			}
+		]
+		}
+	],
+	"version": "1.0"
+	},
+	"Update_AAA_Radius_Attribute": {
+	"response": {
+		"designName": "sample_design",
+		"featureAttributes": {
+		"calledStationId": "AP_ETHMAC_ONLY"
+		},
+		"id": "9181cf41-1563-4532-9897-76d99779cc18",
+		"unlockedAttributes": [
+		"calledStationId"
+		]
+	},
+	"version": "1.0"
+	},
+	"Update_AAA_Radius_Attribute_": {
+	"response": {
+		"taskId": "019a05af-03ca-78c2-afde-264247f40bad",
+		"url": "/api/v1/task/019a05af-03ca-78c2-afde-264247f40bad"
+	},
+	"version": "1.0"
+	},
+	"task_019a05af-03ca-78c2-afde-264247f40bad": {
+	"response": {
+		"endTime": 1761031947227,
+		"status": "SUCCESS",
+		"startTime": 1761031947211,
+		"resultLocation": "/dna/intent/api/v1/tasks/019a05af-03ca-78c2-afde-264247f40bad/detail",
+		"id": "019a05af-03ca-78c2-afde-264247f40bad"
+	},
+	"version": "1.0"
+	},
+	"playbook_aaa_radius_attribute_delete": [
+	{
+		"feature_template_config": [
+		{
+			"aaa_radius_attribute": [
+			{
+				"design_name": "sample_design"
+			}
+			]
+		}
+		]
+	}
+	],
+	"Get_AAA_RADIUS_ATTRIBUTES_CONFIGURATION_delete": {
+	"response": [
+		{
+		"type": "AAA_RADIUS_ATTRIBUTES_CONFIGURATION",
+		"count": 2,
+		"instances": [
+			{
+			"designName": "Default AAA_Radius_Attributes_Configuration",
+			"id": "8864fe4d-b305-4fd2-b8f9-2d9bc54b6347",
+			"systemTemplate": true
+			},
+			{
+			"designName": "sample_design",
+			"id": "9181cf41-1563-4532-9897-76d99779cc18",
+			"systemTemplate": false
+			}
+		]
+		}
+	],
+	"version": "1.0"
+	},
+	"delete_AAA_RADIUS_ATTRIBUTES_CONFIGURATION": {
+	"response": {
+		"taskId": "019a05c6-1eee-7459-9ac8-d09c60c33845",
+		"url": "/api/v1/task/019a05c6-1eee-7459-9ac8-d09c60c33845"
+	},
+	"version": "1.0"
+	},
+	"task_019a05c6-1eee-7459-9ac8-d09c60c33845": {
+	"response": {
+		"endTime": 1761033461490,
+		"status": "SUCCESS",
+		"startTime": 1761033461486,
+		"resultLocation": "/dna/intent/api/v1/tasks/019a05c6-1eee-7459-9ac8-d09c60c33845/detail",
+		"id": "019a05c6-1eee-7459-9ac8-d09c60c33845"
+	},
+	"version": "1.0"
+	},
+	"playbook_advanced_ssid_create": [
+	{
+		"feature_template_config": [
+		{
+			"advanced_ssid": [
+			{
+				"design_name": "sample_advanced_ssid_design",
+				"feature_attributes": {
+				"advertise_pc_analytics_support": false,
+				"advertise_support": false,
+				"aironet_ie_support": true,
+				"call_snooping": false,
+				"defer_priority_0": false,
+				"defer_priority_1": false,
+				"defer_priority_2": false,
+				"defer_priority_3": false,
+				"defer_priority_4": false,
+				"defer_priority_5": false,
+				"defer_priority_6": false,
+				"defer_priority_7": false,
+				"dhcp_opt82_remote_id_sub_option": false,
+				"dhcp_required": true,
+				"dhcp_server": "10.10.10.5",
+				"dot11ax": true,
+				"dot11v_bss_max_idle_protected": false,
+				"downlink_mu_mimo": true,
+				"downlink_ofdma": true,
+				"dtim_period_24ghz": 2,
+				"dtim_period_5ghz": 2,
+				"dual_band_neighbor_list": false,
+				"fast_transition_reassociation_timeout": 50.0,
+				"fastlane_asr": false,
+				"flex_local_auth": false,
+				"idle_threshold": 300,
+				"ip_mac_binding": false,
+				"ip_source_guard": false,
+				"load_balancing": false,
+				"max_clients": 200,
+				"max_clients_per_ap": 300,
+				"max_clients_per_radio": 100,
+				"mdns_mode": "MDNS_SD_BRIDGING",
+				"media_stream_multicast_direct": true,
+				"mu_mimo_11ac": true,
+				"multicast_buffer": true,
+				"multicast_buffer_value": 50,
+				"opportunistic_key_caching": false,
+				"passive_client": false,
+				"peer2peer_blocking": "DISABLE",
+				"prediction_optimization": false,
+				"radius_nac_state": true,
+				"scan_defer_time": 100,
+				"send_beacon_on_association": false,
+				"send_beacon_on_roam": false,
+				"send_disassociate": false,
+				"sent_486_busy": false,
+				"share_data_with_client": false,
+				"target_wakeup_time": true,
+				"universal_ap_admin": false,
+				"uplink_mu_mimo": true,
+				"uplink_ofdma": true,
+				"vlan_central_switching": false,
+				"wifi_alliance_agile_multiband": false,
+				"wifi_to_cellular_steering": false,
+				"wmm_policy": "ALLOWED"
+				},
+				"unlocked_attributes": null
+			}
+			]
+		}
+		]
+	}
+	],
+	"ADVANCED_SSID_CONFIGURATION": {
+	"response": [
+		{
+		"type": "ADVANCED_SSID_CONFIGURATION",
+		"count": 2,
+		"instances": [
+			{
+			"designName": "test_ssid",
+			"id": "1cf0bf57-538c-4d79-8b22-fa1a60e8ea90",
+			"systemTemplate": false
+			},
+			{
+			"designName": "Default Advanced SSID Design",
+			"id": "a007b22e-43dc-4d5f-b847-a59d5a7b192d",
+			"systemTemplate": true
+			}
+		]
+		}
+	],
+	"version": "1.0"
+	},
+	"create_ADVANCED_SSID_CONFIGURATION": {
+	"response": {
+		"taskId": "019a05e4-e2cd-7fe9-895a-3a86eaae5514",
+		"url": "/api/v1/task/019a05e4-e2cd-7fe9-895a-3a86eaae5514"
+	},
+	"version": "1.0"
+	},
+	"task_019a05e4-e2cd-7fe9-895a-3a86eaae5514": {
+	"response": {
+		"endTime": 1761035477714,
+		"status": "SUCCESS",
+		"startTime": 1761035477709,
+		"resultLocation": "/dna/intent/api/v1/tasks/019a05e4-e2cd-7fe9-895a-3a86eaae5514/detail",
+		"id": "019a05e4-e2cd-7fe9-895a-3a86eaae5514"
+	},
+	"version": "1.0"
+	},
+	"playbook_advanced_ssid_update": [
+	{
+		"feature_template_config": [
+		{
+			"advanced_ssid": [
+			{
+				"design_name": "sample_advanced_ssid_design",
+				"feature_attributes": {
+				"advertise_pc_analytics_support": false,
+				"advertise_support": false,
+				"aironet_ie_support": true,
+				"call_snooping": false,
+				"defer_priority_0": false,
+				"defer_priority_1": false,
+				"defer_priority_2": false,
+				"defer_priority_3": false,
+				"defer_priority_4": false,
+				"defer_priority_5": false,
+				"defer_priority_6": false,
+				"defer_priority_7": false,
+				"dhcp_opt82_remote_id_sub_option": false,
+				"dhcp_required": true,
+				"dhcp_server": "10.10.10.5",
+				"dot11ax": true,
+				"dot11v_bss_max_idle_protected": false,
+				"downlink_mu_mimo": true,
+				"downlink_ofdma": true,
+				"dtim_period_24ghz": 5,
+				"dtim_period_5ghz": 5,
+				"dual_band_neighbor_list": false,
+				"fast_transition_reassociation_timeout": 50.0,
+				"fastlane_asr": false,
+				"flex_local_auth": false,
+				"idle_threshold": 300,
+				"ip_mac_binding": false,
+				"ip_source_guard": false,
+				"load_balancing": false,
+				"max_clients": 200,
+				"max_clients_per_ap": 300,
+				"max_clients_per_radio": 100,
+				"mdns_mode": "MDNS_SD_BRIDGING",
+				"media_stream_multicast_direct": true,
+				"mu_mimo_11ac": true,
+				"multicast_buffer": true,
+				"multicast_buffer_value": 50,
+				"opportunistic_key_caching": false,
+				"passive_client": false,
+				"peer2peer_blocking": "DISABLE",
+				"prediction_optimization": false,
+				"radius_nac_state": true,
+				"scan_defer_time": 100,
+				"send_beacon_on_association": false,
+				"send_beacon_on_roam": false,
+				"send_disassociate": false,
+				"sent_486_busy": false,
+				"share_data_with_client": false,
+				"target_wakeup_time": true,
+				"universal_ap_admin": false,
+				"uplink_mu_mimo": true,
+				"uplink_ofdma": true,
+				"vlan_central_switching": false,
+				"wifi_alliance_agile_multiband": false,
+				"wifi_to_cellular_steering": false,
+				"wmm_policy": "REQUIRED"
+				},
+				"unlocked_attributes": null
+			}
+			]
+		}
+		]
+	}
+	],
+	"ADVANCED_SSID_CONFIGURATION_update": {
+	"response": [
+		{
+		"type": "ADVANCED_SSID_CONFIGURATION",
+		"count": 3,
+		"instances": [
+			{
+			"designName": "sample_advanced_ssid_design",
+			"id": "0f67234e-b117-4f04-aa2d-dda49440a3fe",
+			"systemTemplate": false
+			},
+			{
+			"designName": "Default Advanced SSID Design",
+			"id": "a007b22e-43dc-4d5f-b847-a59d5a7b192d",
+			"systemTemplate": true
+			},
+			{
+			"designName": "test_ssid",
+			"id": "1cf0bf57-538c-4d79-8b22-fa1a60e8ea90",
+			"systemTemplate": false
+			}
+		]
+		}
+	],
+	"version": "1.0"
+	},
+	"ADVANCED_SSID_CONFIGURATION_update_": {
+	"response": {
+		"designName": "sample_advanced_ssid_design",
+		"featureAttributes": {
+		"peer2peerblocking": "DISABLE",
+		"passiveClient": false,
+		"predictionOptimization": false,
+		"dualBandNeighborList": false,
+		"radiusNacState": true,
+		"dhcpRequired": true,
+		"dhcpServer": "10.10.10.5",
+		"flexLocalAuth": false,
+		"dot11ax": true,
+		"loadBalancing": false,
+		"dtimPeriod5GHz": 2,
+		"dtimPeriod24GHz": 2,
+		"wmmPolicy": "ALLOWED",
+		"maxClients": 200,
+		"maxClientsPerRadio": 100,
+		"targetWakeupTime": true,
+		"downlinkOfdma": true,
+		"uplinkOfdma": true,
+		"downlinkMuMimo": true,
+		"uplinkMuMimo": true,
+		"deferPriority0": false,
+		"deferPriority1": false,
+		"deferPriority2": false,
+		"deferPriority3": false,
+		"deferPriority4": false,
+		"deferPriority5": false,
+		"deferPriority6": false,
+		"deferPriority7": false,
+		"scanDeferTime": 100,
+		"shareDataWithClient": false,
+		"advertiseSupport": false,
+		"sendBeaconOnAssociation": false,
+		"sendBeaconOnRoam": false,
+		"multicastBuffer": true,
+		"multicastBufferValue": 50,
+		"callSnooping": false,
+		"sendDisassociate": false,
+		"sent486Busy": false,
+		"mediaStreamMulticastDirect": true,
+		"muMimo11ac": true,
+		"wifiToCellularSteering": false,
+		"wifiAllianceAgileMultiband": false,
+		"opportunisticKeyCaching": false,
+		"ipSourceGuard": false,
+		"vlanCentralSwitching": false,
+		"ipMacBinding": false,
+		"idleThreshold": 300,
+		"fastTransitionReassociationTimeout": 50,
+		"mDNSMode": "MDNS_SD_BRIDGING"
+		},
+		"id": "0f67234e-b117-4f04-aa2d-dda49440a3fe",
+		"unlockedAttributes": [
+		
+		]
+	},
+	"version": "1.0"
+	},
+	"update_ADVANCED_SSID_CONFIGURATION": {
+	"response": {
+		"taskId": "019a05ff-25bb-7464-aa52-ae50f9ea6e11",
+		"url": "/api/v1/task/019a05ff-25bb-7464-aa52-ae50f9ea6e11"
+	},
+	"version": "1.0"
+	},
+	"task_019a05ff-25bb-7464-aa52-ae50f9ea6e11": {
+	"response": {
+		"endTime": 1761037198784,
+		"status": "SUCCESS",
+		"startTime": 1761037198779,
+		"resultLocation": "/dna/intent/api/v1/tasks/019a05ff-25bb-7464-aa52-ae50f9ea6e11/detail",
+		"id": "019a05ff-25bb-7464-aa52-ae50f9ea6e11"
+	},
+	"version": "1.0"
+	},
+	"playbook_advanced_ssid_delete": [
+	{
+		"feature_template_config": [
+		{
+			"advanced_ssid": [
+			{
+				"design_name": "sample_advanced_ssid_design"
+			}
+			]
+		}
+		]
+	}
+	],
+	"ADVANCED_SSID_CONFIGURATION_delete": {
+	"response": [
+		{
+		"type": "ADVANCED_SSID_CONFIGURATION",
+		"count": 3,
+		"instances": [
+			{
+			"designName": "sample_advanced_ssid_design",
+			"id": "0f67234e-b117-4f04-aa2d-dda49440a3fe",
+			"systemTemplate": false
+			},
+			{
+			"designName": "Default Advanced SSID Design",
+			"id": "a007b22e-43dc-4d5f-b847-a59d5a7b192d",
+			"systemTemplate": true
+			},
+			{
+			"designName": "test_ssid",
+			"id": "1cf0bf57-538c-4d79-8b22-fa1a60e8ea90",
+			"systemTemplate": false
+			}
+		]
+		}
+	],
+	"version": "1.0"
+	},
+	"delete_ADVANCED_SSID_CONFIGURATION": {
+	"response": {
+		"taskId": "019a0616-094f-7d81-9d8c-2d371bf1daed",
+		"url": "/api/v1/task/019a0616-094f-7d81-9d8c-2d371bf1daed"
+	},
+	"version": "1.0"
+	},
+	"task_019a0616-094f-7d81-9d8c-2d371bf1daed": {
+	"response": {
+		"endTime": 1761038698835,
+		"status": "SUCCESS",
+		"startTime": 1761038698831,
+		"resultLocation": "/dna/intent/api/v1/tasks/019a0616-094f-7d81-9d8c-2d371bf1daed/detail",
+		"id": "019a0616-094f-7d81-9d8c-2d371bf1daed"
+	},
+	"version": "1.0"
+	}
+
+
+
+
 }

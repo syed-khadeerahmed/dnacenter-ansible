@@ -25,6 +25,13 @@ from .dnac_module import TestDnacModule, set_module_args, loadPlaybookData
 class TestWirelessDesign(TestDnacModule):
     module = wireless_design_workflow_manager
     test_data = loadPlaybookData("wireless_design_workflow_manager_intent")
+    # playbooks for wireless_design_workflow_manager enhancements (feature_template)
+    playbook_aaa_radius_attribute = test_data.get("playbook_aaa_radius_attribute")
+    playbook_aaa_radius_attribute_update = test_data.get("playbook_aaa_radius_attribute_update")
+    playbook_aaa_radius_attribute_delete = test_data.get("playbook_aaa_radius_attribute_delete")
+    playbook_advanced_ssid_create = test_data.get("playbook_advanced_ssid_create")
+    playbook_advanced_ssid_update = test_data.get("playbook_advanced_ssid_update")
+    playbook_advanced_ssid_delete = test_data.get("playbook_advanced_ssid_delete")
 
     def setUp(self):
         super(TestWirelessDesign, self).setUp()
@@ -546,6 +553,49 @@ class TestWirelessDesign(TestDnacModule):
                 self.test_data.get("response_get_anchor_groups_3_post_delete_success"),
             ]
 
+        if "playbook_aaa_radius_attribute" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("Get_AAA_RADIUS_ATTRIBUTES_CONFIGURATION"),
+                self.test_data.get("Create_AAA_Radius_Attribute"),
+                self.test_data.get("task_019a0599-07b7-7f20-a2e2-cffc4eccb372"),
+            ]
+
+        if "playbook_aaa_radius_attribute_update" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("Get_AAA_RADIUS_ATTRIBUTES_CONFIGURATION_update"),
+                self.test_data.get("Update_AAA_Radius_Attribute"),
+                self.test_data.get("Update_AAA_Radius_Attribute_"),
+                self.test_data.get("task_019a05af-03ca-78c2-afde-264247f40bad"),
+            ]
+
+        if "playbook_aaa_radius_attribute_delete" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("Get_AAA_RADIUS_ATTRIBUTES_CONFIGURATION_delete"),
+                self.test_data.get("delete_AAA_RADIUS_ATTRIBUTES_CONFIGURATION"),
+                self.test_data.get("task_019a05c6-1eee-7459-9ac8-d09c60c33845"),
+            ]
+
+        if "playbook_advanced_ssid_create" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("ADVANCED_SSID_CONFIGURATION"),
+                self.test_data.get("create_ADVANCED_SSID_CONFIGURATION"),
+                self.test_data.get("task_019a05e4-e2cd-7fe9-895a-3a86eaae5514"),
+            ]
+
+        if "playbook_advanced_ssid_update" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("ADVANCED_SSID_CONFIGURATION_update"),
+                self.test_data.get("ADVANCED_SSID_CONFIGURATION_update_"),
+                self.test_data.get("update_ADVANCED_SSID_CONFIGURATION"),
+                self.test_data.get("task_019a05ff-25bb-7464-aa52-ae50f9ea6e11"),
+            ]
+        if "playbook_advanced_ssid_delete" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("ADVANCED_SSID_CONFIGURATION_delete"),
+                self.test_data.get("delete_ADVANCED_SSID_CONFIGURATION"),
+                self.test_data.get("task_019a0616-094f-7d81-9d8c-2d371bf1daed"),
+            ]
+
     # SUCCESS TESTCASES ########################################################################################
 
     def test_create_ssid(self):
@@ -926,4 +976,136 @@ class TestWirelessDesign(TestDnacModule):
         self.assertIn(
             "Delete Anchor Group(s) Task succeeded for the following anchor group(s)",
             result.get("msg"),
+        )
+
+    def test_wireless_design_workflow_manager_playbook_aaa_radius_attribute(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="merged",
+                config=self.playbook_aaa_radius_attribute
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+            {
+        "aaa_radius_attributes_add": {
+            "sample_design": "Successfully created AAA Radius Attribute."
+        }
+        }
+        )
+        
+    def test_wireless_design_workflow_manager_playbook_aaa_radius_attribute_update(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="merged",
+                config=self.playbook_aaa_radius_attribute_update
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+            {
+        "aaa_radius_attributes_update": {
+            "sample_design": "Successfully updated AAA Radius Attribute."
+        }
+    }
+        )
+
+    def test_wireless_design_workflow_manager_playbook_aaa_radius_attribute_delete(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="deleted",
+                config=self.playbook_aaa_radius_attribute_delete
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+            {
+        "aaa_radius_attributes_delete": {
+            "sample_design": "Successfully deleted AAA Radius Attribute."
+        }
+    }
+        )
+
+    def test_wireless_design_workflow_manager_playbook_advanced_ssid_create(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="merged",
+                config=self.playbook_advanced_ssid_create
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+{
+        "advanced_ssids_add": {
+            "sample_advanced_ssid_design": "Successfully created Advanced SSID."
+        }
+    }
+        )
+
+    def test_wireless_design_workflow_manager_playbook_advanced_ssid_update(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="merged",
+                config=self.playbook_advanced_ssid_update
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+{
+        "advanced_ssids_update": {
+            "sample_advanced_ssid_design": "Successfully updated Advanced SSID."
+        }
+    }
+        )
+
+    def test_wireless_design_workflow_manager_playbook_advanced_ssid_delete(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="deleted",
+                config=self.playbook_advanced_ssid_delete
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+{
+        "advanced_ssids_delete": {
+            "sample_advanced_ssid_design": "Successfully deleted Advanced SSID."
+        }
+    }
         )
