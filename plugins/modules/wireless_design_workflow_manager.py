@@ -17934,6 +17934,3046 @@ class WirelessDesign(DnacBase):
         self.log("Current State (have): {0}".format(str(self.have)), "INFO")
         return self
 
+    def verify_delete_rrm_general_requirement(self, rrm_general_list):
+        """
+        Determines which RRM General configuration templates need to be deleted
+        based on the requested parameters.
+
+        Args:
+            rrm_general_list (list): A list of dicts containing the requested RRM General
+                                    configuration parameters for deletion.
+                                    Example: [{"design_name": "rrm_general_design"}]
+
+        Returns:
+            list: A list of RRM General configuration templates scheduled for deletion,
+                including their IDs.
+        """
+        delete_list = []
+
+        self.log("Starting verification of RRM General configurations for deletion.", "INFO")
+
+        # Retrieve all existing RRM General configurations
+        existing_blocks = self.get_rrm_general_profiles()
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []))
+
+        self.log("Existing RRM General configurations: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary for quick lookup
+        existing_dict = {cfg["designName"]: cfg for cfg in instances}
+        self.log("Converted existing RRM General configs to dictionary.", "DEBUG")
+
+        # Iterate over requested configurations
+        for index, requested_cfg in enumerate(rrm_general_list, start=1):
+            design_name = requested_cfg.get("design_name")
+            self.log(
+                "Iteration {0}: Checking RRM General config '{1}' for deletion.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                cfg_to_delete = requested_cfg.copy()
+                cfg_to_delete["id"] = existing.get("id")
+                delete_list.append(cfg_to_delete)
+                self.log(
+                    "Iteration {0}: RRM General config '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: RRM General config '{1}' not found -> no deletion required.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "RRM General configurations scheduled for deletion: {0} - {1}".format(
+                len(delete_list), delete_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_list
+
+    def verify_create_update_rrm_general_requirement(self, rrm_general_list):
+        """
+        Validates and compares desired RRM General profiles against existing ones and determines
+        which need to be created, updated, or left unchanged.
+
+        Returns:
+            (add_list, update_list, no_update_list)  # payloads use controller (camelCase) keys
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        self.log("Starting verification of RRM General configurations (Add/Update).", "INFO")
+
+        # --- Inline universal normalizer/validator ---
+        def normalize_value(value, value_type="str", choices=None, min_val=None, max_val=None):
+            """
+            value_type: "str", "enum", "bool", "int"
+            - enum: returns UPPERCASE string and validates against choices (if provided)
+            - bool: accepts bool or "true"/"false" strings
+            - int : casts to int and validates range if min/max provided
+            """
+            if value is None:
+                return None
+
+            if value_type == "bool":
+                if isinstance(value, bool):
+                    return value
+                if isinstance(value, str) and value.lower() in ("true", "false"):
+                    return value.lower() == "true"
+                return value
+
+            if value_type == "int":
+                try:
+                    v = int(value)
+                    if min_val is not None and v < min_val:
+                        raise ValueError("Value {0} below min {1}".format(v, min_val))
+                    if max_val is not None and v > max_val:
+                        raise ValueError("Value {0} above max {1}".format(v, max_val))
+                    return v
+                except Exception:
+                    return value
+
+            if value_type == "enum":
+                v = str(value).upper()
+                if choices and v not in choices:
+                    raise ValueError("Invalid enum value '{0}'. Allowed: {1}".format(v, sorted(list(choices))))
+                return v
+
+            # default: string normalization
+            return str(value)
+
+        # --- Constants / choices ---
+        allowed_bands = {"2_4GHZ", "5GHZ", "6GHZ"}
+        allowed_monitoring = {
+            "MONITORING_CHANNELS_ALL",
+            "MONITORING_CHANNELS_COUNTRY",
+            "MONITORING_CHANNELS_DCA",
+        }
+        allowed_neighbor = {
+            "NEIGHBOR_DISCOVER_TYPE_TRANSPARENT",
+            "NEIGHBOR_DISCOVER_TYPE_PROTECTED",
+        }
+        thr_min, thr_max = 1000, 10_000_000
+
+        # snake -> camel map for unlocked attributes
+        unlock_map = {
+            "radio_band": "radioBand",
+            "monitoring_channels": "monitoringChannels",
+            "neighbor_discover_type": "neighborDiscoverType",
+            "throughput_threshold": "throughputThreshold",
+            "coverage_hole_detection": "coverageHoleDetection",
+        }
+
+        # Fetch existing summaries and flatten
+        existing_blocks = self.get_rrm_general_profiles()
+        instances = []
+        for block in (existing_blocks or []):
+            instances.extend(block.get("instances", []) or [])
+        self.log("Existing RRM General profiles: {0}".format(instances), "DEBUG")
+
+        existing_dict = {inst["designName"]: inst for inst in instances}
+        self.log("Converted existing RRM General configs to dictionary.", "DEBUG")
+
+        for index, requested_cfg in enumerate(rrm_general_list or [], start=1):
+            design_name = requested_cfg.get("design_name")
+            fa_req = requested_cfg.get("feature_attributes") or {}
+            unl_req = requested_cfg.get("unlocked_attributes") or []
+
+            self.log("Iteration {0}: Checking RRM General config '{1}'.".format(index, design_name), "DEBUG")
+
+            # --- VALIDATION (input, snake_case) + normalization ---
+            try:
+                radio_band = normalize_value(fa_req.get("radio_band"), "enum", choices=allowed_bands)
+            except ValueError as e:
+                self.msg = "Invalid radio_band for design '{0}': {1}".format(design_name, e)
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            monitoring_channels = None
+            if "monitoring_channels" in fa_req and fa_req.get("monitoring_channels") is not None:
+                try:
+                    monitoring_channels = normalize_value(
+                        fa_req.get("monitoring_channels"), "enum", choices=allowed_monitoring
+                    )
+                except ValueError as e:
+                    self.msg = "Invalid monitoring_channels for design '{0}': {1}".format(design_name, e)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            neighbor_discover_type = None
+            if "neighbor_discover_type" in fa_req and fa_req.get("neighbor_discover_type") is not None:
+                try:
+                    neighbor_discover_type = normalize_value(
+                        fa_req.get("neighbor_discover_type"), "enum", choices=allowed_neighbor
+                    )
+                except ValueError as e:
+                    self.msg = "Invalid neighbor_discover_type for design '{0}': {1}".format(design_name, e)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            throughput_threshold = None
+            if "throughput_threshold" in fa_req and fa_req.get("throughput_threshold") is not None:
+                tt = normalize_value(fa_req.get("throughput_threshold"), "int", min_val=thr_min, max_val=thr_max)
+                if not isinstance(tt, int):
+                    self.msg = ("throughput_threshold must be integer within [{0}..{1}] for design '{2}', got '{3}'"
+                                .format(thr_min, thr_max, design_name, fa_req.get("throughput_threshold")))
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                throughput_threshold = tt
+
+            coverage_hole_detection = None
+            if "coverage_hole_detection" in fa_req and fa_req.get("coverage_hole_detection") is not None:
+                chd = normalize_value(fa_req.get("coverage_hole_detection"), "bool")
+                if not isinstance(chd, bool):
+                    self.msg = ("coverage_hole_detection must be boolean for design '{0}', got '{1}'"
+                                .format(design_name, fa_req.get("coverage_hole_detection")))
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                coverage_hole_detection = chd
+
+            # Info-only constraint: 2_4GHZ support requires IOS-XE >= 17.9.1 (cannot verify here)
+            if radio_band == "2_4GHZ":
+                self.log("Note: radio_band=2_4GHZ requires IOS-XE >= 17.9.1.", "DEBUG")
+
+            # Validate unlocked attributes reference only feature attributes (snake case on input)
+            if unl_req:
+                allowed_unlock_snake = set(unlock_map.keys())
+                bad = [u for u in unl_req if u not in allowed_unlock_snake]
+                if bad:
+                    self.msg = ("Unlocked attributes {0} are invalid for design '{1}'. "
+                                "Allowed: {2}").format(bad, design_name, sorted(allowed_unlock_snake))
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # --- Build controller payload (camelCase) ---
+            fa_payload = {"radioBand": radio_band}
+            if monitoring_channels is not None:
+                fa_payload["monitoringChannels"] = monitoring_channels
+            if neighbor_discover_type is not None:
+                fa_payload["neighborDiscoverType"] = neighbor_discover_type
+            if throughput_threshold is not None:
+                fa_payload["throughputThreshold"] = throughput_threshold
+            if coverage_hole_detection is not None:
+                fa_payload["coverageHoleDetection"] = coverage_hole_detection
+
+            payload = {
+                "designName": design_name,
+                "featureAttributes": fa_payload,
+            }
+
+            if unl_req:
+                payload["unlockedAttributes"] = [unlock_map[u] for u in unl_req]
+
+            # --- Compare against existing ---
+            existing = existing_dict.get(design_name)
+            if not existing:
+                add_list.append(payload)
+                self.log("RRM General '{0}' scheduled for ADD.".format(design_name), "INFO")
+                continue
+
+            # Prefer detailed fetch if available
+            details = {}
+            try:
+                details = self.get_rrm_general_profile_details(existing.get("id")) or {}
+            except Exception:
+                details = existing  # fallback to summary if detail API not available
+
+            existing_fa = (details.get("featureAttributes") or existing.get("featureAttributes") or {})
+            existing_unl = (details.get("unlockedAttributes") or existing.get("unlockedAttributes") or [])
+
+            # normalize enums for fair compare
+            def U(v):
+                return str(v).upper() if isinstance(v, str) else v
+
+            needs_update = (
+                U(existing_fa.get("radioBand")) != U(fa_payload.get("radioBand")) or
+                U(existing_fa.get("monitoringChannels")) != U(fa_payload.get("monitoringChannels")) or
+                U(existing_fa.get("neighborDiscoverType")) != U(fa_payload.get("neighborDiscoverType")) or
+                normalize_value(existing_fa.get("throughputThreshold"), "int")
+                != normalize_value(fa_payload.get("throughputThreshold"), "int") or
+                normalize_value(existing_fa.get("coverageHoleDetection"), "bool")
+                != normalize_value(fa_payload.get("coverageHoleDetection"), "bool") or
+                set(existing_unl) != set(payload.get("unlockedAttributes", []))
+            )
+
+            if needs_update:
+                payload["id"] = existing.get("id")
+                update_list.append(payload)
+                self.log("RRM General '{0}' scheduled for UPDATE.".format(design_name), "INFO")
+            else:
+                no_update_list.append(details or existing)
+                self.log("RRM General '{0}' -> NO CHANGE.".format(design_name), "INFO")
+
+        self.log(
+            "RRM General - Add: {0}, Update: {1}, No-Change: {2}".format(
+                len(add_list), len(update_list), len(no_update_list)
+            ),
+            "DEBUG",
+        )
+        return add_list, update_list, no_update_list
+
+    def get_rrm_general_profile_details(self, template_id):
+        """
+        Retrieve detailed information for a specific RRM General configuration template from Cisco DNAC.
+
+        Args:
+            template_id (str): The unique ID of the RRM General feature template.
+
+        Returns:
+            dict: The details of the RRM General feature template, or {} if fetch fails.
+        """
+        self.log("Fetching RRM General configuration details for template_id='{0}'".format(template_id), "DEBUG")
+
+        try:
+            if not template_id:
+                self.log("No template_id provided for RRM General details.", "ERROR")
+                return {}
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_r_r_m_general_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            details = response.get("response") or {}
+            return details
+
+        except Exception as e:
+            self.log("Failed to fetch RRM General configuration details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def get_rrm_general_profiles(self, design_name=None, template_type="RRM_GENERAL_CONFIGURATION"):
+        """
+        Retrieve existing RRM General feature templates from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): DNAC template type identifier.
+                                        Defaults to "RRM_GENERAL_CONFIGURATION".
+
+        Returns:
+            list: A list of existing RRM General template dicts (the API 'response' list), or [] on failure.
+        """
+        self.log("Fetching existing RRM General Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            existing_rrm_general = response.get("response", [])
+            self.log(
+                "Retrieved {0} RRM General Templates.".format(len(existing_rrm_general)),
+                "DEBUG",
+            )
+            return existing_rrm_general
+
+        except Exception as e:
+            self.log("Failed to fetch RRM General Templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def verify_delete_rrm_fra_requirement(self, rrm_fra_list):
+        """
+        Determines which RRM-FRA configuration templates need to be deleted
+        based on the requested parameters.
+
+        Args:
+            rrm_fra_list (list): A list of dicts containing the requested RRM-FRA
+                                configuration parameters for deletion.
+                                Example: [{"design_name": "fra_design_1"}]
+
+        Returns:
+            list: A list of RRM-FRA configuration templates scheduled for deletion,
+                including their IDs.
+        """
+        delete_list = []
+
+        self.log("Starting verification of RRM-FRA configurations for deletion.", "INFO")
+
+        # Retrieve all existing RRM-FRA configurations
+        existing_blocks = self.get_rrm_fra_profiles()
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []))
+
+        self.log("Existing RRM-FRA configurations: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary for quick lookup
+        existing_dict = {cfg["designName"]: cfg for cfg in instances}
+        self.log("Converted existing RRM-FRA configs to dictionary.", "DEBUG")
+
+        # Iterate over requested configurations
+        for index, requested_cfg in enumerate(rrm_fra_list, start=1):
+            design_name = requested_cfg.get("design_name")
+            self.log(
+                "Iteration {0}: Checking RRM-FRA config '{1}' for deletion.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                cfg_to_delete = requested_cfg.copy()
+                cfg_to_delete["id"] = existing.get("id")
+                delete_list.append(cfg_to_delete)
+                self.log(
+                    "Iteration {0}: RRM-FRA config '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: RRM-FRA config '{1}' not found -> no deletion required.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "RRM-FRA configurations scheduled for deletion: {0} - {1}".format(
+                len(delete_list), delete_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_list
+
+    def verify_create_update_rrm_fra_requirement(self, rrm_fra_list):
+        """
+        Compares desired RRM-FRA profiles against existing ones and determines
+        which need to be created, updated, or left unchanged.
+
+        Returns:
+            (add_list, update_list, no_update_list)
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        existing_blocks = self.get_rrm_fra_profiles()
+        self.log("Existing RRM-FRA Profiles (summary): {0}".format(existing_blocks), "DEBUG")
+
+        existing_dict = {}
+        for block in (existing_blocks or []):
+            for inst in block.get("instances", []) or []:
+                existing_dict[inst["designName"]] = inst
+        self.log("Existing RRM-FRA Profiles Dict: {0}".format(existing_dict), "DEBUG")
+
+        # Allowed values
+        allowed_bands = ["2_4GHZ_5GHZ", "5GHZ_6GHZ"]
+        allowed_sensitivity = ["LOW", "MEDIUM", "HIGH", "HIGHER", "EVEN_HIGHER", "SUPER_HIGH"]
+        advanced_sensitivity = {"HIGHER", "EVEN_HIGHER", "SUPER_HIGH"}
+
+        for attr in (rrm_fra_list or []):
+            design_name = attr.get("design_name")
+            fa = attr.get("feature_attributes") or {}
+            unlocked = attr.get("unlocked_attributes", [])
+
+            radio_band = fa.get("radio_band")
+            fra_freeze = fa.get("fra_freeze")
+            fra_status = fa.get("fra_status")
+            fra_interval = fa.get("fra_interval")
+            fra_sensitivity = fa.get("fra_sensitivity")
+
+            # --- Validations (no external modules) ---
+            if radio_band not in allowed_bands:
+                self.msg = "Invalid radio_band '{0}' for design '{1}'. Must be one of: {2}".format(
+                    radio_band, design_name, allowed_bands
+                )
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            if fra_interval is not None:
+                try:
+                    val = int(fra_interval)
+                except Exception:
+                    self.msg = "fra_interval must be an integer for design '{0}'.".format(design_name)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                if not (1 <= val <= 24):
+                    self.msg = "fra_interval must be between 1 and 24 for design '{0}'.".format(design_name)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            if fra_sensitivity is not None:
+                if fra_sensitivity not in allowed_sensitivity:
+                    self.msg = "Invalid fra_sensitivity '{0}' for design '{1}'. Must be one of: {2}".format(
+                        fra_sensitivity, design_name, allowed_sensitivity
+                    )
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                # Advanced sensitivity only valid for 2_4GHZ_5GHZ
+                if (fra_sensitivity in advanced_sensitivity) and (radio_band != "2_4GHZ_5GHZ"):
+                    self.msg = ("fra_sensitivity '{0}' is supported only for radio_band=2_4GHZ_5GHZ "
+                                "for design '{1}'.").format(fra_sensitivity, design_name)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # Note: fra_freeze controller-version constraints cannot be validated here; log hint only.
+            if fra_freeze is not None:
+                if radio_band == "2_4GHZ_5GHZ":
+                    self.log("Notice: fra_freeze requires controller >= 17.6 for 2_4GHZ_5GHZ.", "DEBUG")
+                elif radio_band == "5GHZ_6GHZ":
+                    self.log("Notice: fra_freeze requires controller >= 17.9 for 5GHZ_6GHZ.", "DEBUG")
+
+            # Build desired payload (camelCase for controller)
+            payload = {
+                "designName": design_name,
+                "featureAttributes": {
+                    "radioBand": radio_band
+                }
+            }
+            if fra_freeze is not None:
+                payload["featureAttributes"]["fraFreeze"] = fra_freeze
+            if fra_status is not None:
+                payload["featureAttributes"]["fraStatus"] = fra_status
+            if fra_interval is not None:
+                payload["featureAttributes"]["fraInterval"] = int(fra_interval)
+            if fra_sensitivity is not None:
+                payload["featureAttributes"]["fraSensitivity"] = fra_sensitivity
+
+            # Normalize unlocked attributes to controller keys
+            if unlocked:
+                norm_unlocked = []
+                for u in unlocked:
+                    if u == "radio_band":
+                        norm_unlocked.append("radioBand")
+                    elif u == "fra_freeze":
+                        norm_unlocked.append("fraFreeze")
+                    elif u == "fra_status":
+                        norm_unlocked.append("fraStatus")
+                    elif u == "fra_interval":
+                        norm_unlocked.append("fraInterval")
+                    elif u == "fra_sensitivity":
+                        norm_unlocked.append("fraSensitivity")
+                    else:
+                        norm_unlocked.append(u)
+                payload["unlockedAttributes"] = norm_unlocked
+
+            # Compare against existing
+            existing = existing_dict.get(design_name)
+            if not existing:
+                add_list.append(payload)
+                self.log("RRM-FRA profile '{0}' scheduled for creation.".format(design_name), "DEBUG")
+                continue
+
+            details = self.get_rrm_fra_profile_details(existing["id"]) or {}
+            self.log("Existing details for '{0}': {1}".format(design_name, details), "DEBUG")
+
+            existing_fa = (details.get("featureAttributes") or {})
+            existing_unl = (details.get("unlockedAttributes") or [])
+
+            desired_fa = payload["featureAttributes"]
+            desired_unl = payload.get("unlockedAttributes", [])
+
+            needs_update = (
+                existing_fa.get("radioBand") != desired_fa.get("radioBand") or
+                existing_fa.get("fraFreeze") != desired_fa.get("fraFreeze") or
+                existing_fa.get("fraStatus") != desired_fa.get("fraStatus") or
+                existing_fa.get("fraInterval") != desired_fa.get("fraInterval") or
+                (
+                    str(existing_fa.get("fraSensitivity") or "").upper()
+                    != str(desired_fa.get("fraSensitivity") or "").upper()
+                    or set(existing_unl) != set(desired_unl)
+                )
+            )
+
+            if needs_update:
+                payload["id"] = existing["id"]
+                update_list.append(payload)
+                self.log("RRM-FRA profile '{0}' marked for update.".format(design_name), "DEBUG")
+            else:
+                no_update_list.append(details)
+                self.log("RRM-FRA profile '{0}' requires no update.".format(design_name), "DEBUG")
+
+        self.log(
+            "RRM-FRA - Add: {0}, Update: {1}, No-Change: {2}".format(
+                len(add_list), len(update_list), len(no_update_list)
+            ),
+            "DEBUG",
+        )
+        return add_list, update_list, no_update_list
+
+    def get_rrm_fra_profiles(self, design_name=None, template_type="RRM_FRA_CONFIGURATION"):
+        """
+        Retrieve existing RRM-FRA feature templates from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): Defaults to "RRM_FRA_CONFIGURATION".
+
+        Returns:
+            list: A list of RRM-FRA template dicts (the API 'response' list), or [] on failure.
+        """
+        self.log("Fetching existing RRM-FRA Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            existing_fra = response.get("response", [])
+            self.log("Retrieved {0} RRM-FRA Templates.".format(len(existing_fra)), "DEBUG")
+            return existing_fra
+
+        except Exception as e:
+            self.log("Failed to fetch RRM-FRA Templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def get_rrm_fra_profile_details(self, template_id):
+        """
+        Retrieve detailed information for a specific RRM-FRA configuration template from Cisco DNAC.
+
+        Args:
+            template_id (str): The unique ID of the RRM-FRA feature template.
+
+        Returns:
+            dict: The details of the RRM-FRA feature template, or {} if fetch fails.
+        """
+        self.log("Fetching RRM-FRA configuration details for template_id='{0}'".format(template_id), "DEBUG")
+
+        try:
+            if not template_id:
+                self.log("No template_id provided for RRM-FRA details.", "ERROR")
+                return {}
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_r_r_m_f_r_a_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            details = response.get("response") or {}
+            return details
+
+        except Exception as e:
+            self.log("Failed to fetch RRM-FRA configuration details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def verify_delete_multicast_requirement(self, multicast_list):
+        """
+        Determines which multicast configuration templates need to be deleted
+        based on the requested parameters.
+
+        Args:
+            multicast_list (list): A list of dicts containing the requested multicast
+                                configuration parameters for deletion.
+                                Example: [{"design_name": "multicast_office_profile"}]
+
+        Returns:
+            list: A list of multicast configuration templates scheduled for deletion,
+                including their IDs.
+        """
+        delete_list = []
+
+        self.log("Starting verification of multicast configurations for deletion.", "INFO")
+
+        # Retrieve all existing multicast configurations
+        existing_blocks = self.get_multicast_profiles()
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []))
+
+        self.log("Existing multicast configurations: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary for quick lookup
+        existing_dict = {cfg["designName"]: cfg for cfg in instances}
+        self.log("Converted existing multicast configs to dictionary.", "DEBUG")
+
+        # Iterate over requested configurations
+        for index, requested_cfg in enumerate(multicast_list, start=1):
+            design_name = requested_cfg.get("design_name")
+            self.log(
+                "Iteration {0}: Checking multicast config '{1}' for deletion.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                cfg_to_delete = requested_cfg.copy()
+                cfg_to_delete["id"] = existing.get("id")
+                delete_list.append(cfg_to_delete)
+                self.log(
+                    "Iteration {0}: multicast config '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: multicast config '{1}' not found -> no deletion required.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "multicast configurations scheduled for deletion: {0} - {1}".format(
+                len(delete_list), delete_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_list
+
+    def verify_create_update_multicast_requirement(self, multicast_list):
+        """
+        Compares desired Multicast profiles against existing ones and determines
+        which need to be created, updated, or left unchanged.
+
+        IPv4 and IPv6 validation is handled with simple string/number checks (no external modules).
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        # Fetch once
+        existing_blocks = self.get_multicast_profiles()
+        self.log("Existing Multicast Profiles: {0}".format(existing_blocks), "DEBUG")
+
+        # Flatten instances into dict
+        existing_dict = {}
+        for block in existing_blocks or []:
+            for inst in block.get("instances", []):
+                existing_dict[inst["designName"]] = inst
+        self.log("Existing Multicast Profiles Dict: {0}".format(existing_dict), "DEBUG")
+
+        allowed_ipv4_modes = ["UNICAST", "MULTICAST"]
+        allowed_ipv6_modes = ["UNICAST", "MULTICAST"]
+
+        # Iterate requested attributes
+        for attr in multicast_list or []:
+            design_name = attr.get("design_name")
+            feature_attrs = attr.get("feature_attributes") or {}
+            unlocked_attributes = attr.get("unlocked_attributes", [])
+
+            global_multicast_enabled = feature_attrs.get("global_multicast_enabled")
+            ipv4_mode = feature_attrs.get("multicast_ipv4_mode")
+            ipv4_address = feature_attrs.get("multicast_ipv4_address")
+            ipv6_mode = feature_attrs.get("multicast_ipv6_mode")
+            ipv6_address = feature_attrs.get("multicast_ipv6_address")
+
+            # --- Validation ---
+            if ipv4_mode and ipv4_mode not in allowed_ipv4_modes:
+                self.msg = (
+                    "Invalid multicastIpv4Mode '{0}' for design '{1}'. Must be one of: {2}"
+                    .format(ipv4_mode, design_name, allowed_ipv4_modes)
+                )
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            if ipv6_mode and ipv6_mode not in allowed_ipv6_modes:
+                self.msg = (
+                    "Invalid multicastIpv6Mode '{0}' for design '{1}'. Must be one of: {2}"
+                    .format(ipv6_mode, design_name, allowed_ipv6_modes)
+                )
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # IPv4 validation (basic numeric check, only if MULTICAST)
+            if ipv4_mode == "MULTICAST" and ipv4_address:
+                try:
+                    parts = [int(p) for p in ipv4_address.split(".")]
+                    if len(parts) != 4 or any(p < 0 or p > 255 for p in parts):
+                        raise ValueError
+                    if not (224 <= parts[0] <= 239):
+                        raise ValueError
+                except Exception:
+                    self.msg = (
+                        "Invalid multicastIpv4Address '{0}' for design '{1}'. "
+                        "Must be in range 224.0.0.0–239.255.255.255."
+                    ).format(ipv4_address, design_name)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # IPv6 validation (prefix check, only if MULTICAST)
+            if ipv6_mode == "MULTICAST" and ipv6_address:
+                addr_up = ipv6_address.upper()
+                # must start with FF
+                if not addr_up.startswith("FF") or len(addr_up) < 4:
+                    self.msg = (
+                        "Invalid multicastIpv6Address '{0}' for design '{1}'. "
+                        "Must start with FF[0 or 1][1,2,3,4,5,8,E]."
+                    ).format(ipv6_address, design_name)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                else:
+                    second = addr_up[2]
+                    third = addr_up[3]
+                    if second not in ("0", "1") or third not in ("1", "2", "3", "4", "5", "8", "E"):
+                        self.msg = (
+                            "Invalid multicastIpv6Address '{0}' for design '{1}'. "
+                            "Must start with FF[0 or 1][1,2,3,4,5,8,E]."
+                        ).format(ipv6_address, design_name)
+                        self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # --- Build payload ---
+            payload = {
+                "designName": design_name,
+                "featureAttributes": {
+                    "globalMulticastEnabled": global_multicast_enabled,
+                },
+            }
+            if ipv4_mode:
+                payload["featureAttributes"]["multicastIpv4Mode"] = ipv4_mode
+            if ipv4_address:
+                payload["featureAttributes"]["multicastIpv4Address"] = ipv4_address
+            if ipv6_mode:
+                payload["featureAttributes"]["multicastIpv6Mode"] = ipv6_mode
+            if ipv6_address:
+                payload["featureAttributes"]["multicastIpv6Address"] = ipv6_address
+
+            if unlocked_attributes:
+                normalized_unlocked = []
+                for u in unlocked_attributes:
+                    if u == "global_multicast_enabled":
+                        normalized_unlocked.append("globalMulticastEnabled")
+                    elif u == "multicast_ipv4_mode":
+                        normalized_unlocked.append("multicastIpv4Mode")
+                    elif u == "multicast_ipv4_address":
+                        normalized_unlocked.append("multicastIpv4Address")
+                    elif u == "multicast_ipv6_mode":
+                        normalized_unlocked.append("multicastIpv6Mode")
+                    elif u == "multicast_ipv6_address":
+                        normalized_unlocked.append("multicastIpv6Address")
+                    else:
+                        normalized_unlocked.append(u)
+                payload["unlockedAttributes"] = normalized_unlocked
+
+            # --- Compare with existing ---
+            existing = existing_dict.get(design_name)
+            if not existing:
+                add_list.append(payload)
+                self.log("Multicast profile '{0}' scheduled for creation.".format(design_name), "DEBUG")
+            else:
+                details = self.get_multicast_profile_details(existing["id"])
+                self.log("Details for {0}: {1}".format(design_name, details), "DEBUG")
+
+                existing_attrs = details.get("featureAttributes", {})
+                existing_unlocked = details.get("unlockedAttributes", []) or []
+
+                desired_attrs = payload.get("featureAttributes", {})
+                desired_unlocked = payload.get("unlockedAttributes", [])
+
+                if (
+                    existing_attrs.get("globalMulticastEnabled") != desired_attrs.get("globalMulticastEnabled")
+                    or existing_attrs.get("multicastIpv4Mode") != desired_attrs.get("multicastIpv4Mode")
+                    or existing_attrs.get("multicastIpv4Address") != desired_attrs.get("multicastIpv4Address")
+                    or existing_attrs.get("multicastIpv6Mode") != desired_attrs.get("multicastIpv6Mode")
+                    or existing_attrs.get("multicastIpv6Address") != desired_attrs.get("multicastIpv6Address")
+                    or set(existing_unlocked) != set(desired_unlocked)
+                ):
+                    payload["id"] = existing["id"]
+                    update_list.append(payload)
+                    self.log("Multicast profile '{0}' marked for update.".format(design_name), "DEBUG")
+                else:
+                    no_update_list.append(details)
+                    self.log("Multicast profile '{0}' requires no update.".format(design_name), "DEBUG")
+
+        self.log(
+            "Multicast Profiles - Add: {0}, Update: {1}, No Changes: {2}".format(
+                len(add_list), len(update_list), len(no_update_list)
+            ),
+            "DEBUG",
+        )
+
+        return add_list, update_list, no_update_list
+
+    def get_multicast_profiles(self, design_name=None, template_type="MULTICAST_CONFIGURATION"):
+        """
+        Retrieve existing Multicast feature templates from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): Feature template type string used by DNAC.
+                                        Defaults to "MULTICAST_CONFIGURATION".
+
+        Returns:
+            list: A list of existing Multicast template dicts (the API 'response' list), or [] on failure.
+        """
+        self.log("Fetching existing Multicast Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            existing_multicast = response.get("response", [])
+            self.log(
+                "Retrieved {0} Multicast Templates.".format(len(existing_multicast)),
+                "DEBUG",
+            )
+            return existing_multicast
+
+        except Exception as e:
+            self.log("Failed to fetch Multicast Templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def get_multicast_profile_details(self, template_id):
+        """
+        Retrieve detailed information for a specific Multicast configuration template from Cisco DNAC.
+
+        Args:
+            template_id (str): The unique ID of the multicast feature template.
+
+        Returns:
+            dict: The details of the multicast feature template, or {} if fetch fails.
+        """
+        self.log("Fetching multicast configuration details for template_id='{0}'".format(template_id), "DEBUG")
+
+        try:
+            if not template_id:
+                self.log("No template_id provided for multicast details.", "ERROR")
+                return {}
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_multicast_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            details = response.get("response") or {}
+            return details
+
+        except Exception as e:
+            self.log("Failed to fetch multicast configuration details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def verify_delete_flexconnect_requirement(self, flex_list):
+        """
+        Build payloads (with id) for FlexConnect templates to delete.
+        """
+        delete_list = []
+
+        existing_blocks = self.get_flexconnect_profiles() or []
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []) or [])
+        existing_by_name = {i.get("designName"): i for i in instances if i.get("designName")}
+
+        for idx, req in enumerate(flex_list or [], start=1):
+            dn = req.get("design_name")
+            if not dn:
+                self.log(f"Iteration {idx}: Missing 'design_name' in delete entry. Skipping.", "ERROR")
+                continue
+            if dn in existing_by_name:
+                got = dict(req)
+                got["id"] = existing_by_name[dn].get("id")
+                delete_list.append(got)
+                self.log(f"Iteration {idx}: FlexConnect '{dn}' -> DELETE", "INFO")
+            else:
+                self.log(f"Iteration {idx}: FlexConnect '{dn}' not found -> skip", "INFO")
+
+        self.log("FlexConnect scheduled for delete: {0}".format(delete_list), "DEBUG")
+        return delete_list
+
+    def verify_create_update_flexconnect_requirement(self, flex_list):
+        """
+        Build payloads to create/update FlexConnect feature templates.
+        Returns: (add_list, update_list, no_update_list)
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        # Get existing (summary)
+        existing_blocks = self.get_flexconnect_profiles()
+        instances = []
+        for block in (existing_blocks or []):
+            instances.extend(block.get("instances", []) or [])
+        existing_by_name = {i["designName"]: i for i in instances if i.get("designName")}
+        self.log("Existing FlexConnect instances: {0}".format(instances), "DEBUG")
+
+        for req in flex_list or []:
+            design_name = req.get("design_name")
+            fa = req.get("feature_attributes") or {}
+            overlap_enable = fa.get("overlap_ip_enable")
+            unlocked = req.get("unlocked_attributes", []) or []
+
+            if not design_name:
+                self.msg = "FlexConnect: 'design_name' is required."
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # Build normalized payload
+            payload = {
+                "designName": design_name,
+                "featureAttributes": {}
+            }
+            if overlap_enable is not None:
+                payload["featureAttributes"]["overlapIpEnable"] = overlap_enable
+
+            if unlocked:
+                # Only valid attribute is overlap_ip_enable -> overlapIpEnable
+                name_map = {"overlap_ip_enable": "overlapIpEnable"}
+                payload["unlockedAttributes"] = [name_map.get(u, u) for u in unlocked]
+
+            existing = existing_by_name.get(design_name)
+            if not existing:
+                add_list.append(payload)
+                self.log("FlexConnect '{0}' -> ADD".format(design_name), "DEBUG")
+                continue
+
+            # Fetch details to compare
+            details = self.get_flexconnect_profile_details(existing["id"]) or {}
+            ef = (details.get("featureAttributes") or {})
+            existing_overlap = ef.get("overlapIpEnable")
+            existing_unlocked = details.get("unlockedAttributes", []) or []
+            desired_unlocked = payload.get("unlockedAttributes", [])
+
+            needs_update = (
+                existing_overlap != overlap_enable
+                or set(existing_unlocked) != set(desired_unlocked)
+            )
+
+            if needs_update:
+                payload["id"] = existing["id"]
+                update_list.append(payload)
+                self.log("FlexConnect '{0}' -> UPDATE".format(design_name), "DEBUG")
+            else:
+                no_update_list.append(details)
+                self.log("FlexConnect '{0}' -> NO CHANGE".format(design_name), "DEBUG")
+
+        self.log(
+            "FlexConnect Add: {0}, Update: {1}, No-Change: {2}".format(
+                len(add_list), len(update_list), len(no_update_list)
+            ),
+            "DEBUG",
+        )
+        return add_list, update_list, no_update_list
+
+    def get_flexconnect_profiles(self, design_name=None, template_type="FLEX_CONFIGURATION"):
+        """
+        Summary list of FlexConnect templates (uses get_feature_template_summary with type).
+        """
+        self.log("Fetching FlexConnect templates (summary).", "DEBUG")
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+            resp = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(resp), "DEBUG")
+            return resp.get("response", []) or []
+        except Exception as e:
+            self.log("Failed to fetch FlexConnect templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def get_flexconnect_profile_details(self, template_id):
+        """
+        Details of one FlexConnect template by id.
+        """
+        self.log("Fetching FlexConnect details for id='{0}'".format(template_id), "DEBUG")
+        try:
+            if not template_id:
+                self.log("No template_id provided.", "ERROR")
+                return {}
+            resp = self.dnac._exec(
+                family="wireless",
+                function="get_flex_connect_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(resp), "DEBUG")
+            return resp.get("response") or {}
+        except Exception as e:
+            self.log("Failed to fetch FlexConnect details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def verify_delete_dot11be_requirement(self, dot11be_list):
+        """
+        Determines which dot11be configuration templates need to be deleted
+        based on the requested parameters.
+
+        Args:
+            dot11be_list (list): A list of dicts containing the requested dot11be
+                                configuration parameters for deletion.
+                                Example: [{"design_name": "dot11be_2.4ghz_design"}]
+
+        Returns:
+            list: A list of dot11be configuration templates scheduled for deletion,
+                including their IDs.
+        """
+        delete_list = []
+
+        self.log("Starting verification of dot11be configurations for deletion.", "INFO")
+
+        # Retrieve all existing dot11be configurations
+        existing_blocks = self.get_dot11be_profiles()
+        instances = []
+        for block in existing_blocks or []:
+            instances.extend(block.get("instances", []) or [])
+
+        self.log("Existing dot11be configurations: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary for quick lookup
+        existing_dict = {cfg["designName"]: cfg for cfg in instances}
+        self.log("Converted existing dot11be configs to dictionary.", "DEBUG")
+
+        # Iterate over requested configurations
+        for index, requested_cfg in enumerate(dot11be_list or [], start=1):
+            design_name = requested_cfg.get("design_name")
+            self.log(
+                "Iteration {0}: Checking dot11be config '{1}' for deletion.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                cfg_to_delete = requested_cfg.copy()
+                cfg_to_delete["id"] = existing.get("id")
+                delete_list.append(cfg_to_delete)
+                self.log(
+                    "Iteration {0}: dot11be config '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: dot11be config '{1}' not found -> no deletion required.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "dot11be configurations scheduled for deletion: {0} - {1}".format(
+                len(delete_list), delete_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_list
+
+    def verify_create_update_dot11be_requirement(self, dot11be_list):
+        """
+        Compares desired 802.11be profiles against existing ones and determines
+        which need to be created, updated, or left unchanged.
+
+        This function ONLY builds and returns payloads:
+        - add_list: payloads to create
+        - update_list: payloads to update
+        - no_update_list: existing details that require no change
+
+        It does NOT call create/update APIs — execution should happen elsewhere.
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        # Fetch once
+        existing_blocks = self.get_dot11be_profiles()
+        self.log("Existing 802.11be Profiles: {0}".format(existing_blocks), "DEBUG")
+
+        # Flatten instances into dict
+        existing_dict = {}
+        for block in existing_blocks or []:
+            for inst in block.get("instances", []):
+                existing_dict[inst["designName"]] = inst
+        self.log("Existing 802.11be Profiles Dict: {0}".format(existing_dict), "DEBUG")
+
+        # Allowed values for radioBand
+        allowed_bands = ["2_4GHZ", "5GHZ", "6GHZ"]
+
+        # Iterate requested attributes
+        for attr in dot11be_list or []:
+            design_name = attr.get("design_name")
+            feature_attrs = attr.get("feature_attributes") or {}
+            dot11be_status = feature_attrs.get("dot11be_status")
+            radio_band = feature_attrs.get("radio_band")
+            unlocked_attributes = attr.get("unlocked_attributes", [])
+
+            # Validate radio_band value
+            if radio_band not in allowed_bands:
+                self.msg = ("Invalid radio_band '{0}' for design '{1}'. Must be one of: {2}".format(
+                    radio_band, design_name, allowed_bands))
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # Build payload
+            payload = {
+                "designName": design_name,
+                "featureAttributes": {
+                    "dot11beStatus": dot11be_status,
+                    "radioBand": radio_band,
+                },
+            }
+            if unlocked_attributes:
+                # Normalized to camelCase
+                normalized_unlocked = []
+                for u in unlocked_attributes:
+                    if u == "dot11be_status":
+                        normalized_unlocked.append("dot11beStatus")
+                    elif u == "radio_band":
+                        normalized_unlocked.append("radioBand")
+                    else:
+                        normalized_unlocked.append(u)
+                payload["unlockedAttributes"] = normalized_unlocked
+
+            # Check against existing
+            existing = existing_dict.get(design_name)
+            if not existing:
+                add_list.append(payload)
+                self.log("802.11be profile '{0}' scheduled for creation.".format(design_name), "DEBUG")
+            else:
+                details = self.get_dot11be_profile_details(existing["id"])
+                self.log("Details for {0}: {1}".format(design_name, details), "DEBUG")
+
+                existing_status = details.get("featureAttributes", {}).get("dot11beStatus")
+                existing_band = details.get("featureAttributes", {}).get("radioBand")
+                existing_unlocked = details.get("unlockedAttributes", []) or []
+
+                desired_unlocked = payload.get("unlockedAttributes", [])
+
+                # Compare fields
+                if (
+                    existing_status != dot11be_status
+                    or existing_band != radio_band
+                    or set(existing_unlocked) != set(desired_unlocked)
+                ):
+                    payload["id"] = existing["id"]
+                    update_list.append(payload)
+                    self.log("802.11be profile '{0}' marked for update.".format(design_name), "DEBUG")
+                else:
+                    no_update_list.append(details)
+                    self.log("802.11be profile '{0}' requires no update.".format(design_name), "DEBUG")
+
+        self.log(
+            "802.11be Profiles - Add: {0}, Update: {1}, No Changes: {2}".format(
+                add_list, update_list, no_update_list
+            ),
+            "DEBUG"
+        )
+
+        self.log(
+            "802.11be Profiles - Add: {0}, Update: {1}, No Changes: {2}".format(
+                len(add_list), len(update_list), len(no_update_list)
+            ),
+            "DEBUG"
+        )
+
+        return add_list, update_list, no_update_list
+
+    def get_dot11be_profiles(self, design_name=None, template_type="DOT11BE_STATUS_CONFIGURATION"):
+        """
+        Retrieve existing 802.11be feature templates from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): Feature template type string used by DNAC.
+                                        Defaults to "DOT11BE_STATUS_CONFIGURATION".
+
+        Returns:
+            list: A list of existing 802.11be template dicts (the API 'response' list), or [] on failure.
+        """
+        self.log("Fetching existing 802.11be Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            existing_dot11be = response.get("response", [])
+            self.log(
+                "Retrieved {0} 802.11be Templates.".format(len(existing_dot11be)),
+                "DEBUG",
+            )
+            return existing_dot11be
+
+        except Exception as e:
+            self.log("Failed to fetch 802.11be Templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def get_dot11be_profile_details(self, template_id):
+        """
+        Retrieve detailed information for a specific 802.11be configuration template from Cisco DNAC.
+
+        Args:
+            template_id (str): The unique ID of the 802.11be feature template.
+
+        Returns:
+            dict: The details of the 802.11be feature template, or {} if fetch fails.
+        """
+        self.log("Fetching 802.11be configuration details for template_id='{0}'".format(template_id), "DEBUG")
+
+        try:
+            if not template_id:
+                self.log("No template_id provided for 802.11be details.", "ERROR")
+                return {}
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_dot11be_status_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            details = response.get("response") or {}
+            return details
+
+        except Exception as e:
+            self.log("Failed to fetch 802.11be configuration details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def verify_create_update_event_rrm_requirement(self, event_rrm_list):
+        """
+        Compares desired Event Driven RRM profiles against existing ones and determines
+        which need to be created, updated, or left unchanged.
+
+        This function ONLY builds and returns payloads:
+        - add_list: payloads to create
+        - update_list: payloads to update
+        - no_update_list: existing details that require no change
+
+        It does NOT call create/update APIs — execution should happen elsewhere.
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        # Fetch once
+        existing_blocks = self.get_event_rrm_profiles()
+        self.log("Existing Event Driven RRM Profiles: {0}".format(existing_blocks), "DEBUG")
+
+        # Flatten instances into dict
+        existing_dict = {}
+        for block in existing_blocks or []:
+            for inst in block.get("instances", []):
+                existing_dict[inst["designName"]] = inst
+        self.log("Existing Event Driven RRM Profiles Dict: {0}".format(existing_dict), "DEBUG")
+
+        # Allowed enums / ranges
+        allowed_bands = ["2_4GHZ", "5GHZ"]
+        allowed_levels = ["LOW", "MEDIUM", "HIGH", "CUSTOM"]
+
+        # Iterate requested profiles
+        for attr in event_rrm_list or []:
+            design_name = attr.get("design_name")
+            fa = attr.get("feature_attributes") or {}
+            radio_band = fa.get("radio_band")
+            rrm_enable = fa.get("event_driven_rrm_enable")
+            rrm_level = fa.get("event_driven_rrm_threshold_level")
+            rrm_custom = fa.get("event_driven_rrm_custom_threshold_val")
+            unlocked_attributes = attr.get("unlocked_attributes", [])
+
+            # ---- Validations ----
+            if not design_name:
+                self.msg = "Missing 'design_name' in Event Driven RRM entry."
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            if radio_band not in allowed_bands:
+                self.msg = ("Invalid radio_band '{0}' for design '{1}'. Must be one of: {2}".format(
+                    radio_band, design_name, allowed_bands))
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            if rrm_level is not None and rrm_level not in allowed_levels:
+                self.msg = ("Invalid event_driven_rrm_threshold_level '{0}' for design '{1}'. "
+                            "Must be one of: {2}".format(rrm_level, design_name, allowed_levels))
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # Threshold level is only supported when RRM is enabled
+            if (rrm_level is not None or rrm_custom is not None) and not rrm_enable:
+                self.msg = ("For design '{0}': threshold level/custom value provided but "
+                            "event_driven_rrm_enable is not true.".format(design_name))
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # Custom value only when level == CUSTOM and must be 1..99
+            if rrm_custom is not None:
+                if rrm_level != "CUSTOM":
+                    self.msg = ("For design '{0}': event_driven_rrm_custom_threshold_val is only valid when "
+                                "event_driven_rrm_threshold_level == 'CUSTOM'.".format(design_name))
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                if not isinstance(rrm_custom, int) or not (1 <= rrm_custom <= 99):
+                    self.msg = ("For design '{0}': event_driven_rrm_custom_threshold_val must be an integer 1–99."
+                                .format(design_name))
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # ---- Build normalized payload ----
+            payload = {
+                "designName": design_name,
+                "featureAttributes": {
+                    "radioBand": radio_band,
+                },
+            }
+            # Only include optional keys if present (keep payload clean)
+            if rrm_enable is not None:
+                payload["featureAttributes"]["eventDrivenRrmEnable"] = rrm_enable
+            if rrm_level is not None:
+                payload["featureAttributes"]["eventDrivenRrmThresholdLevel"] = rrm_level
+            if rrm_custom is not None:
+                payload["featureAttributes"]["eventDrivenRrmCustomThresholdVal"] = rrm_custom
+
+            # Normalize unlocked attributes (snake_case -> camelCase)
+            if unlocked_attributes:
+                name_map = {
+                    "radio_band": "radioBand",
+                    "event_driven_rrm_enable": "eventDrivenRrmEnable",
+                    "event_driven_rrm_threshold_level": "eventDrivenRrmThresholdLevel",
+                    "event_driven_rrm_custom_threshold_val": "eventDrivenRrmCustomThresholdVal",
+                }
+                normalized_unlocked = [name_map.get(u, u) for u in unlocked_attributes]
+                payload["unlockedAttributes"] = normalized_unlocked
+
+            # ---- Compare with existing ----
+            existing = existing_dict.get(design_name)
+            if not existing:
+                add_list.append(payload)
+                self.log("Event Driven RRM profile '{0}' scheduled for creation.".format(design_name), "DEBUG")
+            else:
+                details = self.get_event_rrm_profile_details(existing["id"])
+                self.log("Details for {0}: {1}".format(design_name, details), "DEBUG")
+
+                ef = details.get("featureAttributes", {}) or {}
+                existing_band = ef.get("radioBand")
+                existing_enable = ef.get("eventDrivenRrmEnable")
+                existing_level = ef.get("eventDrivenRrmThresholdLevel")
+                existing_custom = ef.get("eventDrivenRrmCustomThresholdVal")
+                existing_unlocked = details.get("unlockedAttributes", []) or []
+                desired_unlocked = payload.get("unlockedAttributes", [])
+
+                needs_update = (
+                    existing_band != radio_band
+                    or existing_enable != rrm_enable
+                    or existing_level != rrm_level
+                    or existing_custom != rrm_custom
+                    or set(existing_unlocked) != set(desired_unlocked)
+                )
+
+                if needs_update:
+                    payload["id"] = existing["id"]
+                    update_list.append(payload)
+                    self.log("Event Driven RRM profile '{0}' marked for update.".format(design_name), "DEBUG")
+                else:
+                    no_update_list.append(details)
+                    self.log("Event Driven RRM profile '{0}' requires no update.".format(design_name), "DEBUG")
+
+        self.log(
+            "Event Driven RRM - Add: {0}, Update: {1}, No Changes: {2}".format(
+                add_list, update_list, no_update_list
+            ),
+            "DEBUG"
+        )
+        self.log(
+            "Event Driven RRM - Add: {0}, Update: {1}, No Changes: {2}".format(
+                len(add_list), len(update_list), len(no_update_list)
+            ),
+            "DEBUG"
+        )
+
+        return add_list, update_list, no_update_list
+
+    def get_event_rrm_profile_details(self, template_id):
+        """
+        Retrieve detailed information for a specific Event Driven RRM configuration template from Cisco DNAC.
+
+        Args:
+            template_id (str): The unique ID of the Event Driven RRM feature template.
+
+        Returns:
+            dict: The details of the Event Driven RRM feature template, or {} if fetch fails.
+        """
+        self.log("Fetching Event Driven RRM configuration details for template_id='{0}'".format(template_id), "DEBUG")
+
+        try:
+            if not template_id:
+                self.log("No template_id provided for Event Driven RRM details.", "ERROR")
+                return {}
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_event_driven_r_r_m_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            details = response.get("response") or {}
+            return details
+
+        except Exception as e:
+            self.log("Failed to fetch Event Driven RRM configuration details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def get_event_rrm_profiles(self, design_name=None, template_type="EVENT_DRIVEN_RRM_CONFIGURATION"):
+        """
+        Retrieve existing Event Driven RRM feature templates (summary) from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): Feature template type string used by DNAC.
+                                        Defaults to "EVENT_DRIVEN_RRM_CONFIGURATION".
+
+        Returns:
+            list: A list of existing Event Driven RRM template dicts (summary, not full details),
+                or [] on failure.
+        """
+        self.log("Fetching existing Event Driven RRM Templates (summary) from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            existing_event_rrm = response.get("response", [])
+            self.log(
+                "Retrieved {0} Event Driven RRM Templates (summary).".format(len(existing_event_rrm)),
+                "DEBUG",
+            )
+            return existing_event_rrm
+
+        except Exception as e:
+            self.log("Failed to fetch Event Driven RRM Templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def verify_delete_event_rrm_requirement(self, event_rrm_list):
+        """
+        Determines which Event-Driven RRM configuration templates need to be deleted
+        based on the requested parameters.
+
+        Args:
+            event_rrm_list (list): A list of dicts containing the requested Event-Driven RRM
+                                configuration parameters for deletion.
+                                Example: [{"design_name": "edrrm_2_4ghz_design"}]
+
+        Returns:
+            list: A list of Event-Driven RRM configuration templates scheduled for deletion,
+                including their IDs.
+        """
+        delete_list = []
+
+        self.log("Starting verification of Event-Driven RRM configurations for deletion.", "INFO")
+
+        # Retrieve all existing Event-Driven RRM configurations (summary)
+        existing_blocks = self.get_event_rrm_profiles()
+        instances = []
+        for block in existing_blocks or []:
+            instances.extend(block.get("instances", []) or [])
+
+        self.log("Existing Event-Driven RRM configurations: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary for quick lookup
+        existing_dict = {cfg["designName"]: cfg for cfg in instances}
+        self.log("Converted existing Event-Driven RRM configs to dictionary.", "DEBUG")
+
+        # Iterate over requested configurations
+        for index, requested_cfg in enumerate(event_rrm_list or [], start=1):
+            design_name = requested_cfg.get("design_name")
+            self.log(
+                "Iteration {0}: Checking Event-Driven RRM config '{1}' for deletion.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                cfg_to_delete = requested_cfg.copy()
+                cfg_to_delete["id"] = existing.get("id")
+                delete_list.append(cfg_to_delete)
+                self.log(
+                    "Iteration {0}: Event-Driven RRM config '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: Event-Driven RRM config '{1}' not found -> no deletion required.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "Event-Driven RRM configurations scheduled for deletion: {0} - {1}".format(
+                len(delete_list), delete_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_list
+
+    def verify_delete_dot11axs_requirement(self, dot11ax_list):
+        """
+        Determines which dot11ax configuration templates need to be deleted
+        based on the requested parameters.
+
+        Args:
+            dot11ax_list (list): A list of dicts containing the requested dot11ax
+                                configuration parameters for deletion.
+                                Example: [{"design_name": "dot11ax_24ghz_design"}]
+
+        Returns:
+            list: A list of dot11ax configuration templates scheduled for deletion,
+                including their IDs.
+        """
+        delete_list = []
+
+        self.log("Starting verification of dot11ax configurations for deletion.", "INFO")
+
+        # Retrieve all existing dot11ax configurations
+        existing_blocks = self.get_dot11ax_templates()
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []))
+
+        self.log("Existing dot11ax configurations: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary for quick lookup
+        existing_dict = {cfg["designName"]: cfg for cfg in instances}
+        self.log("Converted existing dot11ax configs to dictionary.", "DEBUG")
+
+        # Iterate over requested configurations
+        for index, requested_cfg in enumerate(dot11ax_list, start=1):
+            design_name = requested_cfg.get("design_name")
+            self.log(
+                "Iteration {0}: Checking dot11ax config '{1}' for deletion.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                cfg_to_delete = requested_cfg.copy()
+                cfg_to_delete["id"] = existing.get("id")
+                delete_list.append(cfg_to_delete)
+                self.log(
+                    "Iteration {0}: dot11ax config '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: dot11ax config '{1}' not found -> no deletion required.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "dot11ax configurations scheduled for deletion: {0} - {1}".format(
+                len(delete_list), delete_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_list
+
+    def verify_create_update_dot11axs_requirement(self, dot11ax_list):
+        """
+        Compare requested dot11ax profiles against existing templates and determine
+        which should be added, updated, or left unchanged.
+        params:
+            
+        Returns:
+            (add_list, update_list, no_update_list)
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        self.log("verify_create_update_dot11axs_requirement input: {0}".format(dot11ax_list), "DEBUG")
+
+        # map snake_case keys from playbook to controller keys (adjust if controller uses different names)
+        key_name_map = {
+            "design_name": "designName",
+            "feature_attributes": "featureAttributes",
+            "unlocked_attributes": "unlockedAttributes",
+            "radio_band": "radioBand",
+            "bss_color": "bssColor",
+            "target_waketime_broadcast": "targetWaketimeBroadcast",
+            "non_srg_obss_pd_max_threshold": "nonSRGObssPdMaxThreshold",
+            "target_wake_up_time_11ax": "targetWakeUpTime11ax",
+            "obss_pd": "obssPd",
+            "multiple_bssid": "multipleBssid",
+        }
+
+        # helper: snake_case -> lowerCamelCase fallback
+        def snake_to_camel(s):
+            parts = s.split("_")
+            return parts[0] + "".join(p.capitalize() for p in parts[1:]) if len(parts) > 1 else s
+
+        # Controller-allowed unlocked attribute names (explicit list from controller validation message).
+        # If you have an API to fetch this dynamically, replace this static set with that call.
+        allowed_unlocked = {
+            "targetWakeUpTime11ax",
+            "obssPd",
+            "bssColor",
+            "targetWaketimeBroadcast",
+            "nonSRGObssPdMaxThreshold",
+            "multipleBssid",
+        }
+
+        # fetch existing dot11ax templates once and flatten by designName
+        existing_blocks = self.get_dot11ax_templates() or []
+        self.log("Existing dot11ax templates: {0}".format(existing_blocks), "DEBUG")
+        existing_dict = {}
+        for block in existing_blocks or []:
+            for inst in block.get("instances", []) or []:
+                existing_dict[inst.get("designName")] = inst
+        self.log("Existing dot11ax templates dict: {0}".format(existing_dict), "DEBUG")
+
+        # iterate requests
+        for requested in dot11ax_list or []:
+            design_name = requested.get("design_name")
+            feature_attrs_raw = requested.get("feature_attributes") or {}
+            unlocked_attrs = requested.get("unlocked_attributes") or []
+
+            # Build normalized payload (controller-style keys) for featureAttributes
+            normalized_features = {}
+            for rk, rv in feature_attrs_raw.items():
+                tk = key_name_map.get(rk) or snake_to_camel(rk)
+                normalized_features[tk] = rv
+
+            # Normalize & filter unlocked attributes: map to controller keys and only keep allowed first-level attributes
+            requested_unlocked = unlocked_attrs or []
+            normalized_unlocked = []
+            dropped_unlocked = []
+            unmapped_unlocked = []
+
+            for ua in requested_unlocked:
+                mapped = key_name_map.get(ua) or snake_to_camel(ua)
+                if mapped in allowed_unlocked:
+                    normalized_unlocked.append(mapped)
+                else:
+                    # keep track to log back to the user / playbook author
+                    # if it didn't map to ANY reasonable controller key, mark as unmapped, else dropped because not allowed
+                    if (key_name_map.get(ua) or snake_to_camel(ua)) != mapped:
+                        unmapped_unlocked.append(ua)
+                    else:
+                        dropped_unlocked.append(ua)
+
+            if dropped_unlocked or unmapped_unlocked:
+                # warn user / playbook author that some unlocked attrs were invalid and dropped
+                self.log(
+                    "Some unlockedAttributes were invalid and removed for '{0}': dropped={1}, unmapped={2}".format(
+                        design_name, dropped_unlocked, unmapped_unlocked
+                    ),
+                    "WARNING",
+                )
+
+            payload = {"designName": design_name, "featureAttributes": normalized_features}
+            if normalized_unlocked:
+                payload["unlockedAttributes"] = normalized_unlocked
+
+            self.log("Checking dot11ax profile: {0}".format(design_name), "DEBUG")
+
+            existing = existing_dict.get(design_name)
+
+            # If not existing -> add
+            if not existing:
+                add_list.append(payload)
+                self.log("dot11ax '{0}' marked for ADD.".format(design_name), "INFO")
+                continue
+
+            # fetch full details for accurate comparison
+            details = self.get_dot11ax_details(existing.get("id")) or {}
+            self.log("Details for {0}: {1}".format(design_name, details), "DEBUG")
+
+            existing_features = details.get("featureAttributes", {}) or {}
+            existing_unlocked = details.get("unlockedAttributes", []) or []
+
+            needs_update = False
+
+            # Compare only the keys supplied by the user
+            for key, req_value in normalized_features.items():
+                exist_value = existing_features.get(key)
+
+                # normalize boolean-like strings on request side
+                if isinstance(req_value, str) and req_value.lower() in ("true", "false"):
+                    req_value = req_value.lower() == "true"
+                # if controller omitted the key and request is boolean, treat omitted as False
+                if exist_value is None and isinstance(req_value, bool):
+                    exist_value = False
+                # normalize controller boolean strings
+                if isinstance(exist_value, str) and exist_value.lower() in ("true", "false"):
+                    exist_value = exist_value.lower() == "true"
+
+                lower_key = key.lower()
+
+                # numeric comparison for numeric-looking keys
+                if (
+                    isinstance(req_value, (int, float))
+                    or (isinstance(req_value, str) and req_value.isdigit())
+                    or any(sub in lower_key for sub in ("threshold", "max", "count"))
+                ):
+                    try:
+                        ev_num = int(exist_value) if exist_value is not None else None
+                    except Exception:
+                        ev_num = exist_value
+                    try:
+                        rv_num = int(req_value) if req_value is not None else None
+                    except Exception:
+                        rv_num = req_value
+                    if ev_num != rv_num:
+                        self.log("Diff for {0}: existing({1}) != requested({2})".format(key, ev_num, rv_num), "DEBUG")
+                        needs_update = True
+                        break
+
+                else:
+                    # default strict equality
+                    if exist_value != req_value:
+                        self.log("Diff for {0}: existing({1}) != requested({2})".format(key, exist_value, req_value), "DEBUG")
+                        needs_update = True
+                        break
+
+            # compare unlocked attributes (order-insensitive)
+            if not needs_update:
+                # Normalize existing unlocked (controller should already be lowerCamelCase; defensively map snake -> camel just in case)
+                normalized_existing_unlocked = []
+                for eu in existing_unlocked:
+                    # assume existing values are controller style; but normalize just in case:
+                    # if someone stored snake_case in controller (unlikely), convert. We only convert if '_' present.
+                    if isinstance(eu, str) and "_" in eu:
+                        normalized_existing_unlocked.append(key_name_map.get(eu) or snake_to_camel(eu))
+                    else:
+                        normalized_existing_unlocked.append(eu)
+
+                # Compare as sets (order-insensitive). If request omitted unlockedAttributes entirely, we treat as "no change requested"
+                if "unlockedAttributes" in payload:
+                    if set(normalized_existing_unlocked) != set(payload.get("unlockedAttributes", [])):
+                        self.log(
+                            "Unlocked attributes differ: existing({0}) != requested({1})".format(
+                                normalized_existing_unlocked, payload.get("unlockedAttributes", [])
+                            ),
+                            "DEBUG",
+                        )
+                        needs_update = True
+
+            # finalize
+            if needs_update:
+                payload["id"] = existing.get("id")
+                update_list.append(payload)
+                self.log("dot11ax '{0}' marked for UPDATE.".format(design_name), "INFO")
+            else:
+                no_update_list.append(details)
+                self.log("dot11ax '{0}' requires NO UPDATE.".format(design_name), "INFO")
+
+        self.log("dot11ax to ADD: {0}, UPDATE: {1}, NO-UPDATE: {2}".format(len(add_list), len(update_list), len(no_update_list)), "DEBUG")
+        return add_list, update_list, no_update_list
+
+    def get_dot11ax_details(self, template_id):
+        """
+        Retrieve detailed information for a specific dot11ax configuration template from Cisco DNAC.
+
+        Args:
+            template_id (str): The unique ID of the dot11ax feature template.
+
+        Returns:
+            dict: The details of the dot11ax feature template, or {} if fetch fails.
+        """
+        self.log("Fetching dot11ax configuration details for template_id='{0}'".format(template_id), "DEBUG")
+
+        try:
+            if not template_id:
+                self.log("No template_id provided for dot11ax details.", "ERROR")
+                return {}
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_dot11ax_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            details = response.get("response") or {}
+            return details
+
+        except Exception as e:
+            self.log("Failed to fetch dot11ax configuration details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def get_dot11ax_templates(self, design_name=None, template_type="DOT11AX_CONFIGURATION"):
+        """
+        Retrieve existing CleanAir feature templates from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): Feature template type string used by DNAC. Defaults to "CLEAN_AIR_CONFIGURATION".
+                                        Adjust if your DNAC uses a different type identifier.
+
+        Returns:
+            list: A list of existing CleanAir template dicts (the API 'response' list), or [] on failure.
+        """
+        self.log("Fetching existing CleanAir Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            existing_clean_air = response.get("response", [])
+            self.log(
+                "Retrieved {0} CleanAir Templates.".format(len(existing_clean_air)),
+                "DEBUG",
+            )
+            return existing_clean_air
+
+        except Exception as e:
+            self.log("Failed to fetch CleanAir Templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def verify_delete_clean_air_requirement(self, clean_air_list):
+        """
+        Determines which CleanAir profiles need to be deleted based on the requested parameters.
+
+        Args:
+            clean_air_list (list): A list of dicts containing the requested CleanAir parameters for deletion.
+                                Example: [{"design_name": "sample_cleanair_design_24ghz"}]
+
+        Returns:
+            list: A list of CleanAir entries to delete. Each entry is the original requested dict
+                with an added "id" key (the controller template id) when a match is found.
+        """
+        delete_clean_air_list = []
+
+        self.log("Starting verification of CleanAir profiles for deletion.", "INFO")
+
+        # Retrieve all existing CleanAir templates
+        existing_blocks = self.get_clean_air_templates() or []
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []) or [])
+
+        self.log("Existing CleanAir instances: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary keyed by designName
+        existing_dict = {item["designName"]: item for item in instances}
+        self.log("Converted existing CleanAir templates to dictionary.", "DEBUG")
+
+        # Iterate over the requested entries for deletion
+        for idx, requested in enumerate(clean_air_list or [], start=1):
+            design_name = requested.get("design_name")
+            self.log(
+                "Iteration {0}: Checking CleanAir '{1}' for deletion requirement.".format(idx, design_name),
+                "DEBUG",
+            )
+
+            if not design_name:
+                self.log(
+                    "Iteration {0}: Skipping entry with missing design_name: {1}".format(idx, requested),
+                    "WARNING",
+                )
+                continue
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                to_delete = requested.copy()
+                to_delete["id"] = existing.get("id")
+                delete_clean_air_list.append(to_delete)
+                self.log(
+                    "Iteration {0}: CleanAir '{1}' scheduled for deletion (id={2}).".format(
+                        idx, design_name, existing.get("id")
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: CleanAir '{1}' not found - no deletion required.".format(idx, design_name),
+                    "INFO",
+                )
+
+        self.log(
+            "CleanAir profiles scheduled for deletion: {0} - {1}".format(len(delete_clean_air_list), delete_clean_air_list),
+            "DEBUG",
+        )
+
+        return delete_clean_air_list
+
+    def verify_create_update_clean_air_requirement(self, clean_air_list, field_to_check=None):
+        """
+        Determine which CleanAir profiles to add, update, or leave unchanged.
+
+        Args:
+            clean_air_list (list): list of requested clean-air dicts from the playbook
+            field_to_check (str|None): optional single-field to check (snake_case or camelCase, supports dot notation)
+
+        Returns:
+            tuple: (add_list, update_list, no_update_list)
+        Side effect:
+            sets self.clean_air_update_diffs = { designName: [(key, existing, requested), ...], ... }
+        """
+        add_list, update_list, no_update_list = [], [], []
+        clean_air_update_diffs = {}
+        self.log("verify_create_update_clean_air_requirement input: {0}".format(clean_air_list), "DEBUG")
+
+        # key map: playbook snake_case -> controller camelCase
+        key_name_map = {
+            "design_name": "designName",
+            "radio_band": "radioBand",
+            "feature_attributes": "featureAttributes",
+            "unlocked_attributes": "unlockedAttributes",
+            "clean_air": "cleanAir",
+            "clean_air_device_reporting": "cleanAirDeviceReporting",
+            "persistent_device_propagation": "persistentDevicePropagation",
+            "description": "description",
+            "interferers_features": "interferersFeatures",
+            "ble_beacon": "bleBeacon",
+            "bluetooth_paging_inquiry": "bluetoothPagingInquiry",
+            "bluetooth_sco_acl": "bluetoothScoAcl",
+            "continuous_transmitter": "continuousTransmitter",
+            "generic_dect": "genericDect",
+            "generic_tdd": "genericTdd",
+            "jammer": "jammer",
+            "microwave_oven": "microwaveOven",
+            "motorola_canopy": "motorolaCanopy",
+            "si_fhss": "siFHSS",
+            "spectrum80211_fh": "spectrum80211FH",
+            "spectrum80211_non_standard_channel": "spectrum80211NonStandardChannel",
+            "spectrum802154": "spectrum802154",
+            "spectrum_inverted": "spectrumInverted",
+            "super_ag": "superAg",
+            "video_camera": "videoCamera",
+            "wimax_fixed": "wimaxFixed",
+            "wimax_mobile": "wimaxMobile",
+            "xbox": "xbox",
+        }
+
+        # optional per-key boolean defaults when controller omits key (controller-style names)
+        boolean_defaults = {
+            # Example: "cleanAir": False,
+            # For nested interferersFeatures you could default to {} or set specific inner keys
+            # e.g. "interferersFeatures": {}
+        }
+
+        # helper: snake_case -> lowerCamelCase
+        def snake_to_camel(s):
+            parts = s.split("_")
+            return parts[0] + "".join(p.capitalize() for p in parts[1:]) if len(parts) > 1 else s
+
+        # normalize field_to_check (support dot notation like 'interferers_features.ble_beacon')
+        def normalize_field_key(raw_key):
+            if raw_key is None:
+                return None
+            if "." in raw_key:
+                left, right = raw_key.split(".", 1)
+                left_mapped = key_name_map.get(left, snake_to_camel(left))
+                # keep nested part as provided (we will compare nested dicts specially)
+                return left_mapped + "." + right
+            return key_name_map.get(raw_key, snake_to_camel(raw_key))
+
+        field_check_key = normalize_field_key(field_to_check)
+
+        # helper to coerce "true"/"false" strings to bool
+        def to_bool_if_str(v):
+            if isinstance(v, str) and v.lower() in ("true", "false"):
+                return v.lower() == "true"
+            return v
+
+        # Fetch existing templates and flatten by designName
+        existing_blocks = self.get_clean_air_templates() or []
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []) or [])
+        existing_by_design = {inst["designName"]: inst for inst in instances}
+        self.log("Existing CleanAir instances: {0}".format(instances), "DEBUG")
+
+        # Iterate requested profiles
+        for requested_entry in clean_air_list or []:
+            design_name = requested_entry.get("design_name")
+            radio_band = requested_entry.get("radio_band")
+            requested_features_raw = requested_entry.get("feature_attributes") or {}
+            requested_unlocked = requested_entry.get("unlocked_attributes")
+            requested_unlocked = [] if requested_unlocked is None else requested_unlocked
+
+            # Build normalized request payload (convert top-level keys)
+            normalized_features = {}
+            # handle simple keys
+            for raw_k, raw_v in requested_features_raw.items():
+                if raw_k == "interferers_features" and isinstance(raw_v, dict):
+                    # nested interferersFeatures: normalize inner keys optionally
+                    interferers = {}
+                    for ik, iv in raw_v.items():
+                        # keep inner keys as-is (snake) unless you want camel conversion
+                        # you can map inner keys via key_name_map if needed
+                        inner_key = key_name_map.get(ik, ik)
+                        interferers[inner_key] = iv
+                    normalized_features["interferersFeatures"] = interferers
+                else:
+                    mapped_key = key_name_map.get(raw_k, snake_to_camel(raw_k))
+                    normalized_features[mapped_key] = raw_v
+
+            payload = {"designName": design_name, "radioBand": radio_band, "featureAttributes": normalized_features}
+            if requested_unlocked:
+                # transform unlocked dot-notation to controller-style left-hand mapping
+                normalized_unlocked = []
+                for u in requested_unlocked:
+                    if "." in u:
+                        left, right = u.split(".", 1)
+                        left_mapped = key_name_map.get(left, snake_to_camel(left))
+                        normalized_unlocked.append(left_mapped + "." + right)
+                    else:
+                        normalized_unlocked.append(key_name_map.get(u, snake_to_camel(u)))
+                payload["unlockedAttributes"] = normalized_unlocked
+
+            # check existing
+            existing_entry = existing_by_design.get(design_name)
+            if not existing_entry:
+                add_list.append(payload)
+                self.log("CleanAir design '{0}' not found -> ADD".format(design_name), "INFO")
+                continue
+
+            # fetch full existing details (adjust getter function name if needed)
+            existing_details = self.get_clean_air_details(existing_entry["id"]) or {}
+            self.log("Existing clean-air details for {0}: {1}".format(design_name, existing_details), "DEBUG")
+            existing_features = existing_details.get("featureAttributes", {}) or {}
+            existing_unlocked = existing_details.get("unlockedAttributes", []) or []
+
+            needs_update = False
+            per_design_diffs = []
+
+            # helper to register diff
+            def _reg_diff(k, ev, rv):
+                per_design_diffs.append((k, ev, rv))
+
+            # Determine keys to compare
+            if field_check_key is None:
+                keys_to_check = list(normalized_features.keys())
+                # ensure we compare nested interferers keys if present
+                if "interferersFeatures" in normalized_features:
+                    # we'll handle nested comparison below
+                    pass
+            else:
+                # if it's nested like interferersFeatures.ble_beacon
+                if "." in field_check_key:
+                    keys_to_check = [field_check_key]
+                else:
+                    keys_to_check = [field_check_key]
+
+            # Compare keys
+            for key in keys_to_check:
+                # nested interferersFeatures handling
+                if key.startswith("interferersFeatures"):
+                    # if single-field check might be "interferersFeatures.ble_beacon"
+                    if "." in key:
+                        outer, inner = key.split(".", 1)
+                        req_map = normalized_features.get("interferersFeatures", {})
+                        req_val = req_map.get(inner)
+                        exist_map = existing_features.get("interferersFeatures", {}) or {}
+                        exist_val = exist_map.get(inner)
+                        # coerce bool-like strings
+                        req_val = to_bool_if_str(req_val)
+                        if exist_val is None and isinstance(req_val, bool):
+                            # fallback default
+                            exist_val = (
+                                boolean_defaults.get("interferersFeatures", {}).get(inner)
+                                if isinstance(boolean_defaults.get("interferersFeatures"), dict)
+                                else False
+                            )
+                        if isinstance(exist_val, str) and exist_val.lower() in ("true", "false"):
+                            exist_val = exist_val.lower() == "true"
+                        if exist_val != req_val:
+                            _reg_diff("interferersFeatures." + inner, exist_val, req_val)
+                            needs_update = True
+                    else:
+                        # compare entire interferersFeatures map shallowly: any inner mismatch triggers diff entries
+                        req_map = normalized_features.get("interferersFeatures", {}) or {}
+                        exist_map = existing_features.get("interferersFeatures", {}) or {}
+                        # check union of inner keys
+                        for inner_key in set(list(req_map.keys()) + list(exist_map.keys())):
+                            req_val = to_bool_if_str(req_map.get(inner_key))
+                            exist_val = exist_map.get(inner_key)
+                            if exist_val is None and isinstance(req_val, bool):
+                                exist_val = (
+                                    boolean_defaults.get("interferersFeatures", {}).get(inner_key)
+                                    if isinstance(boolean_defaults.get("interferersFeatures"), dict)
+                                    else False
+                                )
+                            if isinstance(exist_val, str) and exist_val.lower() in ("true", "false"):
+                                exist_val = exist_val.lower() == "true"
+                            if exist_val != req_val:
+                                _reg_diff("interferersFeatures." + inner_key, exist_val, req_val)
+                                needs_update = True
+                    # continue to next key
+                    continue
+
+                # non-nested key comparison
+                req_value = normalized_features.get(key)
+                exist_value = existing_features.get(key)
+
+                # coerce boolean-like strings
+                req_value = to_bool_if_str(req_value)
+
+                # consult boolean_defaults for missing exist_value (controller omitted)
+                if exist_value is None:
+                    if key in boolean_defaults:
+                        exist_value = boolean_defaults[key]
+                    elif isinstance(req_value, bool):
+                        exist_value = False  # safe fallback
+
+                if isinstance(exist_value, str) and exist_value.lower() in ("true", "false"):
+                    exist_value = exist_value.lower() == "true"
+
+                # numeric-ish checks
+                lower_key = key.lower()
+                if lower_key in ("description",):
+                    # string compare
+                    if exist_value != req_value:
+                        _reg_diff(key, exist_value, req_value)
+                        needs_update = True
+                elif isinstance(req_value, bool) or isinstance(exist_value, bool):
+                    # boolean compare
+                    if bool(exist_value) != bool(req_value):
+                        _reg_diff(key, exist_value, req_value)
+                        needs_update = True
+                elif isinstance(req_value, (int, float)) or isinstance(exist_value, (int, float)):
+                    # numeric tolerant compare
+                    try:
+                        evn = int(exist_value) if exist_value is not None else None
+                    except Exception:
+                        evn = exist_value
+                    try:
+                        rvn = int(req_value) if req_value is not None else None
+                    except Exception:
+                        rvn = req_value
+                    if evn != rvn:
+                        _reg_diff(key, evn, rvn)
+                        needs_update = True
+                else:
+                    # default equality
+                    if exist_value != req_value:
+                        _reg_diff(key, exist_value, req_value)
+                        needs_update = True
+
+            # unlocked attributes diff
+            if (field_check_key is None) or (field_check_key and field_check_key.startswith("unlockedAttributes")):
+                if set(existing_unlocked) != set(payload.get("unlockedAttributes", [])):
+                    _reg_diff("unlockedAttributes", existing_unlocked, payload.get("unlockedAttributes", []))
+                    needs_update = True
+
+            # finalize
+            if needs_update:
+                payload["id"] = existing_entry.get("id")
+                update_list.append(payload)
+                clean_air_update_diffs[design_name] = per_design_diffs
+                self.log("CleanAir design '{0}' marked for UPDATE. Diffs: {1}".format(design_name, per_design_diffs), "INFO")
+            else:
+                no_update_list.append(existing_details)
+                self.log("CleanAir design '{0}' requires NO UPDATE".format(design_name), "INFO")
+
+        # attach diffs to self for inspection (no change to return signature)
+        self.clean_air_update_diffs = clean_air_update_diffs
+        self.log("Collected CleanAir diffs: {0}".format(clean_air_update_diffs), "DEBUG")
+        self.log("ADD: {0}, UPDATE: {1}, NO-CHANGE: {2}".format(len(add_list), len(update_list), len(no_update_list)), "DEBUG")
+        return add_list, update_list, no_update_list
+
+    def verify_delete_advanced_ssid_requirement(self, adv_ssid_list):
+        """
+        Determines which Advanced SSIDs need to be deleted based on the requested parameters.
+
+        Args:
+            adv_ssid_list (list): A list of dicts containing the requested Advanced SSID parameters for deletion.
+                                Example: [{"design_name": "Corporate_WLAN_Design"}]
+
+        Returns:
+            list: A list of Advanced SSID entries to delete. Each entry is the original requested dict
+                with an added "id" key (the controller template id) when a match is found.
+        """
+        delete_ssid_list = []
+
+        self.log("Starting verification of Advanced SSIDs for deletion.", "INFO")
+
+        # Retrieve all existing Advanced SSID templates
+        existing_blocks = self.get_advanced_ssid_templates() or []
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []) or [])
+
+        self.log("Existing Advanced SSID instances: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary keyed by designName
+        existing_dict = {ssid["designName"]: ssid for ssid in instances}
+        self.log("Converted existing Advanced SSIDs to dictionary.", "DEBUG")
+
+        # Iterate over the requested entries for deletion
+        for idx, requested in enumerate(adv_ssid_list or [], start=1):
+            design_name = requested.get("design_name")
+            self.log(
+                "Iteration {0}: Checking Advanced SSID '{1}' for deletion requirement.".format(idx, design_name),
+                "DEBUG",
+            )
+
+            if not design_name:
+                self.log(
+                    "Iteration {0}: Skipping entry with missing design_name: {1}".format(idx, requested),
+                    "WARNING",
+                )
+                continue
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                to_delete = requested.copy()
+                to_delete["id"] = existing.get("id")
+                delete_ssid_list.append(to_delete)
+                self.log(
+                    "Iteration {0}: Advanced SSID '{1}' scheduled for deletion (id={2}).".format(
+                        idx, design_name, existing.get("id")
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: Advanced SSID '{1}' not found - no deletion required.".format(idx, design_name),
+                    "INFO",
+                )
+
+        self.log(
+            "Advanced SSIDs scheduled for deletion: {0} - {1}".format(len(delete_ssid_list), delete_ssid_list),
+            "DEBUG",
+        )
+
+        return delete_ssid_list
+
+    def verify_create_update_advanced_ssid_requirement(self, adv_ssid_list, field_to_check=None):
+        """
+        Determine which Advanced SSIDs to add, update, or leave unchanged.
+        - Single function (no nested helpers except two small inline helpers for clarity).
+        - Basic snake_case -> lowerCamelCase key normalization (inline).
+        - Treats unlocked_attributes=None as [].
+        - If `field_to_check` is provided, only that field (or 'unlocked_attributes') is compared.
+        Accepts camelCase or snake_case field names for `field_to_check`.
+        Returns: (add_payloads, update_payloads, no_change_payloads)
+        where update_diffs is { "DesignName": [(key, existing_value, requested_value), ...], ... }
+        """
+        add_payloads, update_payloads, no_change_payloads = [], [], []
+        update_diffs = {}
+        self.log("verify_create_update_advanced_ssid_requirement input: {0}".format(adv_ssid_list), "DEBUG")
+
+        # key name map (complete map from your playbook)
+        key_name_map = {
+            # top-level
+            "design_name": "designName",
+            "feature_attributes": "featureAttributes",
+            "unlocked_attributes": "unlockedAttributes",
+
+            # common ssid fields / enums / booleans
+            "peer2peer_blocking": "peer2peerblocking",
+            "passive_client": "passiveClient",
+            "prediction_optimization": "predictionOptimization",
+            "dual_band_neighbor_list": "dualBandNeighborList",
+            "radius_nac_state": "radiusNacState",
+            "dhcp_required": "dhcpRequired",
+            "dhcp_server": "dhcpServer",
+            "flex_local_auth": "flexLocalAuth",
+            "target_wakeup_time": "targetWakeupTime",
+
+            # OFDMA / MU-MIMO / 802.11ax
+            "downlink_ofdma": "downlinkOfdma",
+            "uplink_ofdma": "uplinkOfdma",
+            "downlink_mu_mimo": "downlinkMuMimo",
+            "uplink_mu_mimo": "uplinkMuMimo",
+            "dot11ax": "dot11ax",
+            "mu_mimo_11ac": "muMimo11ac",
+
+            # vendor / extra flags
+            "aironet_ie_support": "aironetIeSupport",
+            "load_balancing": "loadBalancing",
+
+            # timing / counts / numeric
+            "dtim_period_5ghz": "dtimPeriod5GHz",
+            "dtim_period_24ghz": "dtimPeriod24GHz",
+            "scan_defer_time": "scanDeferTime",
+            "max_clients": "maxClients",
+            "max_clients_per_radio": "maxClientsPerRadio",
+            "max_clients_per_ap": "maxClientsPerAP",
+            "idle_threshold": "idleThreshold",
+            "fast_transition_reassociation_timeout": "fastTransitionReassociationTimeout",
+
+            # WMM / multicast
+            "wmm_policy": "wmmPolicy",
+            "multicast_buffer": "multicastBuffer",
+            "multicast_buffer_value": "multicastBufferValue",
+            "media_stream_multicast_direct": "mediaStreamMulticastDirect",
+
+            # steering / agile multiband / fastlane
+            "wifi_to_cellular_steering": "wifiToCellularSteering",
+            "wifi_alliance_agile_multiband": "wifiAllianceAgileMultiband",
+            "fastlane_asr": "fastlaneAsr",
+
+            # 11v / AP admin / caching / security guards
+            "dot11v_bss_max_idle_protected": "dot11vBssMaxIdleProtected",
+            "universal_ap_admin": "universalApAdmin",
+            "opportunistic_key_caching": "opportunisticKeyCaching",
+            "ip_source_guard": "ipSourceGuard",
+            "dhcp_opt82_remote_id_sub_option": "dhcpOpt82RemoteIdSubOption",
+            "vlan_central_switching": "vlanCentralSwitching",
+
+            # call / snooping / disassociate / busy
+            "call_snooping": "callSnooping",
+            "send_disassociate": "sendDisassociate",
+            "sent_486_busy": "sent486Busy",
+
+            # ip/mac binding
+            "ip_mac_binding": "ipMacBinding",
+
+            # defer priorities (0..7)
+            "defer_priority_0": "deferPriority0",
+            "defer_priority_1": "deferPriority1",
+            "defer_priority_2": "deferPriority2",
+            "defer_priority_3": "deferPriority3",
+            "defer_priority_4": "deferPriority4",
+            "defer_priority_5": "deferPriority5",
+            "defer_priority_6": "deferPriority6",
+            "defer_priority_7": "deferPriority7",
+
+            # sharing / analytics / beacons
+            "share_data_with_client": "shareDataWithClient",
+            "advertise_support": "advertiseSupport",
+            "advertise_pc_analytics_support": "advertisePcAnalyticsSupport",
+            "send_beacon_on_association": "sendBeaconOnAssociation",
+            "send_beacon_on_roam": "sendBeaconOnRoam",
+
+            # mdns
+            "mdns_mode": "mDNSMode",
+        }
+
+        # small helper to normalize a provided field_to_check into controller key style
+        def _normalize_field_check_key(raw_key):
+            if raw_key is None:
+                return None
+            if raw_key in key_name_map:
+                return key_name_map[raw_key]
+            if "_" in raw_key:
+                parts = raw_key.split("_")
+                return parts[0] + "".join(p.capitalize() for p in parts[1:])
+            return raw_key
+
+        # small helper to canonicalize peer2peer-like values for tolerant compare
+        def _canon_peer2peer_value(v):
+            if v is None:
+                return None
+            s = str(v).strip().upper()
+            if s in ("DISABLE", "DROP", "OFF", "FALSE", "0"):
+                return "DROP"
+            if s in ("ENABLE", "ALLOW", "ON", "TRUE", "1"):
+                return "ALLOW"
+            return s
+
+        field_check_key = _normalize_field_check_key(field_to_check)
+
+        # Fetch existing templates once and flatten by designName
+        existing_templates = self.get_advanced_ssid_templates() or []
+        self.log("Existing Advanced SSID templates: {0}".format(existing_templates), "DEBUG")
+        existing_by_design = {}
+        for block in existing_templates:
+            for instance in block.get("instances", []) or []:
+                existing_by_design[instance["designName"]] = instance
+
+        # Iterate requested SSIDs
+        for requested_entry in adv_ssid_list or []:
+            design_name = requested_entry.get("design_name")
+            requested_feature_attrs_raw = requested_entry.get("feature_attributes") or {}
+            requested_unlocked = requested_entry.get("unlocked_attributes")
+            requested_unlocked = [] if requested_unlocked is None else requested_unlocked
+
+            # Inline snake_case -> lowerCamelCase normalization for payload
+            normalized_feature_attrs = {}
+            for raw_key, raw_val in requested_feature_attrs_raw.items():
+                if raw_key in key_name_map:
+                    target_key = key_name_map[raw_key]
+                else:
+                    if "_" in raw_key:
+                        parts = raw_key.split("_")
+                        target_key = parts[0] + "".join(p.capitalize() for p in parts[1:])
+                    else:
+                        target_key = raw_key
+
+                if target_key == "fastTransitionReassociationTimeout" and isinstance(raw_val, (float, str)):
+                    try:
+                        raw_val = int(float(raw_val))
+                    except Exception:
+                        pass
+
+                normalized_feature_attrs[target_key] = raw_val
+
+            payload = {"designName": design_name, "featureAttributes": normalized_feature_attrs}
+            if requested_unlocked:
+                payload["unlockedAttributes"] = requested_unlocked
+
+            self.log("Evaluating design: {0} (field_to_check={1})".format(design_name, field_to_check), "DEBUG")
+
+            existing_entry = existing_by_design.get(design_name)
+            self.log("Existing entry match: {0}".format(existing_entry), "DEBUG")
+
+            # If design doesn't exist yet, schedule for creation
+            if not existing_entry:
+                add_payloads.append(payload)
+                self.log("Design '{0}' not found -> ADD".format(design_name), "INFO")
+                continue
+
+            # Fetch complete details to compare real stored values
+            existing_details = self.get_advanced_ssid_details(existing_entry["id"]) or {}
+            self.log("Existing design details: {0}".format(existing_details), "DEBUG")
+            existing_features = existing_details.get("featureAttributes", {}) or {}
+            existing_unlocked = existing_details.get("unlockedAttributes", []) or []
+
+            needs_update = False
+            per_design_diffs = []  # collect all diffs for this design
+
+            # If no single-field restriction, check all requested keys
+            if field_check_key is None:
+                # Compare only keys the user provided
+                for attr_key, req_value in normalized_feature_attrs.items():
+                    # read raw existing value from controller
+                    exist_value = existing_features.get(attr_key)
+
+                    # coerce boolean-like strings to bool for requested side
+                    if isinstance(req_value, str) and req_value.lower() in ("true", "false"):
+                        req_value = req_value.lower() == "true"
+
+                    # If controller omitted the key (exist_value is None) but the requested value is boolean,
+                    # treat the missing controller value as False (common when controllers omit default/false flags).
+                    if exist_value is None and isinstance(req_value, bool):
+                        exist_value = False
+
+                    # normalize controller-side boolean strings
+                    if isinstance(exist_value, str) and exist_value.lower() in ("true", "false"):
+                        exist_value = exist_value.lower() == "true"
+
+                    lower_key = attr_key.lower()
+
+                    # peer2peer tolerant comparison
+                    if "peer2peer" in lower_key:
+                        if _canon_peer2peer_value(exist_value) != _canon_peer2peer_value(req_value):
+                            self.log("Diff for {0}: existing({1}) != requested({2})".format(attr_key, exist_value, req_value), "DEBUG")
+                            per_design_diffs.append((attr_key, exist_value, req_value))
+                            needs_update = True
+                            # continue scanning to capture all diffs
+                            continue
+
+                    # wmmPolicy tolerant (case-insensitive)
+                    elif attr_key.lower() == "wmmpolicy" or attr_key == "wmmPolicy":
+                        ev = None if exist_value is None else str(exist_value).upper()
+                        rv = None if req_value is None else str(req_value).upper()
+                        if ev != rv:
+                            self.log("Diff for {0}: existing({1}) != requested({2})".format(attr_key, ev, rv), "DEBUG")
+                            per_design_diffs.append((attr_key, ev, rv))
+                            needs_update = True
+                            continue
+
+                    # numeric-ish fields: try int comparison
+                    elif any(sub in lower_key for sub in ("dtim", "maxclients", "idle", "timeout", "value", "scan", "defer")):
+                        try:
+                            ev_num = int(existing_features.get(attr_key)) if existing_features.get(attr_key) is not None else None
+                        except Exception:
+                            ev_num = existing_features.get(attr_key)
+                        try:
+                            rv_num = int(req_value) if req_value is not None else None
+                        except Exception:
+                            rv_num = req_value
+                        if ev_num != rv_num:
+                            self.log("Diff for {0}: existing({1}) != requested({2})".format(attr_key, ev_num, rv_num), "DEBUG")
+                            per_design_diffs.append((attr_key, ev_num, rv_num))
+                            needs_update = True
+                            continue
+
+                    # default strict equality
+                    else:
+                        if exist_value != req_value:
+                            self.log("Diff for {0}: existing({1}) != requested({2})".format(attr_key, exist_value, req_value), "DEBUG")
+                            per_design_diffs.append((attr_key, exist_value, req_value))
+                            needs_update = True
+                            continue
+
+                # If still no difference found, compare unlocked attributes
+                if set(existing_unlocked) != set(requested_unlocked):
+                    self.log("Unlocked attrs differ: existing({0}) != requested({1})".format(existing_unlocked, requested_unlocked), "DEBUG")
+                    per_design_diffs.append(("unlockedAttributes", existing_unlocked, requested_unlocked))
+                    needs_update = True
+
+            else:
+                # Only compare the single requested field or unlocked attributes
+                if field_to_check in ("unlocked_attributes", "unlockedAttributes") or field_check_key == "unlockedAttributes":
+                    if set(existing_unlocked) != set(requested_unlocked):
+                        self.log(
+                            "Unlocked attrs differ (single-field check): "
+                            "existing({0}) != requested({1})".format(existing_unlocked, requested_unlocked),
+                            "DEBUG",
+                        )
+                        per_design_diffs.append(("unlockedAttributes", existing_unlocked, requested_unlocked))
+                        needs_update = True
+                else:
+                    # if the requested payload didn't include the field to check, treat as NO-UPDATE
+                    if field_check_key not in normalized_feature_attrs:
+                        self.log(
+                            "Requested entry missing field_to_check '{0}' -> "
+                            "treating NO-UPDATE for design {1}".format(field_to_check, design_name),
+                            "DEBUG",
+                        )
+                        needs_update = False
+                    else:
+                        req_value = normalized_feature_attrs.get(field_check_key)
+                        exist_value = existing_features.get(field_check_key)
+
+                        # coerce boolean-like strings
+                        if isinstance(req_value, str) and req_value.lower() in ("true", "false"):
+                            req_value = req_value.lower() == "true"
+                        # same missing-key -> False heuristic for boolean requested values
+                        if exist_value is None and isinstance(req_value, bool):
+                            exist_value = False
+                        if isinstance(exist_value, str) and exist_value.lower() in ("true", "false"):
+                            exist_value = exist_value.lower() == "true"
+
+                        lower_key = field_check_key.lower()
+                        if "peer2peer" in lower_key:
+                            if _canon_peer2peer_value(exist_value) != _canon_peer2peer_value(req_value):
+                                self.log("Diff for {0}: existing({1}) != requested({2})".format(field_check_key, exist_value, req_value), "DEBUG")
+                                per_design_diffs.append((field_check_key, exist_value, req_value))
+                                needs_update = True
+                        elif field_check_key.lower() == "wmmpolicy" or field_check_key == "wmmPolicy":
+                            ev = None if exist_value is None else str(exist_value).upper()
+                            rv = None if req_value is None else str(req_value).upper()
+                            if ev != rv:
+                                self.log("Diff for {0}: existing({1}) != requested({2})".format(field_check_key, ev, rv), "DEBUG")
+                                per_design_diffs.append((field_check_key, ev, rv))
+                                needs_update = True
+                        elif any(sub in lower_key for sub in ("dtim", "maxclients", "idle", "timeout", "value", "scan", "defer")):
+                            try:
+                                ev_num = int(existing_features.get(field_check_key)) if existing_features.get(field_check_key) is not None else None
+                            except Exception:
+                                ev_num = existing_features.get(field_check_key)
+                            try:
+                                rv_num = int(req_value) if req_value is not None else None
+                            except Exception:
+                                rv_num = req_value
+                            if ev_num != rv_num:
+                                self.log("Diff for {0}: existing({1}) != requested({2})".format(field_check_key, ev_num, rv_num), "DEBUG")
+                                per_design_diffs.append((field_check_key, ev_num, rv_num))
+                                needs_update = True
+                        else:
+                            if exist_value != req_value:
+                                self.log("Diff for {0}: existing({1}) != requested({2})".format(field_check_key, exist_value, req_value), "DEBUG")
+                                per_design_diffs.append((field_check_key, exist_value, req_value))
+                                needs_update = True
+
+            # Finalize lists
+            if needs_update:
+                payload["id"] = existing_entry.get("id")
+                update_payloads.append(payload)
+                update_diffs[design_name] = per_design_diffs
+                self.log("Design '{0}' marked for UPDATE. Diffs: {1}".format(design_name, per_design_diffs), "INFO")
+            else:
+                no_change_payloads.append(existing_details)
+                self.log("Design '{0}' requires NO UPDATE".format(design_name), "INFO")
+
+        self.log("ADD: {0}, UPDATE: {1}, NO-CHANGE: {2}".format(len(add_payloads), len(update_payloads), len(no_change_payloads)), "DEBUG")
+        return add_payloads, update_payloads, no_change_payloads
+
+    def get_clean_air_templates(self, design_name=None, template_type="CLEANAIR_CONFIGURATION"):
+        """
+        Retrieve existing CleanAir feature templates from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): Feature template type string used by DNAC. Defaults to "CLEAN_AIR_CONFIGURATION".
+                                        Adjust if your DNAC uses a different type identifier.
+
+        Returns:
+            list: A list of existing CleanAir template dicts (the API 'response' list), or [] on failure.
+        """
+        self.log("Fetching existing CleanAir Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            existing_clean_air = response.get("response", [])
+            self.log(
+                "Retrieved {0} CleanAir Templates.".format(len(existing_clean_air)),
+                "DEBUG",
+            )
+            return existing_clean_air
+
+        except Exception as e:
+            self.log("Failed to fetch CleanAir Templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def get_clean_air_details(self, template_id):
+        """
+        Retrieve full details for a specific CleanAir feature template.
+
+        Args:
+            template_id (str): The feature template ID to fetch.
+
+        Returns:
+            dict: The template details (API 'response' object) or {} on failure.
+        """
+        self.log("Fetching CleanAir template details for id: {0}".format(template_id), "DEBUG")
+
+        if not template_id:
+            self.log("get_clean_air_details called without template_id.", "WARNING")
+            return {}
+
+        try:
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_clean_air_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            details = response.get("response", {}) or {}
+            self.log("Retrieved CleanAir template details: {0}".format(details), "DEBUG")
+            return details
+
+        except Exception as e:
+            self.log("Failed to fetch CleanAir template details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def get_advanced_ssid_details(self, ssid_id):
+        """
+        Retrieve existing Advanced SSID feature templates from Cisco DNAC.
+        Args:
+            design_name (str, optional): Specific feature template design name to fetch.
+        Returns:
+            list: A list of existing Advanced SSID template dicts.
+        """
+        self.log("Fetching existing Advanced SSID Templates from DNAC.", "DEBUG")
+        try:
+            # Prepare API parameters
+            params = {}
+            if ssid_id:
+                params["id"] = ssid_id
+
+            # Execute API call to DNA Center
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_advanced_ssid_configuration_feature_template",
+                op_modifies=False,
+                params=params,
+            )
+
+            # Log raw response for debugging
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            # Extract templates from response
+            existing_ssids = response.get("response", [])
+            # Validate response data
+            if not isinstance(existing_ssids, dict):
+                self.log(
+                    f"Unexpected response format. Expected list, got {type(existing_ssids)}",
+                    "WARNING"
+                )
+                return []
+            return existing_ssids
+
+        except Exception as e:
+            self.log(
+                "Failed to fetch Advanced SSID Templates: {0}".format(str(e)), "ERROR"
+            )
+            return []
+
+    def get_advanced_ssid_templates(self, design_name=None):
+        """
+        Retrieve existing Advanced SSID feature templates from Cisco DNAC.
+        Args:
+            design_name (str, optional): Specific feature template design name to fetch.
+        Returns:
+            list: A list of existing Advanced SSID template dicts.
+        """
+        self.log("Fetching existing Advanced SSID Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": "ADVANCED_SSID_CONFIGURATION"}
+
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            existing_ssids = response.get("response", [])
+            self.log(
+                "Retrieved {0} Advanced SSID Templates.".format(len(existing_ssids)),
+                "DEBUG",
+            )
+            return existing_ssids
+
+        except Exception as e:
+            self.log(
+                "Failed to fetch Advanced SSID Templates: {0}".format(str(e)), "ERROR"
+            )
+            return []
+
+    def verify_delete_aaa_radius_attributes_requirement(self, aaa_attr_list):
+        """
+        Determines whether AAA Radius Attributes need to be deleted based on the requested parameters.
+        Args:
+            aaa_attr_list (list): A list of dictionaries containing the requested AAA Radius Attribute parameters for deletion.
+                                Example: [{"design_name": "AAA_Radius_Template_01"}]
+        Returns:
+            list: A list of AAA Radius Attributes that need to be deleted, including their IDs.
+        """
+        delete_attrs_list = []
+
+        self.log("Starting verification of AAA Radius Attributes for deletion.", "INFO")
+
+        # Retrieve all existing AAA Radius Attributes
+        existing_blocks = self.get_aaa_radius_attributes()
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []))
+
+        self.log("Existing AAA Radius Attributes: {0}".format(instances), "DEBUG")
+
+        # Convert existing attributes into a dictionary for quick lookup by design name
+        existing_dict = {attr["designName"]: attr for attr in instances}
+        self.log("Converted existing AAA Radius Attributes to dictionary.", "DEBUG")
+
+        # Iterate over the requested attributes
+        for index, requested_attr in enumerate(aaa_attr_list, start=1):
+            design_name = requested_attr.get("design_name")
+            self.log(
+                "Iteration {0}: Checking AAA Radius Attribute '{1}' for deletion requirement.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                # Match found → prepare payload with ID
+                existing = existing_dict[design_name]
+                attr_to_delete = requested_attr.copy()
+                attr_to_delete["id"] = existing.get("id")
+                delete_attrs_list.append(attr_to_delete)
+                self.log(
+                    "Iteration {0}: AAA Radius Attribute '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: Deletion not required for AAA Radius Attribute '{1}'. It does not exist.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "AAA Radius Attributes scheduled for deletion: {0} - {1}".format(
+                len(delete_attrs_list), delete_attrs_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_attrs_list
+
+    def verify_create_update_aaa_radius_attributes_requirement(self, aaa_attr_list):
+        """
+        Compares desired AAA Radius Attributes against existing ones and determines
+        which need to be created, updated, or left unchanged.
+
+        This function ONLY builds and returns payloads:
+        - add_attrs: payloads to create
+        - update_attrs: payloads to update
+        - no_update_attrs: existing details that require no change
+
+        It does NOT call create/update APIs — execution should happen elsewhere.
+        """
+        add_attrs, update_attrs, no_update_attrs = [], [], []
+
+        # Fetch once
+        existing_blocks = self.get_aaa_radius_attributes()
+        self.log("Existing AAA Radius Attributes: {0}".format(existing_blocks), "DEBUG")
+
+        # Flatten instances into dict
+        existing_dict = {}
+        for block in existing_blocks:
+            for inst in block.get("instances", []):
+                existing_dict[inst["designName"]] = inst
+        self.log("Existing AAA Radius Attributes Dict: {0}".format(existing_dict), "DEBUG")
+
+        # Iterate requested attributes
+        for attr in aaa_attr_list:
+            design_name = attr.get("design_name")
+            called_station_id = attr.get("called_station_id")
+            unlocked_attributes = attr.get("unlocked_attributes", False)
+
+            # validate the called_station_id value
+            allowed_values = [
+                "AP_ETHMAC_ONLY", "AP_ETHMAC_SSID", "AP_GROUP_NAME", "AP_LABEL_ADDRESS",
+                "AP_LABEL_ADDRESS_SSID", "AP_LOCATION", "AP_MACADDRESS", "AP_MACADDRESS_SSID",
+                "AP_NAME", "AP_NAME_SSID", "IPADDRESS", "MACADDRESS", "VLAN_ID"
+            ]
+            if called_station_id not in allowed_values:
+                self.msg = ("Invalid called_station_id '{0}' for design '{1}'. Must be one of: {2}".format(
+                    called_station_id, design_name, allowed_values))
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # Build payload
+            payload = {
+                "designName": design_name,
+                "featureAttributes": {"calledStationId": called_station_id},
+            }
+            if unlocked_attributes:
+                payload["unlockedAttributes"] = ["calledStationId"]
+
+            existing = existing_dict.get(design_name)
+
+            if not existing:
+                # CREATE payload
+                add_attrs.append(payload)
+                self.log("AAA Radius Attribute '{0}' scheduled for creation.".format(design_name), "DEBUG")
+            else:
+                details = self.get_aaa_radius_attribute_details(existing["id"])
+                self.log("Details for {0}: {1}".format(design_name, details), "DEBUG")
+
+                existing_called = details.get("featureAttributes", {}).get("calledStationId")
+                existing_unlocked = details.get("unlockedAttributes", []) or []
+
+                # Desired unlocked (only set if explicitly requested True)
+                desired_unlocked = ["calledStationId"] if unlocked_attributes else []
+
+                # Compare both fields
+                if (
+                    existing_called != called_station_id
+                    or set(existing_unlocked) != set(desired_unlocked)
+                ):
+                    update_attrs.append(payload)
+                    self.log("AAA Radius Attribute '{0}' marked for update.".format(design_name), "DEBUG")
+                else:
+                    no_update_attrs.append(details)
+                    self.log("AAA Radius Attribute '{0}' requires no update.".format(design_name), "DEBUG")
+
+        self.log("AAA Radius Attributes to Add: {0}".format(add_attrs), "DEBUG")
+        self.log("AAA Radius Attributes to Update: {0}".format(update_attrs), "DEBUG")
+        self.log("AAA Radius Attributes with No Changes: {0}".format(no_update_attrs), "DEBUG")
+
+        return add_attrs, update_attrs, no_update_attrs
+
+    def get_aaa_radius_attribute_details(self, template_id):
+        """
+        Fetch detailed AAA Radius Attribute template by ID from Cisco DNAC.
+
+        Args:
+            template_id (str): The unique ID of the feature template.
+
+        Returns:
+            dict: Detailed AAA Radius Attribute template (with featureAttributes, unlockedAttributes).
+        """
+        self.log(
+            "Fetching AAA Radius Attribute details for ID: {0}".format(template_id),
+            "DEBUG",
+        )
+        self.template_id = template_id
+        try:
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_aaa_radius_attributes_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            details = response.get("response", {})
+            self.log(
+                "Retrieved AAA Radius Attribute details for ID {0}: {1}".format(
+                    template_id, details
+                ),
+                "DEBUG",
+            )
+            return details
+
+        except Exception as e:
+            self.log(
+                "Failed to fetch AAA Radius Attribute details for ID {0}: {1}".format(
+                    template_id, str(e)
+                ),
+                "ERROR",
+            )
+            return {}
+
+    def get_aaa_radius_attributes(self, design_name=None):
+        """
+        Retrieve existing AAA Radius Attributes from Cisco DNAC.
+        Args:
+            design_name (str, optional): Specific feature template design name to fetch.
+        Returns:
+            list: A list of existing AAA Radius Attribute dicts.
+        """
+        self.log("Fetching existing AAA Radius Attributes from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": "AAA_RADIUS_ATTRIBUTES_CONFIGURATION"}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            existing_attrs = response.get("response", [])
+            self.log(
+                "Retrieved {0} AAA Radius Attributes.".format(len(existing_attrs)),
+                "DEBUG",
+            )
+            return existing_attrs
+
+        except Exception as e:
+            self.log(
+                "Failed to fetch AAA Radius Attributes: {0}".format(str(e)), "ERROR"
+            )
+            return []
+
 
     def get_want(self, config, state):
         """
