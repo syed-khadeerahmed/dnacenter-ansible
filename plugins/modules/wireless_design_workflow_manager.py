@@ -18351,6 +18351,187 @@ class WirelessDesign(DnacBase):
         )
 
         return delete_list
+    def verify_create_update_rrm_fra_requirement(self, rrm_fra_list):
+        """
+        Compares desired RRM-FRA profiles against existing ones and determines
+        which need to be created, updated, or left unchanged.
+
+        Returns:
+            (add_list, update_list, no_update_list)
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        existing_blocks = self.get_rrm_fra_profiles()
+        self.log("Existing RRM-FRA Profiles (summary): {0}".format(existing_blocks), "DEBUG")
+
+        existing_dict = {}
+        for block in (existing_blocks or []):
+            for inst in block.get("instances", []) or []:
+                existing_dict[inst["designName"]] = inst
+        self.log("Existing RRM-FRA Profiles Dict: {0}".format(existing_dict), "DEBUG")
+
+        # Allowed values
+        allowed_bands = ["2_4GHZ_5GHZ", "5GHZ_6GHZ"]
+        allowed_sensitivity = ["LOW", "MEDIUM", "HIGH", "HIGHER", "EVEN_HIGHER", "SUPER_HIGH"]
+        advanced_sensitivity = {"HIGHER", "EVEN_HIGHER", "SUPER_HIGH"}
+
+        for attr in (rrm_fra_list or []):
+            design_name = attr.get("design_name")
+            fa = attr.get("feature_attributes") or {}
+            unlocked = attr.get("unlocked_attributes", [])
+
+            radio_band = fa.get("radio_band")
+            fra_freeze = fa.get("fra_freeze")
+            fra_status = fa.get("fra_status")
+            fra_interval = fa.get("fra_interval")
+            fra_sensitivity = fa.get("fra_sensitivity")
+
+            # --- Validations (no external modules) ---
+            if radio_band not in allowed_bands:
+                self.msg = "Invalid radio_band '{0}' for design '{1}'. Must be one of: {2}".format(
+                    radio_band, design_name, allowed_bands
+                )
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            if fra_interval is not None:
+                try:
+                    val = int(fra_interval)
+                except Exception:
+                    self.msg = "fra_interval must be an integer for design '{0}'.".format(design_name)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                if not (1 <= val <= 24):
+                    self.msg = "fra_interval must be between 1 and 24 for design '{0}'.".format(design_name)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            if fra_sensitivity is not None:
+                if fra_sensitivity not in allowed_sensitivity:
+                    self.msg = "Invalid fra_sensitivity '{0}' for design '{1}'. Must be one of: {2}".format(
+                        fra_sensitivity, design_name, allowed_sensitivity
+                    )
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                # Advanced sensitivity only valid for 2_4GHZ_5GHZ
+                if (fra_sensitivity in advanced_sensitivity) and (radio_band != "2_4GHZ_5GHZ"):
+                    self.msg = ("fra_sensitivity '{0}' is supported only for radio_band=2_4GHZ_5GHZ "
+                                "for design '{1}'.").format(fra_sensitivity, design_name)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # Note: fra_freeze controller-version constraints cannot be validated here; log hint only.
+            if fra_freeze is not None:
+                if radio_band == "2_4GHZ_5GHZ":
+                    self.log("Notice: fra_freeze requires controller >= 17.6 for 2_4GHZ_5GHZ.", "DEBUG")
+                elif radio_band == "5GHZ_6GHZ":
+                    self.log("Notice: fra_freeze requires controller >= 17.9 for 5GHZ_6GHZ.", "DEBUG")
+
+            # Build desired payload (camelCase for controller)
+            payload = {
+                "designName": design_name,
+                "featureAttributes": {
+                    "radioBand": radio_band
+                }
+            }
+            if fra_freeze is not None:
+                payload["featureAttributes"]["fraFreeze"] = fra_freeze
+            if fra_status is not None:
+                payload["featureAttributes"]["fraStatus"] = fra_status
+            if fra_interval is not None:
+                payload["featureAttributes"]["fraInterval"] = int(fra_interval)
+            if fra_sensitivity is not None:
+                payload["featureAttributes"]["fraSensitivity"] = fra_sensitivity
+
+            # Normalize unlocked attributes to controller keys
+            if unlocked:
+                norm_unlocked = []
+                for u in unlocked:
+                    if u == "radio_band":
+                        norm_unlocked.append("radioBand")
+                    elif u == "fra_freeze":
+                        norm_unlocked.append("fraFreeze")
+                    elif u == "fra_status":
+                        norm_unlocked.append("fraStatus")
+                    elif u == "fra_interval":
+                        norm_unlocked.append("fraInterval")
+                    elif u == "fra_sensitivity":
+                        norm_unlocked.append("fraSensitivity")
+                    else:
+                        norm_unlocked.append(u)
+                payload["unlockedAttributes"] = norm_unlocked
+
+            # Compare against existing
+            existing = existing_dict.get(design_name)
+            if not existing:
+                add_list.append(payload)
+                self.log("RRM-FRA profile '{0}' scheduled for creation.".format(design_name), "DEBUG")
+                continue
+
+            details = self.get_rrm_fra_profile_details(existing["id"]) or {}
+            self.log("Existing details for '{0}': {1}".format(design_name, details), "DEBUG")
+
+            existing_fa = (details.get("featureAttributes") or {})
+            existing_unl = (details.get("unlockedAttributes") or [])
+
+            desired_fa = payload["featureAttributes"]
+            desired_unl = payload.get("unlockedAttributes", [])
+
+            needs_update = (
+                existing_fa.get("radioBand") != desired_fa.get("radioBand") or
+                existing_fa.get("fraFreeze") != desired_fa.get("fraFreeze") or
+                existing_fa.get("fraStatus") != desired_fa.get("fraStatus") or
+                existing_fa.get("fraInterval") != desired_fa.get("fraInterval") or
+                (
+                    str(existing_fa.get("fraSensitivity") or "").upper()
+                    != str(desired_fa.get("fraSensitivity") or "").upper()
+                    or set(existing_unl) != set(desired_unl)
+                )
+            )
+
+            if needs_update:
+                payload["id"] = existing["id"]
+                update_list.append(payload)
+                self.log("RRM-FRA profile '{0}' marked for update.".format(design_name), "DEBUG")
+            else:
+                no_update_list.append(details)
+                self.log("RRM-FRA profile '{0}' requires no update.".format(design_name), "DEBUG")
+
+        self.log(
+            "RRM-FRA - Add: {0}, Update: {1}, No-Change: {2}".format(
+                len(add_list), len(update_list), len(no_update_list)
+            ),
+            "DEBUG",
+        )
+        return add_list, update_list, no_update_list
+
+    def get_rrm_fra_profiles(self, design_name=None, template_type="RRM_FRA_CONFIGURATION"):
+        """
+        Retrieve existing RRM-FRA feature templates from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): Defaults to "RRM_FRA_CONFIGURATION".
+
+        Returns:
+            list: A list of RRM-FRA template dicts (the API 'response' list), or [] on failure.
+        """
+        self.log("Fetching existing RRM-FRA Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+            existing_fra = response.get("response", [])
+            self.log("Retrieved {0} RRM-FRA Templates.".format(len(existing_fra)), "DEBUG")
+            return existing_fra
+
+        except Exception as e:
+            self.log("Failed to fetch RRM-FRA Templates: {0}".format(str(e)), "ERROR")
+            return []
 
     def get_want(self, config, state):
         """
