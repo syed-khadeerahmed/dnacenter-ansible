@@ -29,9 +29,18 @@ class TestWirelessDesign(TestDnacModule):
     playbook_aaa_radius_attribute = test_data.get("playbook_aaa_radius_attribute")
     playbook_aaa_radius_attribute_update = test_data.get("playbook_aaa_radius_attribute_update")
     playbook_aaa_radius_attribute_delete = test_data.get("playbook_aaa_radius_attribute_delete")
+    
     playbook_advanced_ssid_create = test_data.get("playbook_advanced_ssid_create")
     playbook_advanced_ssid_update = test_data.get("playbook_advanced_ssid_update")
     playbook_advanced_ssid_delete = test_data.get("playbook_advanced_ssid_delete")
+    
+    playbook_clean_air_create = test_data.get("playbook_clean_air_create")
+    playbook_clean_air_update = test_data.get("playbook_clean_air_update")
+    playbook_clean_air_delete = test_data.get("playbook_clean_air_delete")
+
+    playbook_dot11ax_add = test_data.get("playbook_dot11ax_add")
+    playbook_dot11ax_update = test_data.get("playbook_dot11ax_update")
+    
 
     def setUp(self):
         super(TestWirelessDesign, self).setUp()
@@ -595,6 +604,43 @@ class TestWirelessDesign(TestDnacModule):
                 self.test_data.get("delete_ADVANCED_SSID_CONFIGURATION"),
                 self.test_data.get("task_019a0616-094f-7d81-9d8c-2d371bf1daed"),
             ]
+            
+        if "playbook_clean_air_create" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("get_CLEANAIR_CONFIGURATION"),
+                self.test_data.get("CLEANAIR_CONFIGURATION_create"),
+                self.test_data.get("task_019a0b14-1380-7afc-a82e-a27c917eff36"),
+            ]
+
+        if "playbook_clean_air_update" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("CLEANAIR_CONFIGURATION_get_update"),
+                self.test_data.get("CLEANAIR_CONFIGURATION_update_get"),
+                self.test_data.get("CLEANAIR_CONFIGURATION_update"),
+                self.test_data.get("task_019a0b1f-1e68-7d22-a6e5-4edb47eeb423"),
+            ]
+
+        if "playbook_clean_air_delete" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("CLEANAIR_CONFIGURATION_get_delete"),
+                self.test_data.get("CLEANAIR_CONFIGURATION_delete_get"),
+                self.test_data.get("task_019a0b25-4304-70f0-a684-889e06e10841"),
+            ]
+
+        if "playbook_dot11ax_add" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("DOT11AX_CONFIGURATION_get"),
+                self.test_data.get("DOT11AX_CONFIGURATION_create"),
+                self.test_data.get("task_019a0b40-98f2-7d60-b662-1fa7b0d18246"),
+            ]
+
+        if "playbook_dot11ax_update" in self._testMethodName:
+            self.run_dnac_exec.side_effect = [
+                self.test_data.get("DOT11AX_CONFIGURATION_get_update"),
+                self.test_data.get("DOT11AX_CONFIGURATION_update_get"),
+                self.test_data.get("DOT11AX_CONFIGURATION_update"),
+                self.test_data.get("task_019a0b4b-4ddd-7717-95dc-d224a3dc0213"),
+            ]
 
     # SUCCESS TESTCASES ########################################################################################
 
@@ -1106,6 +1152,115 @@ class TestWirelessDesign(TestDnacModule):
 {
         "advanced_ssids_delete": {
             "sample_advanced_ssid_design": "Successfully deleted Advanced SSID."
+        }
+    }
+        )
+
+    def test_wireless_design_workflow_manager_playbook_clean_air_create(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="merged",
+                config=self.playbook_clean_air_create
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+{
+        "clean_air_add": {
+            "sample_cleanair_design_24ghz": "Successfully created CleanAir Profile."
+        }
+    }
+        )
+
+    def test_wireless_design_workflow_manager_playbook_clean_air_update(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="merged",
+                config=self.playbook_clean_air_update
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+{
+        "clean_air_update": {
+            "sample_cleanair_design_24ghz": "Successfully updated CleanAir Profile."
+        }
+    }
+        )
+    def test_wireless_design_workflow_manager_playbook_clean_air_delete(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="deleted",
+                config=self.playbook_clean_air_delete
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+{
+        "clean_air_delete": {
+            "sample_cleanair_design_24ghz": "Successfully deleted CleanAir Profile."
+        }
+    }
+        )
+
+    def test_wireless_design_workflow_manager_playbook_dot11ax_add(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="merged",
+                config=self.playbook_dot11ax_add
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+{
+        "dot11ax_add": {
+            "dot11ax_24ghz_design": "Successfully created dot11ax configuration."
+        }
+    }
+        )
+
+    def test_wireless_design_workflow_manager_playbook_dot11ax_update(self):
+        set_module_args(
+            dict(
+                dnac_version='3.1.3.0',
+                dnac_host="1.1.1.1",
+                dnac_username="dummy",
+                dnac_password="dummy",
+                dnac_log=True,
+                state="merged",
+                config=self.playbook_dot11ax_update
+            )
+        )
+        result = self.execute_module(changed=True, failed=False)
+        self.assertEqual(
+            result.get('msg'),
+{
+        "dot11ax_update": {
+            "dot11ax_24ghz_design": "Successfully updated dot11ax configuration."
         }
     }
         )

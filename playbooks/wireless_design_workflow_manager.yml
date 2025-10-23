@@ -20,78 +20,18 @@
         config_verify: true
         dnac_api_task_timeout: 1000
         dnac_task_poll_interval: 1
-        state: deleted
+        state: merged
         config:
           - feature_template_config:
-              - advanced_ssid:
-                  - design_name: "sample_advanced_ssid_design"
-                    # feature_attributes:
-                    #   peer2peer_blocking: "DISABLE"   # enum: DROP, FORWARD_UP, ALLOW_PVT_GROUP, DISABLE
-                    #   passive_client: false
-                    #   prediction_optimization: false
-                    #   dual_band_neighbor_list: false
-                    #   radius_nac_state: true
-                    #   dhcp_required: true
-                    #   dhcp_server: "10.10.10.5"
-                    #   flex_local_auth: false
-                    #   target_wakeup_time: true
-                    #   downlink_ofdma: true
-                    #   uplink_ofdma: true
-                    #   downlink_mu_mimo: true
-                    #   uplink_mu_mimo: true
-                    #   dot11ax: true
-                    #   aironet_ie_support: true
-                    #   load_balancing: false
-                    #   dtim_period_5ghz: 5   # 1-255
-                    #   dtim_period_24ghz: 5  # 1-255
-                    #   scan_defer_time: 100
-                    #   max_clients: 200
-                    #   max_clients_per_radio: 100   # 0-500
-                    #   max_clients_per_ap: 300      # 0-1200
-                    #   wmm_policy: "REQUIRED"        # DISABLED, REQUIRED, ALLOWED
-                    #   multicast_buffer: true
-                    #   multicast_buffer_value: 50
-                    #   media_stream_multicast_direct: true
-                    #   mu_mimo_11ac: true
-                    #   wifi_to_cellular_steering: false
-                    #   wifi_alliance_agile_multiband: false
-                    #   fastlane_asr: false
-                    #   dot11v_bss_max_idle_protected: false
-                    #   universal_ap_admin: false
-                    #   opportunistic_key_caching: false
-                    #   ip_source_guard: false
-                    #   dhcp_opt82_remote_id_sub_option: false
-                    #   vlan_central_switching: false
-                    #   call_snooping: false
-                    #   send_disassociate: false
-                    #   sent_486_busy: false
-                    #   ip_mac_binding: false
-                    #   idle_threshold: 300
-                    #   defer_priority_0: false
-                    #   defer_priority_1: false
-                    #   defer_priority_2: false
-                    #   defer_priority_3: false
-                    #   defer_priority_4: false
-                    #   defer_priority_5: false
-                    #   defer_priority_6: false
-                    #   defer_priority_7: false
-                    #   share_data_with_client: false
-                    #   advertise_support: false
-                    #   advertise_pc_analytics_support: false
-                    #   send_beacon_on_association: false
-                    #   send_beacon_on_roam: false
-                    #   fast_transition_reassociation_timeout: 50. #1 - 100
-                    #   mdns_mode: "MDNS_SD_BRIDGING"  # MDNS_SD_BRIDGING, MDNS_SD_DROP, MDNS_SD_GATEWAY
-                    # unlocked_attributes:
-                      # - "peer2peer_blocking"
-                      # - "passive_client"
-                      # - "dot11ax"
-                      # - "load_balancing"
-                      # - "max_clients"
-                      # - "max_clients_per_radio"
-                      # - "max_clients_per_ap"
-                      # - "wmm_policy"
-                      # - "dtim_period_5ghz"
-                      # - "dtim_period_24ghz"
-                      # - "scan_defer_time"
-                      # - "mdns_mode"
+              - dot11ax_configuration:
+                  - design_name: "dot11ax_24ghz_design"
+                    feature_attributes:
+                      radio_band: "2_4GHZ"
+                      bss_color: true
+                      target_waketime_broadcast: false
+                      non_srg_obss_pd_max_threshold: -78
+                      target_wake_up_time_11ax: true
+                      obss_pd: true
+                    unlocked_attributes:
+                      - "radio_band"
+                      - "bss_color"

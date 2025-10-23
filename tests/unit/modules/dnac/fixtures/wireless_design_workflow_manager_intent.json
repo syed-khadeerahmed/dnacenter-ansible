@@ -32064,9 +32064,192 @@
 		"id": "019a0616-094f-7d81-9d8c-2d371bf1daed"
 	},
 	"version": "1.0"
-	}
+	},
+
+	"playbook_clean_air_create": [
+                {
+                    "feature_template_config": [
+                        {
+                            "clean_air_configuration": [
+                                {
+                                    "design_name": "sample_cleanair_design_24ghz",
+                                    "feature_attributes": {
+                                        "clean_air": true,
+                                        "clean_air_device_reporting": true,
+                                        "description": "CleanAir profile for 2.4GHz office deployment",
+                                        "interferers_features": {
+                                            "ble_beacon": true,
+                                            "bluetooth_paging_inquiry": false,
+                                            "bluetooth_sco_acl": false,
+                                            "continuous_transmitter": true,
+                                            "generic_dect": false,
+                                            "generic_tdd": false,
+                                            "jammer": false,
+                                            "microwave_oven": true,
+                                            "motorola_canopy": false,
+                                            "si_fhss": false,
+                                            "spectrum80211_fh": false,
+                                            "spectrum80211_non_standard_channel": false,
+                                            "spectrum802154": false,
+                                            "spectrum_inverted": false,
+                                            "super_ag": false,
+                                            "video_camera": false,
+                                            "wimax_fixed": false,
+                                            "wimax_mobile": false,
+                                            "xbox": false
+                                        },
+                                        "persistent_device_propagation": false,
+                                        "radio_band": "2_4GHZ"
+                                    },
+                                    "unlocked_attributes": null
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+	"get_CLEANAIR_CONFIGURATION": {"response": [{"type": "CLEANAIR_CONFIGURATION", "count": 3, "instances": [{"designName": "Default CleanAir 6GHz Design", "id": "dae784a7-7589-4b98-a924-b93c3d5f5604", "systemTemplate": true}, {"designName": "Default CleanAir 802.11b Design", "id": "b17463b1-b0f9-4e7f-a987-c3bb97236dd1", "systemTemplate": true}, {"designName": "Default CleanAir 802.11a Design", "id": "5e14f94e-aaa6-4fa3-9224-8a4a72958e56", "systemTemplate": true}]}], "version": "1.0"},
+	"CLEANAIR_CONFIGURATION_create": {"response": {"taskId": "019a0b14-1380-7afc-a82e-a27c917eff36", "url": "/api/v1/task/019a0b14-1380-7afc-a82e-a27c917eff36"}, "version": "1.0"} ,
+	"task_019a0b14-1380-7afc-a82e-a27c917eff36": {"response": {"endTime": 1761122456451, "status": "SUCCESS", "startTime": 1761122456448, "resultLocation": "/dna/intent/api/v1/tasks/019a0b14-1380-7afc-a82e-a27c917eff36/detail", "id": "019a0b14-1380-7afc-a82e-a27c917eff36"}, "version": "1.0"} ,
+
+	"playbook_clean_air_update": [
+                {
+                    "feature_template_config": [
+                        {
+                            "clean_air_configuration": [
+                                {
+                                    "design_name": "sample_cleanair_design_24ghz",
+                                    "feature_attributes": {
+                                        "clean_air": true,
+                                        "clean_air_device_reporting": true,
+                                        "description": "CleanAir profile for 2.4GHz office deployment",
+                                        "interferers_features": {
+                                            "ble_beacon": true,
+                                            "bluetooth_paging_inquiry": false,
+                                            "bluetooth_sco_acl": false,
+                                            "continuous_transmitter": true,
+                                            "generic_dect": false,
+                                            "generic_tdd": true,
+                                            "jammer": false,
+                                            "microwave_oven": true,
+                                            "motorola_canopy": false,
+                                            "si_fhss": false,
+                                            "spectrum80211_fh": false,
+                                            "spectrum80211_non_standard_channel": false,
+                                            "spectrum802154": false,
+                                            "spectrum_inverted": false,
+                                            "super_ag": false,
+                                            "video_camera": false,
+                                            "wimax_fixed": false,
+                                            "wimax_mobile": false,
+                                            "xbox": false
+                                        },
+                                        "persistent_device_propagation": false,
+                                        "radio_band": "2_4GHZ"
+                                    },
+                                    "unlocked_attributes": null
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+	"CLEANAIR_CONFIGURATION_get_update": {"response": [{"type": "CLEANAIR_CONFIGURATION", "count": 4, "instances": [{"designName": "sample_cleanair_design_24ghz", "id": "f0d18e5d-5b8d-46c9-8e35-75c690c8e451", "systemTemplate": false}, {"designName": "Default CleanAir 802.11a Design", "id": "5e14f94e-aaa6-4fa3-9224-8a4a72958e56", "systemTemplate": true}, {"designName": "Default CleanAir 802.11b Design", "id": "b17463b1-b0f9-4e7f-a987-c3bb97236dd1", "systemTemplate": true}, {"designName": "Default CleanAir 6GHz Design", "id": "dae784a7-7589-4b98-a924-b93c3d5f5604", "systemTemplate": true}]}], "version": "1.0"} ,
+	"CLEANAIR_CONFIGURATION_update_get": {"response": {"designName": "sample_cleanair_design_24ghz", "featureAttributes": {"radioBand": "2_4GHZ", "cleanAir": true, "cleanAirDeviceReporting": true, "persistentDevicePropagation": false, "description": "CleanAir profile for 2.4GHz office deployment", "interferersFeatures": {"bleBeacon": true, "bluetoothPagingInquiry": false, "bluetoothScoAcl": false, "continuousTransmitter": true, "genericDect": false, "genericTdd": true, "jammer": false, "microwaveOven": true, "motorolaCanopy": false, "siFhss": false, "spectrum80211Fh": false, "spectrum80211NonStandardChannel": false, "spectrum802154": false, "spectrumInverted": false, "superAg": false, "videoCamera": false, "wimaxFixed": false, "wimaxMobile": false, "xbox": false}}, "id": "f0d18e5d-5b8d-46c9-8e35-75c690c8e451", "unlockedAttributes": []}, "version": "1.0"},
+	"CLEANAIR_CONFIGURATION_update": {"response": {"taskId": "019a0b1f-1e68-7d22-a6e5-4edb47eeb423", "url": "/api/v1/task/019a0b1f-1e68-7d22-a6e5-4edb47eeb423"}, "version": "1.0"},
+	"task_019a0b1f-1e68-7d22-a6e5-4edb47eeb423": {"response": {"endTime": 1761123180140, "status": "SUCCESS", "startTime": 1761123180136, "resultLocation": "/dna/intent/api/v1/tasks/019a0b1f-1e68-7d22-a6e5-4edb47eeb423/detail", "id": "019a0b1f-1e68-7d22-a6e5-4edb47eeb423"}, "version": "1.0"},
+
+	"playbook_clean_air_delete": [
+                {
+                    "feature_template_config": [
+                        {
+                            "clean_air_configuration": [
+                                {
+                                    "design_name": "sample_cleanair_design_24ghz"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+        
+ 
+	"CLEANAIR_CONFIGURATION_get_delete": {"response": [{"type": "CLEANAIR_CONFIGURATION", "count": 4, "instances": [{"designName": "sample_cleanair_design_24ghz", "id": "f0d18e5d-5b8d-46c9-8e35-75c690c8e451", "systemTemplate": false}, {"designName": "Default CleanAir 802.11a Design", "id": "5e14f94e-aaa6-4fa3-9224-8a4a72958e56", "systemTemplate": true}, {"designName": "Default CleanAir 802.11b Design", "id": "b17463b1-b0f9-4e7f-a987-c3bb97236dd1", "systemTemplate": true}, {"designName": "Default CleanAir 6GHz Design", "id": "dae784a7-7589-4b98-a924-b93c3d5f5604", "systemTemplate": true}]}], "version": "1.0"},
+	"CLEANAIR_CONFIGURATION_delete_get": {"response": {"taskId": "019a0b25-4304-70f0-a684-889e06e10841", "url": "/api/v1/task/019a0b25-4304-70f0-a684-889e06e10841"}, "version": "1.0"},
+	"task_019a0b25-4304-70f0-a684-889e06e10841": {"response": {"endTime": 1761123582727, "status": "SUCCESS", "startTime": 1761123582724, "resultLocation": "/dna/intent/api/v1/tasks/019a0b25-4304-70f0-a684-889e06e10841/detail", "id": "019a0b25-4304-70f0-a684-889e06e10841"}, "version": "1.0"},
+
+	"playbook_dot11ax_add": [
+                {
+                    "feature_template_config": [
+                        {
+                            "dot11ax_configuration": [
+                                {
+                                    "design_name": "dot11ax_24ghz_design",
+                                    "feature_attributes": {
+                                        "bss_color": true,
+                                        "non_srg_obss_pd_max_threshold": -78,
+                                        "obss_pd": true,
+                                        "radio_band": "2_4GHZ",
+                                        "target_wake_up_time_11ax": true,
+                                        "target_waketime_broadcast": true
+                                    },
+                                    "unlocked_attributes": [
+                                        "radio_band",
+                                        "bss_color",
+                                        "target_waketime_broadcast",
+                                        "non_srg_obss_pd_max_threshold",
+                                        "target_wake_up_time_11ax",
+                                        "obss_pd"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+		"DOT11AX_CONFIGURATION_get": {"response": [{"type": "DOT11AX_CONFIGURATION", "count": 3, "instances": [{"designName": "Default Dot11ax 802.11b Design", "id": "7d2615c1-dac4-4e1b-b554-9c322c677398", "systemTemplate": true}, {"designName": "Default Dot11ax 802.11a Design", "id": "68db7360-fdd7-4e89-9f6b-f3f6f4e3a6ae", "systemTemplate": true}, {"designName": "Default Dot11ax 6-GHz Design", "id": "aa159efb-a624-4105-920a-4f084dbb2e25", "systemTemplate": true}]}], "version": "1.0"},
+		"DOT11AX_CONFIGURATION_create": {"response": {"taskId": "019a0b40-98f2-7d60-b662-1fa7b0d18246", "url": "/api/v1/task/019a0b40-98f2-7d60-b662-1fa7b0d18246"}, "version": "1.0"},
+		"task_019a0b40-98f2-7d60-b662-1fa7b0d18246": {"response": {"endTime": 1761125374197, "status": "SUCCESS", "startTime": 1761125374194, "resultLocation": "/dna/intent/api/v1/tasks/019a0b40-98f2-7d60-b662-1fa7b0d18246/detail", "id": "019a0b40-98f2-7d60-b662-1fa7b0d18246"}, "version": "1.0"},
+
+		"playbook_dot11ax_update": [
+                {
+                    "feature_template_config": [
+                        {
+                            "dot11ax_configuration": [
+                                {
+                                    "design_name": "dot11ax_24ghz_design",
+                                    "feature_attributes": {
+                                        "bss_color": true,
+                                        "non_srg_obss_pd_max_threshold": -78,
+                                        "obss_pd": true,
+                                        "radio_band": "2_4GHZ",
+                                        "target_wake_up_time_11ax": true,
+                                        "target_waketime_broadcast": false
+                                    },
+                                    "unlocked_attributes": [
+                                        "radio_band",
+                                        "bss_color"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+		"DOT11AX_CONFIGURATION_get_update": {"response": [{"type": "DOT11AX_CONFIGURATION", "count": 4, "instances": [{"designName": "dot11ax_24ghz_design", "id": "0d4febe4-3127-44f9-b62e-a35615271815", "systemTemplate": false}, {"designName": "Default Dot11ax 802.11b Design", "id": "7d2615c1-dac4-4e1b-b554-9c322c677398", "systemTemplate": true}, {"designName": "Default Dot11ax 802.11a Design", "id": "68db7360-fdd7-4e89-9f6b-f3f6f4e3a6ae", "systemTemplate": true}, {"designName": "Default Dot11ax 6-GHz Design", "id": "aa159efb-a624-4105-920a-4f084dbb2e25", "systemTemplate": true}]}], "version": "1.0"},
+		"DOT11AX_CONFIGURATION_update_get": {"response": {"designName": "dot11ax_24ghz_design", "featureAttributes": {"bssColor": true, "targetWaketimeBroadcast": true, "nonSRGObssPdMaxThreshold": -78, "radioBand": "2_4GHZ", "targetWakeUpTime11ax": true, "obssPd": true}, "id": "0d4febe4-3127-44f9-b62e-a35615271815", "unlockedAttributes": ["targetWakeUpTime11ax", "obssPd", "bssColor", "targetWaketimeBroadcast", "nonSRGObssPdMaxThreshold"]}, "version": "1.0"},
+		"DOT11AX_CONFIGURATION_update": {"response": {"taskId": "019a0b4b-4ddd-7717-95dc-d224a3dc0213", "url": "/api/v1/task/019a0b4b-4ddd-7717-95dc-d224a3dc0213"}, "version": "1.0"},
+		"task_019a0b4b-4ddd-7717-95dc-d224a3dc0213": {"response": {"endTime": 1761126075875, "status": "SUCCESS", "startTime": 1761126075869, "resultLocation": "/dna/intent/api/v1/tasks/019a0b4b-4ddd-7717-95dc-d224a3dc0213/detail", "id": "019a0b4b-4ddd-7717-95dc-d224a3dc0213"}, "version": "1.0"}
 
 
 
 
-}
+
+
+
+
+    }
