@@ -18214,6 +18214,143 @@ class WirelessDesign(DnacBase):
             "DEBUG",
         )
         return add_list, update_list, no_update_list
+    def get_rrm_general_profile_details(self, template_id):
+        """
+        Retrieve detailed information for a specific RRM General configuration template from Cisco DNAC.
+
+        Args:
+            template_id (str): The unique ID of the RRM General feature template.
+
+        Returns:
+            dict: The details of the RRM General feature template, or {} if fetch fails.
+        """
+        self.log("Fetching RRM General configuration details for template_id='{0}'".format(template_id), "DEBUG")
+
+        try:
+            if not template_id:
+                self.log("No template_id provided for RRM General details.", "ERROR")
+                return {}
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_r_r_m_general_configuration_feature_template",
+                op_modifies=False,
+                params={"id": template_id},
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            details = response.get("response") or {}
+            return details
+
+        except Exception as e:
+            self.log("Failed to fetch RRM General configuration details: {0}".format(str(e)), "ERROR")
+            return {}
+
+    def get_rrm_general_profiles(self, design_name=None, template_type="RRM_GENERAL_CONFIGURATION"):
+        """
+        Retrieve existing RRM General feature templates from Cisco DNAC.
+
+        Args:
+            design_name (str, optional): Specific feature template design name to filter by.
+            template_type (str, optional): DNAC template type identifier.
+                                        Defaults to "RRM_GENERAL_CONFIGURATION".
+
+        Returns:
+            list: A list of existing RRM General template dicts (the API 'response' list), or [] on failure.
+        """
+        self.log("Fetching existing RRM General Templates from DNAC.", "DEBUG")
+
+        try:
+            params = {"type": template_type}
+            if design_name:
+                params["design_name"] = design_name
+
+            response = self.dnac._exec(
+                family="wireless",
+                function="get_feature_template_summary",
+                op_modifies=False,
+                params=params,
+            )
+            self.log("Received API response: {0}".format(response), "DEBUG")
+
+            existing_rrm_general = response.get("response", [])
+            self.log(
+                "Retrieved {0} RRM General Templates.".format(len(existing_rrm_general)),
+                "DEBUG",
+            )
+            return existing_rrm_general
+
+        except Exception as e:
+            self.log("Failed to fetch RRM General Templates: {0}".format(str(e)), "ERROR")
+            return []
+
+    def verify_delete_rrm_fra_requirement(self, rrm_fra_list):
+        """
+        Determines which RRM-FRA configuration templates need to be deleted
+        based on the requested parameters.
+
+        Args:
+            rrm_fra_list (list): A list of dicts containing the requested RRM-FRA
+                                configuration parameters for deletion.
+                                Example: [{"design_name": "fra_design_1"}]
+
+        Returns:
+            list: A list of RRM-FRA configuration templates scheduled for deletion,
+                including their IDs.
+        """
+        delete_list = []
+
+        self.log("Starting verification of RRM-FRA configurations for deletion.", "INFO")
+
+        # Retrieve all existing RRM-FRA configurations
+        existing_blocks = self.get_rrm_fra_profiles()
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []))
+
+        self.log("Existing RRM-FRA configurations: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary for quick lookup
+        existing_dict = {cfg["designName"]: cfg for cfg in instances}
+        self.log("Converted existing RRM-FRA configs to dictionary.", "DEBUG")
+
+        # Iterate over requested configurations
+        for index, requested_cfg in enumerate(rrm_fra_list, start=1):
+            design_name = requested_cfg.get("design_name")
+            self.log(
+                "Iteration {0}: Checking RRM-FRA config '{1}' for deletion.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                cfg_to_delete = requested_cfg.copy()
+                cfg_to_delete["id"] = existing.get("id")
+                delete_list.append(cfg_to_delete)
+                self.log(
+                    "Iteration {0}: RRM-FRA config '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: RRM-FRA config '{1}' not found -> no deletion required.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "RRM-FRA configurations scheduled for deletion: {0} - {1}".format(
+                len(delete_list), delete_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_list
 
     def get_want(self, config, state):
         """
