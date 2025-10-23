@@ -6186,6 +6186,391 @@ class WirelessDesign(DnacBase):
                     },
                 },
             },
+            "feature_template_config": {
+                "type": "list",
+                "elements": "dict",
+                "required": False,
+                "options": {
+                    "aaa_radius_attribute": {
+                        "type": "list",
+                        "elements": "dict",
+                        "required": False,
+                        "options": {
+                            "design_name": {"type": "str"},
+                            "called_station_id": {"type": "str"},
+                            "unlocked_attributes": {"type": "bool", "required": False},
+                        },
+                    },
+                    "advanced_ssid": {
+                        "type": "list",
+                        "elements": "dict",
+                        "required": False,
+                        "options": {
+                            "design_name": {"type": "str"},
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": False,
+                                "options": {
+                                    "peer2peer_blocking": {
+                                        "type": "str",
+                                        "choices": ["DISABLE", "DROP", "FORWARD_UP", "ALLOW_PVT_GROUP"]
+                                    },
+                                    "passive_client": {"type": "bool"},
+                                    "prediction_optimization": {"type": "bool"},
+                                    "dual_band_neighbor_list": {"type": "bool"},
+                                    "radius_nac_state": {"type": "bool"},
+                                    "dhcp_required": {"type": "bool"},
+                                    "dhcp_server": {"type": "str"},
+                                    "flex_local_auth": {"type": "bool"},
+                                    "target_wakeup_time": {"type": "bool"},
+                                    "downlink_ofdma": {"type": "bool"},
+                                    "uplink_ofdma": {"type": "bool"},
+                                    "downlink_mu_mimo": {"type": "bool"},
+                                    "uplink_mu_mimo": {"type": "bool"},
+                                    "dot11ax": {"type": "bool"},
+                                    "aironet_ie_support": {"type": "bool"},
+                                    "load_balancing": {"type": "bool"},
+                                    "dtim_period_5ghz": {"type": "int"},
+                                    "dtim_period_24ghz": {"type": "int"},
+                                    "scan_defer_time": {"type": "int"},
+                                    "max_clients": {"type": "int"},
+                                    "max_clients_per_radio": {"type": "int"},
+                                    "max_clients_per_ap": {"type": "int"},
+                                    "wmm_policy": {"type": "str", "choices": ["DISABLED", "ALLOWED", "REQUIRED"]},
+                                    "multicast_buffer": {"type": "bool"},
+                                    "multicast_buffer_value": {"type": "int"},
+                                    "media_stream_multicast_direct": {"type": "bool"},
+                                    "mu_mimo_11ac": {"type": "bool"},
+                                    "wifi_to_cellular_steering": {"type": "bool"},
+                                    "wifi_alliance_agile_multiband": {"type": "bool"},
+                                    "fastlane_asr": {"type": "bool"},
+                                    "dot11v_bss_max_idle_protected": {"type": "bool"},
+                                    "universal_ap_admin": {"type": "bool"},
+                                    "opportunistic_key_caching": {"type": "bool"},
+                                    "ip_source_guard": {"type": "bool"},
+                                    "dhcp_opt82_remote_id_sub_option": {"type": "bool"},
+                                    "vlan_central_switching": {"type": "bool"},
+                                    "call_snooping": {"type": "bool"},
+                                    "send_disassociate": {"type": "bool"},
+                                    "sent_486_busy": {"type": "bool"},
+                                    "ip_mac_binding": {"type": "bool"},
+                                    "idle_threshold": {"type": "int"},
+                                    "defer_priority_0": {"type": "bool"},
+                                    "defer_priority_1": {"type": "bool"},
+                                    "defer_priority_2": {"type": "bool"},
+                                    "defer_priority_3": {"type": "bool"},
+                                    "defer_priority_4": {"type": "bool"},
+                                    "defer_priority_5": {"type": "bool"},
+                                    "defer_priority_6": {"type": "bool"},
+                                    "defer_priority_7": {"type": "bool"},
+                                    "share_data_with_client": {"type": "bool"},
+                                    "advertise_support": {"type": "bool"},
+                                    "advertise_pc_analytics_support": {"type": "bool"},
+                                    "send_beacon_on_association": {"type": "bool"},
+                                    "send_beacon_on_roam": {"type": "bool"},
+                                    "fast_transition_reassociation_timeout": {"type": "int"},
+                                    "mdns_mode": {
+                                        "type": "str",
+                                        "choices": ["MDNS_SD_BRIDGING", "MDNS_SD_DROP", "MDNS_SD_GATEWAY"]
+                                    },
+                                },
+                            },
+                            "unlocked_attributes": {"type": "list", "elements": "str", "required": False},
+                        },
+                    },
+                    "clean_air_configuration": {
+                        "type": "list",
+                        "elements": "dict",
+                        "required": False,
+                        "options": {
+                            "design_name": {"type": "str"},
+                            "radio_band": {
+                                "type": "str",
+                                "choices": ["2_4GHZ", "5GHZ", "6GHZ"]
+                            },
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": False,
+                                "options": {
+                                    "clean_air": {"type": "bool"},
+                                    "clean_air_device_reporting": {"type": "bool"},
+                                    "persistent_device_propagation": {"type": "bool"},
+                                    "description": {"type": "str"},
+                                    "interferers_features": {
+                                        "type": "dict",
+                                        "required": False,
+                                        "options": {
+                                            "ble_beacon": {"type": "bool"},
+                                            "bluetooth_paging_inquiry": {"type": "bool"},
+                                            "bluetooth_sco_acl": {"type": "bool"},
+                                            "continuous_transmitter": {"type": "bool"},
+                                            "generic_dect": {"type": "bool"},
+                                            "generic_tdd": {"type": "bool"},
+                                            "jammer": {"type": "bool"},
+                                            "microwave_oven": {"type": "bool"},
+                                            "motorola_canopy": {"type": "bool"},
+                                            "si_fhss": {"type": "bool"},
+                                            "spectrum80211_fh": {"type": "bool"},
+                                            "spectrum80211_non_standard_channel": {"type": "bool"},
+                                            "spectrum802154": {"type": "bool"},
+                                            "spectrum_inverted": {"type": "bool"},
+                                            "super_ag": {"type": "bool"},
+                                            "video_camera": {"type": "bool"},
+                                            "wimax_fixed": {"type": "bool"},
+                                            "wimax_mobile": {"type": "bool"},
+                                            "xbox": {"type": "bool"},
+                                        },
+                                    },
+                                },
+                            },
+                            "unlocked_attributes": {"type": "list", "elements": "str", "required": False},
+                        },
+                    },
+                    "dot11ax_configuration": {
+                        "type": "list",
+                        "elements": "dict",
+                        "required": False,
+                        "options": {
+                            "design_name": {"type": "str"},
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": False,
+                                "options": {
+                                    "radio_band": {"type": "str"},
+                                    "bss_color": {"type": "bool"},
+                                    "target_waketime_broadcast": {"type": "bool"},
+                                    "non_srg_obss_pd_max_threshold": {"type": "int"},
+                                    "target_wake_up_time_11ax": {"type": "bool"},
+                                    "obss_pd": {"type": "bool"},
+                                    "multiple_bssid": {"type": "bool"},
+                                },
+                            },
+                            "unlocked_attributes": {"type": "list", "elements": "str", "required": False},
+                        },
+                    },
+                    "dot11be_configuration": {
+                        "type": "list",
+                        "required": False,
+                        "elements": "dict",
+                        "options": {
+                            "design_name": {"type": "str"},
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": False,
+                                "options": {
+                                    "dot11be_status": {"type": "bool"},
+                                    "radio_band": {"type": "str", "choices": ["2_4GHZ", "5GHZ", "6GHZ"]},
+                                },
+                            },
+                            "unlocked_attributes": {
+                                "type": "list",
+                                "elements": "str",
+                                "required": False,
+                            },
+                        },
+                    },
+                    "event_driven_rrm_configuration": {
+                        "type": "list",
+                        "required": False,
+                        "elements": "dict",
+                        "options": {
+                            "design_name": {
+                                "type": "str",
+                                "required": True,
+                            },
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": True,
+                                "options": {
+                                    "radio_band": {
+                                        "type": "str",
+                                        "required": True,
+                                        "choices": ["2_4GHZ", "5GHZ"],
+                                    },
+                                    "event_driven_rrm_enable": {
+                                        "type": "bool",
+                                        "required": False,
+                                    },
+                                    "event_driven_rrm_threshold_level": {
+                                        "type": "str",
+                                        "required": False,
+                                        "choices": ["LOW", "MEDIUM", "HIGH", "CUSTOM"],
+                                    },
+                                    "event_driven_rrm_custom_threshold_val": {
+                                        "type": "int",
+                                        "required": False,
+                                    },
+                                },
+                            },
+                            "unlocked_attributes": {
+                                "type": "list",
+                                "elements": "str",
+                                "required": False,
+                            },
+                        },
+                    },
+                    "flexconnect_configuration": {
+                        "type": "list",
+                        "required": False,
+                        "elements": "dict",
+                        "options": {
+                            "design_name": {"type": "str"},
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": False,
+                                "options": {
+                                    "overlap_ip_enable": {"type": "bool"},
+                                },
+                            },
+                            "unlocked_attributes": {
+                                "type": "list",
+                                "elements": "str",
+                                "required": False,
+                            },
+                        },
+                    },
+                    "multicast_configuration": {
+                        "type": "list",
+                        "required": False,
+                        "elements": "dict",
+                        "options": {
+                            "design_name": {
+                                "type": "str",
+                                "required": True,
+                                "maxlength": 64
+                            },
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": True,
+                                "options": {
+                                    "global_multicast_enabled": {"type": "bool", "required": True},
+                                    "multicast_ipv4_mode": {
+                                        "type": "str",
+                                        "required": False,
+                                        "choices": ["UNICAST", "MULTICAST"]
+                                    },
+                                    "multicast_ipv4_address": {
+                                        "type": "str",
+                                        "required": False
+                                    },
+                                    "multicast_ipv6_mode": {
+                                        "type": "str",
+                                        "required": False,
+                                        "choices": ["UNICAST", "MULTICAST"]
+                                    },
+                                    "multicast_ipv6_address": {
+                                        "type": "str",
+                                        "required": False
+                                    },
+                                },
+                            },
+                            "unlocked_attributes": {
+                                "type": "list",
+                                "elements": "str",
+                                "required": False,
+                            },
+                        },
+                    },
+                    "rrm_fra_configuration": {
+                        "type": "list",
+                        "elements": "dict",
+                        "required": False,
+                        "options": {
+                            "design_name": {
+                                "type": "str",
+                                "required": True,
+                                "maxlength": 64
+                            },
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": True,
+                                "options": {
+                                    "radio_band": {
+                                        "type": "str",
+                                        "required": True,
+                                        "choices": ["2_4GHZ_5GHZ", "5GHZ_6GHZ"]
+                                    },
+                                    "fra_freeze": {
+                                        "type": "bool",
+                                        "required": False
+                                    },
+                                    "fra_status": {
+                                        "type": "bool",
+                                        "required": False
+                                    },
+                                    "fra_interval": {
+                                        "type": "int",
+                                        "required": False
+                                    },
+                                    "fra_sensitivity": {
+                                        "type": "str",
+                                        "required": False,
+                                        "choices": ["LOW", "MEDIUM", "HIGH", "HIGHER", "EVEN_HIGHER", "SUPER_HIGH"]
+                                    },
+                                },
+                            },
+                            "unlocked_attributes": {
+                                "type": "list",
+                                "elements": "str",
+                                "required": False,
+                            },
+                        },
+                    },
+                    "rrm_general_configuration": {
+                        "type": "list",
+                        "elements": "dict",
+                        "required": False,
+                        "options": {
+                            "design_name": {
+                                "type": "str",
+                                "required": True,
+                                "maxlength": 64
+                            },
+                            "feature_attributes": {
+                                "type": "dict",
+                                "required": True,
+                                "options": {
+                                    "radio_band": {
+                                        "type": "str",
+                                        "required": True,
+                                        "choices": ["2_4GHZ", "5GHZ", "6GHZ"]
+                                    },
+                                    "monitoring_channels": {
+                                        "type": "str",
+                                        "required": False,
+                                        "choices": [
+                                            "MONITORING_CHANNELS_ALL",
+                                            "MONITORING_CHANNELS_COUNTRY",
+                                            "MONITORING_CHANNELS_DCA"
+                                        ]
+                                    },
+                                    "neighbor_discover_type": {
+                                        "type": "str",
+                                        "required": False,
+                                        "choices": [
+                                            "NEIGHBOR_DISCOVER_TYPE_TRANSPARENT",
+                                            "NEIGHBOR_DISCOVER_TYPE_PROTECTED"
+                                        ]
+                                    },
+                                    "throughput_threshold": {
+                                        "type": "int",
+                                        "required": False
+                                    },
+                                    "coverage_hole_detection": {
+                                        "type": "bool",
+                                        "required": False
+                                    },
+                                },
+                            },
+                            "unlocked_attributes": {
+                                "type": "list",
+                                "elements": "str",
+                                "required": False,
+                            },
+                        },
+                    }
+                },
+            },
         }
 
         # Validate params against the expected schema
