@@ -17933,6 +17933,287 @@ class WirelessDesign(DnacBase):
         self.have = have
         self.log("Current State (have): {0}".format(str(self.have)), "INFO")
         return self
+    def verify_delete_rrm_general_requirement(self, rrm_general_list):
+        """
+        Determines which RRM General configuration templates need to be deleted
+        based on the requested parameters.
+
+        Args:
+            rrm_general_list (list): A list of dicts containing the requested RRM General
+                                    configuration parameters for deletion.
+                                    Example: [{"design_name": "rrm_general_design"}]
+
+        Returns:
+            list: A list of RRM General configuration templates scheduled for deletion,
+                including their IDs.
+        """
+        delete_list = []
+
+        self.log("Starting verification of RRM General configurations for deletion.", "INFO")
+
+        # Retrieve all existing RRM General configurations
+        existing_blocks = self.get_rrm_general_profiles()
+        instances = []
+        for block in existing_blocks:
+            instances.extend(block.get("instances", []))
+
+        self.log("Existing RRM General configurations: {0}".format(instances), "DEBUG")
+
+        # Convert existing instances into a dictionary for quick lookup
+        existing_dict = {cfg["designName"]: cfg for cfg in instances}
+        self.log("Converted existing RRM General configs to dictionary.", "DEBUG")
+
+        # Iterate over requested configurations
+        for index, requested_cfg in enumerate(rrm_general_list, start=1):
+            design_name = requested_cfg.get("design_name")
+            self.log(
+                "Iteration {0}: Checking RRM General config '{1}' for deletion.".format(
+                    index, design_name
+                ),
+                "DEBUG",
+            )
+
+            if design_name in existing_dict:
+                existing = existing_dict[design_name]
+                cfg_to_delete = requested_cfg.copy()
+                cfg_to_delete["id"] = existing.get("id")
+                delete_list.append(cfg_to_delete)
+                self.log(
+                    "Iteration {0}: RRM General config '{1}' scheduled for deletion.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+            else:
+                self.log(
+                    "Iteration {0}: RRM General config '{1}' not found -> no deletion required.".format(
+                        index, design_name
+                    ),
+                    "INFO",
+                )
+
+        self.log(
+            "RRM General configurations scheduled for deletion: {0} - {1}".format(
+                len(delete_list), delete_list
+            ),
+            "DEBUG",
+        )
+
+        return delete_list
+
+    def verify_create_update_rrm_general_requirement(self, rrm_general_list):
+        """
+        Validates and compares desired RRM General profiles against existing ones and determines
+        which need to be created, updated, or left unchanged.
+
+        Returns:
+            (add_list, update_list, no_update_list)  # payloads use controller (camelCase) keys
+        """
+        add_list, update_list, no_update_list = [], [], []
+
+        self.log("Starting verification of RRM General configurations (Add/Update).", "INFO")
+
+        # --- Inline universal normalizer/validator ---
+        def normalize_value(value, value_type="str", choices=None, min_val=None, max_val=None):
+            """
+            value_type: "str", "enum", "bool", "int"
+            - enum: returns UPPERCASE string and validates against choices (if provided)
+            - bool: accepts bool or "true"/"false" strings
+            - int : casts to int and validates range if min/max provided
+            """
+            if value is None:
+                return None
+
+            if value_type == "bool":
+                if isinstance(value, bool):
+                    return value
+                if isinstance(value, str) and value.lower() in ("true", "false"):
+                    return value.lower() == "true"
+                return value
+
+            if value_type == "int":
+                try:
+                    v = int(value)
+                    if min_val is not None and v < min_val:
+                        raise ValueError("Value {0} below min {1}".format(v, min_val))
+                    if max_val is not None and v > max_val:
+                        raise ValueError("Value {0} above max {1}".format(v, max_val))
+                    return v
+                except Exception:
+                    return value
+
+            if value_type == "enum":
+                v = str(value).upper()
+                if choices and v not in choices:
+                    raise ValueError("Invalid enum value '{0}'. Allowed: {1}".format(v, sorted(list(choices))))
+                return v
+
+            # default: string normalization
+            return str(value)
+
+        # --- Constants / choices ---
+        allowed_bands = {"2_4GHZ", "5GHZ", "6GHZ"}
+        allowed_monitoring = {
+            "MONITORING_CHANNELS_ALL",
+            "MONITORING_CHANNELS_COUNTRY",
+            "MONITORING_CHANNELS_DCA",
+        }
+        allowed_neighbor = {
+            "NEIGHBOR_DISCOVER_TYPE_TRANSPARENT",
+            "NEIGHBOR_DISCOVER_TYPE_PROTECTED",
+        }
+        thr_min, thr_max = 1000, 10_000_000
+
+        # snake -> camel map for unlocked attributes
+        unlock_map = {
+            "radio_band": "radioBand",
+            "monitoring_channels": "monitoringChannels",
+            "neighbor_discover_type": "neighborDiscoverType",
+            "throughput_threshold": "throughputThreshold",
+            "coverage_hole_detection": "coverageHoleDetection",
+        }
+
+        # Fetch existing summaries and flatten
+        existing_blocks = self.get_rrm_general_profiles()
+        instances = []
+        for block in (existing_blocks or []):
+            instances.extend(block.get("instances", []) or [])
+        self.log("Existing RRM General profiles: {0}".format(instances), "DEBUG")
+
+        existing_dict = {inst["designName"]: inst for inst in instances}
+        self.log("Converted existing RRM General configs to dictionary.", "DEBUG")
+
+        for index, requested_cfg in enumerate(rrm_general_list or [], start=1):
+            design_name = requested_cfg.get("design_name")
+            fa_req = requested_cfg.get("feature_attributes") or {}
+            unl_req = requested_cfg.get("unlocked_attributes") or []
+
+            self.log("Iteration {0}: Checking RRM General config '{1}'.".format(index, design_name), "DEBUG")
+
+            # --- VALIDATION (input, snake_case) + normalization ---
+            try:
+                radio_band = normalize_value(fa_req.get("radio_band"), "enum", choices=allowed_bands)
+            except ValueError as e:
+                self.msg = "Invalid radio_band for design '{0}': {1}".format(design_name, e)
+                self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            monitoring_channels = None
+            if "monitoring_channels" in fa_req and fa_req.get("monitoring_channels") is not None:
+                try:
+                    monitoring_channels = normalize_value(
+                        fa_req.get("monitoring_channels"), "enum", choices=allowed_monitoring
+                    )
+                except ValueError as e:
+                    self.msg = "Invalid monitoring_channels for design '{0}': {1}".format(design_name, e)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            neighbor_discover_type = None
+            if "neighbor_discover_type" in fa_req and fa_req.get("neighbor_discover_type") is not None:
+                try:
+                    neighbor_discover_type = normalize_value(
+                        fa_req.get("neighbor_discover_type"), "enum", choices=allowed_neighbor
+                    )
+                except ValueError as e:
+                    self.msg = "Invalid neighbor_discover_type for design '{0}': {1}".format(design_name, e)
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            throughput_threshold = None
+            if "throughput_threshold" in fa_req and fa_req.get("throughput_threshold") is not None:
+                tt = normalize_value(fa_req.get("throughput_threshold"), "int", min_val=thr_min, max_val=thr_max)
+                if not isinstance(tt, int):
+                    self.msg = ("throughput_threshold must be integer within [{0}..{1}] for design '{2}', got '{3}'"
+                                .format(thr_min, thr_max, design_name, fa_req.get("throughput_threshold")))
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                throughput_threshold = tt
+
+            coverage_hole_detection = None
+            if "coverage_hole_detection" in fa_req and fa_req.get("coverage_hole_detection") is not None:
+                chd = normalize_value(fa_req.get("coverage_hole_detection"), "bool")
+                if not isinstance(chd, bool):
+                    self.msg = ("coverage_hole_detection must be boolean for design '{0}', got '{1}'"
+                                .format(design_name, fa_req.get("coverage_hole_detection")))
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+                coverage_hole_detection = chd
+
+            # Info-only constraint: 2_4GHZ support requires IOS-XE >= 17.9.1 (cannot verify here)
+            if radio_band == "2_4GHZ":
+                self.log("Note: radio_band=2_4GHZ requires IOS-XE >= 17.9.1.", "DEBUG")
+
+            # Validate unlocked attributes reference only feature attributes (snake case on input)
+            if unl_req:
+                allowed_unlock_snake = set(unlock_map.keys())
+                bad = [u for u in unl_req if u not in allowed_unlock_snake]
+                if bad:
+                    self.msg = ("Unlocked attributes {0} are invalid for design '{1}'. "
+                                "Allowed: {2}").format(bad, design_name, sorted(allowed_unlock_snake))
+                    self.set_operation_result("failed", False, self.msg, "ERROR").check_return_status()
+
+            # --- Build controller payload (camelCase) ---
+            fa_payload = {"radioBand": radio_band}
+            if monitoring_channels is not None:
+                fa_payload["monitoringChannels"] = monitoring_channels
+            if neighbor_discover_type is not None:
+                fa_payload["neighborDiscoverType"] = neighbor_discover_type
+            if throughput_threshold is not None:
+                fa_payload["throughputThreshold"] = throughput_threshold
+            if coverage_hole_detection is not None:
+                fa_payload["coverageHoleDetection"] = coverage_hole_detection
+
+            payload = {
+                "designName": design_name,
+                "featureAttributes": fa_payload,
+            }
+
+            if unl_req:
+                payload["unlockedAttributes"] = [unlock_map[u] for u in unl_req]
+
+            # --- Compare against existing ---
+            existing = existing_dict.get(design_name)
+            if not existing:
+                add_list.append(payload)
+                self.log("RRM General '{0}' scheduled for ADD.".format(design_name), "INFO")
+                continue
+
+            # Prefer detailed fetch if available
+            details = {}
+            try:
+                details = self.get_rrm_general_profile_details(existing.get("id")) or {}
+            except Exception:
+                details = existing  # fallback to summary if detail API not available
+
+            existing_fa = (details.get("featureAttributes") or existing.get("featureAttributes") or {})
+            existing_unl = (details.get("unlockedAttributes") or existing.get("unlockedAttributes") or [])
+
+            # normalize enums for fair compare
+            def U(v):
+                return str(v).upper() if isinstance(v, str) else v
+
+            needs_update = (
+                U(existing_fa.get("radioBand")) != U(fa_payload.get("radioBand")) or
+                U(existing_fa.get("monitoringChannels")) != U(fa_payload.get("monitoringChannels")) or
+                U(existing_fa.get("neighborDiscoverType")) != U(fa_payload.get("neighborDiscoverType")) or
+                normalize_value(existing_fa.get("throughputThreshold"), "int")
+                != normalize_value(fa_payload.get("throughputThreshold"), "int") or
+                normalize_value(existing_fa.get("coverageHoleDetection"), "bool")
+                != normalize_value(fa_payload.get("coverageHoleDetection"), "bool") or
+                set(existing_unl) != set(payload.get("unlockedAttributes", []))
+            )
+
+            if needs_update:
+                payload["id"] = existing.get("id")
+                update_list.append(payload)
+                self.log("RRM General '{0}' scheduled for UPDATE.".format(design_name), "INFO")
+            else:
+                no_update_list.append(details or existing)
+                self.log("RRM General '{0}' -> NO CHANGE.".format(design_name), "INFO")
+
+        self.log(
+            "RRM General - Add: {0}, Update: {1}, No-Change: {2}".format(
+                len(add_list), len(update_list), len(no_update_list)
+            ),
+            "DEBUG",
+        )
+        return add_list, update_list, no_update_list
 
     def get_want(self, config, state):
         """
